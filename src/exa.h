@@ -61,8 +61,8 @@ exaComm exaGetComm(exaHandle h);
 // exaComm
 //
 int exaCreateComm(exaComm *c,exaCommExternal ce);
-int exaCommSize(exaComm c);
-int exaCommRank(exaComm c);
+exaInt exaCommSize(exaComm c);
+exaInt exaCommRank(exaComm c);
 
 int exaGop(exaComm c,void *v,exaInt size,exaDataType type,exaInt op);
 int exaReduce(exaComm c,void *out,void *in,exaInt size,exaDataType type,exaInt op);
