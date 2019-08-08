@@ -28,23 +28,6 @@ struct exaComm_private {
   buffer buf;
 };
 //
-// exaElements
-//
-struct exaElement_private {
-  exaScalar fiedler;
-  exaLong globalId;
-  exaLong globalId0;
-  exaLong vertices[8];
-  exaInt proc;
-  exaInt origin;
-};
-//
-// exaElements: Create, Destroy
-//
-int exaCreateElements(exaElements *e);
-int exaDestroyElements(exaElements e);
-exaElements exaGetElements_default(exaHandle h);
-//
 // exaHandle
 //
 struct exaHandle_private {
@@ -55,8 +38,6 @@ struct exaHandle_private {
   exaLong Nnodes;
   exaLong start;
   int nv;
-
-  struct array elementArray;
 
   struct crystal cr;
 

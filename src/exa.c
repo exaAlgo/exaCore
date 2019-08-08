@@ -12,13 +12,9 @@ int exaInit(exaHandle *h, exaCommExternal ce) {
   exaCreateComm(&h_->global, ce);
   exaCreateComm(&h_->local, ce);
 
-  h_->elementArray.ptr = NULL;
-  h_->elementArray.n = (*h)->elementArray.max = 0;
-
   h_->dbgLevel = 0;
   h_->printStat = 0;
 
-  exaMalloc(1,&h_->histogram);
   return 0;
 }
 //
@@ -29,10 +25,6 @@ int exaFinalize(exaHandle h) {
     exaDestroyComm(exaGetGlobalComm(h));
   if(exaGetLocalComm(h))
     exaDestroyComm(h->local);
-
-  array_free(&(h->elementArray));
-
-  exaFree(h->histogram);
 
   exaFree(h);
 
