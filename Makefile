@@ -4,18 +4,23 @@ CPPFLAGS ?=
 GSDIR ?=
 LDFLAGS ?=
 DEBUG ?= 1
+
+SRCDIR ?= src
+BUILDDIR ?= build
 DEPDIR ?= .deps
 
-SRCS = $(wildcard src/*.c)
-OBJS = $(patsubst %.c,%.o,$(SRCS))
-INCFLAGS = -I$(CURDIR)/src -I$(GSDIR)/include
+SRCS = $(wildcard $(SRCDIR)/*.c)
+OBJS = $(patsubst $(SRCDIR)/%.c,$(BUILDDIR)/%.o,$(SRCS))
+INCFLAGS = -I$(SRCDIR) -I$(GSDIR)/include
 
 depflags.d = -MT $@ -MMD -MP -MF $(DEPDIR)/$*.d
 compile.c = $(CC) $(CFLAGS) $(CPPFLAGS) $(INCFLAGS) -c
 link.o = $(CC) $(LDFLAGS)
 
-%.o : %.c
-	$(compile.c) $<
+$(BUILDDIR)/%.o : $(SRCDIR)/%.c
+	$(compile.c) $< -o $@
+
+$(shell mkdir -p $(BUILDDIR))
 
 all: $(OBJS)
 
