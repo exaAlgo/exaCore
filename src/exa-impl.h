@@ -21,14 +21,14 @@
 //
 // exaComm
 //
-struct exaComm_private {
+struct exaComm_private{
   struct comm gsComm;
   buffer buf;
 };
 //
 // exaHandle
 //
-struct exaHandle_private {
+struct exaHandle_private{
   exaComm comm;
   struct crystal cr;
   int dbgLevel;
@@ -42,7 +42,7 @@ int exaDestroyHandle(exaHandle h);
 //
 // exaVector
 //
-struct exaVector_private {
+struct exaVector_private{
   exaInt size;
   exaScalar *data;
   void *vec_ptr;
