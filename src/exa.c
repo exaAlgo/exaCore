@@ -6,11 +6,11 @@
 // exaInit
 //
 int exaInit(exaHandle *h, exaCommExternal ce) {
-  exaMalloc(1, h);
+  exaMalloc(1,h);
   exaHandle h_ = *h;
 
-  exaCreateComm(&h_->global, ce);
-  exaCreateComm(&h_->local, ce);
+  // create comms
+  exaCreateComm(&h_->comm,ce);
 
   h_->dbgLevel = 0;
   h_->printStat = 0;
@@ -21,22 +21,17 @@ int exaInit(exaHandle *h, exaCommExternal ce) {
 // exaFinalize
 //
 int exaFinalize(exaHandle h) {
-  if(exaGetGlobalComm(h))
-    exaDestroyComm(exaGetGlobalComm(h));
-  if(exaGetLocalComm(h))
-    exaDestroyComm(h->local);
-
+  exaDestroyComm(exaGetComm(h));
   exaFree(h);
-
   return 0;
 }
 //
 // exaMalloc, Realloc, Calloc and Free
 //
 int exaMallocArray(size_t n, size_t unit, void *p) {
-  int ierr = posix_memalign((void **)p, EXA_ALIGN, n * unit);
+  int ierr = posix_memalign((void **)p,EXA_ALIGN,n*unit);
   if(ierr)
-    printf("exaMallocArray Failed: %s:%d\n", __FILE__, __LINE__);
+    printf("exaMallocArray Failed: %s:%d\n",__FILE__,__LINE__);
   return ierr;
 }
 

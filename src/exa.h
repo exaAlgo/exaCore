@@ -40,7 +40,6 @@ typedef MPI_Comm exaCommExternal;
 typedef struct exaComm_private *exaComm;
 typedef struct exaHandle_private *exaHandle;
 typedef struct exaVector_private *exaVector;
-typedef struct exaHistogram_private *exaHistogram;
 //
 // exa: Init, Finalize
 //
@@ -49,63 +48,46 @@ int exaFinalize(exaHandle h);
 //
 // exaMalloc, Realloc, Calloc and Free
 //
-int exaMallocArray(size_t n, size_t unit, void *p);
-int exaCallocArray(size_t n, size_t unit, void *p);
-int exaReallocArray(size_t n, size_t unit, void *p);
+int exaMallocArray (size_t n,size_t unit,void *p);
+int exaCallocArray (size_t n,size_t unit,void *p);
+int exaReallocArray(size_t n,size_t unit,void *p);
 int exaFree(void *p);
 //
 // exaHandle Getters/Setters
 //
-exaComm exaGetLocalComm(exaHandle h);
-void exaSetLocalComm(exaHandle h, exaComm c);
-
-exaComm exaGetGlobalComm(exaHandle h);
-void exaSetGlobalComm(exaHandle h, exaComm c);
-
-exaInt exaGetNLocalElements(exaHandle h);
-void exaSetNLocalElements(exaHandle h, exaInt localElements);
-
-exaLong exaGetNGlobalElements(exaHandle h);
-void exaSetNGlobalElements(exaHandle h, exaLong globalElements);
-
-exaLong exaGetLocalStartIndex(exaHandle h);
-void exaSetLocalStartIndex(exaHandle h, exaLong localStart);
-
-void exaScan(exaHandle h, exaComm c);
+void exaScan(exaHandle h);
+exaComm exaGetComm(exaHandle h);
 //
 // exaComm
 //
-int exaCreateComm(exaComm *c, exaCommExternal ce);
+int exaCreateComm(exaComm *c,exaCommExternal ce);
 int exaCommSize(exaComm c);
 int exaCommRank(exaComm c);
 
-int exaGop(exaComm c, void *v, exaInt size, exaDataType type,
-              exaInt op);
-int exaReduce(exaComm c, void *out, void *in, exaInt size,
-                 exaDataType type, exaInt op);
-int exaBcast(exaComm c, void *in, exaInt count, exaDataType type);
+int exaGop(exaComm c,void *v,exaInt size,exaDataType type,exaInt op);
+int exaReduce(exaComm c,void *out,void *in,exaInt size,exaDataType type,exaInt op);
+int exaBcast(exaComm c,void *in,exaInt count,exaDataType type);
 
 int exaDestroyComm(exaComm c);
-void exaSplitComm(exaHandle h, exaComm *c, int bin);
-int exaCrystalInit(exaHandle h, exaComm c);
-int exaCrystalTransfer(exaHandle h, int field);
+void exaSplitComm(exaHandle h,exaComm *c,int bin);
+int exaCrystalInit(exaHandle h,exaComm c);
+int exaCrystalTransfer(exaHandle h,int field);
 int exaCrystalFinalize(exaHandle h);
 //
 // exaVector operations
 //
-int exaCreateVector(exaVector *x, exaInt size);
-int exaSetVector(exaVector x, exaScalar *array);
-int exaGetVector(exaVector x, exaScalar *array);
+int exaCreateVector(exaVector *x,exaInt size);
+int exaSetVector(exaVector x,exaScalar *array);
+int exaGetVector(exaVector x,exaScalar *array);
 
-int exaCreateRandomVector(exaVector *x, exaInt size, exaInt seed);
-int exaCreateOnesVector(exaVector *x, exaInt size);
-int exaCreateZerosVector(exaVector *x, exaInt size);
+int exaCreateRandomVector(exaVector *x,exaInt size,exaInt seed);
+int exaCreateOnesVector(exaVector *x,exaInt size);
+int exaCreateZerosVector(exaVector *x,exaInt size);
 
-int exaScaleVector(exaVector y, exaVector x, exaScalar alpha);
-int exaAxpbyVector(exaVector z, exaVector x, exaScalar alpha,
-                      exaVector y, exaScalar beta);
+int exaScaleVector(exaVector y,exaVector x,exaScalar alpha);
+int exaAxpbyVector(exaVector z,exaVector x,exaScalar alpha,exaVector y,exaScalar beta);
 
-int exaVectorsEqual(exaVector x, exaVector y, exaScalar tol);
+int exaVectorsEqual(exaVector x,exaVector y,exaScalar tol);
 int exaCopyVector(exaVector x, exaVector y);
 exaScalar exaDotVector(exaVector x, exaVector y);
 exaScalar exaAbsMaxVector(exaVector x);
