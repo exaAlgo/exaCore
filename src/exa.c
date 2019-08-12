@@ -12,6 +12,8 @@ int exaInit(exaHandle *h, exaCommExternal ce) {
   // create comms
   exaCreateComm(&h_->comm,ce);
 
+  exaCrystalInit(h_);
+
   h_->dbgLevel = 0;
   h_->printStat = 0;
 
@@ -21,6 +23,7 @@ int exaInit(exaHandle *h, exaCommExternal ce) {
 // exaFinalize
 //
 int exaFinalize(exaHandle h) {
+  exaCrystalFinalize(h);
   exaDestroyComm(exaGetComm(h));
   exaFree(h);
   return 0;
