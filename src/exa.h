@@ -40,6 +40,7 @@ typedef MPI_Comm exaCommExternal;
 typedef struct exaComm_private *exaComm;
 typedef struct exaHandle_private *exaHandle;
 typedef struct exaVector_private *exaVector;
+typedef struct exaArray_private *exaArray;
 //
 // exa: Init, Finalize
 //
@@ -101,6 +102,12 @@ exaScalar exaNormVector(exaVector x, exaInt p);
 
 int exaPrintVector(exaVector x);
 int exaDestroyVector(exaVector x);
+//
+// exaArray: just a gslib array
+//
+#define exaArrayInit(T,a,max) array_init(T,a,max)
+#define exaArrayFree(a) array_free(a)
+#define exaArrayTransfer(T,h,a,proc_field) sarray_transfer(T,a,proc_field,0,h->cr);
 //
 // Debug routines
 //

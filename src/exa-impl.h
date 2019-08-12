@@ -31,6 +31,7 @@ struct exaComm_private{
 struct exaHandle_private{
   exaComm comm;
   struct crystal cr;
+  exaArray array;
   int dbgLevel;
   int printStat;
 };
@@ -47,6 +48,10 @@ struct exaVector_private{
   exaScalar *data;
   void *vec_ptr;
 };
+//
+// exaArray: just a gslib array
+//
+typedef struct array exaArray_private;
 //
 // Memory management routines
 //
