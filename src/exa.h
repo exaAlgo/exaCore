@@ -51,28 +51,31 @@ int exaFinalize(exaHandle h);
 int exaMallocArray (size_t n,size_t unit,void *p);
 int exaCallocArray (size_t n,size_t unit,void *p);
 int exaReallocArray(size_t n,size_t unit,void *p);
-int exaFree(void *p);
+int exaFree        (void *p);
 //
-// exaHandle Getters/Setters
+// exa communication routines
 //
-void exaScan(exaHandle h);
 exaComm exaGetComm(exaHandle h);
+int     exaSetComm(exaHandle h,exaComm c);
+exaInt  exaSize   (exaHandle h);
+exaInt  exaRank   (exaHandle h);
+
+int exaCrystalInit    (exaHandle h);
+int exaCrystalTransfer(exaHandle h,int field);
+int exaCrystalFinalize(exaHandle h);
+
+int exaScan  (exaHandle h);
+int exaGop   (exaHandle h,void *v,exaInt size,exaDataType type,exaInt op);
+int exaReduce(exaHandle h,void *out,void *in,exaInt size,exaDataType type,exaInt op);
+int exaBcast (exaHandle h,void *in,exaInt count,exaDataType type);
 //
 // exaComm
 //
 int exaCreateComm(exaComm *c,exaCommExternal ce);
 exaInt exaCommSize(exaComm c);
 exaInt exaCommRank(exaComm c);
-
-int exaGop(exaComm c,void *v,exaInt size,exaDataType type,exaInt op);
-int exaReduce(exaComm c,void *out,void *in,exaInt size,exaDataType type,exaInt op);
-int exaBcast(exaComm c,void *in,exaInt count,exaDataType type);
-
 int exaDestroyComm(exaComm c);
-void exaSplitComm(exaHandle h,exaComm *c,int bin);
-int exaCrystalInit(exaHandle h,exaComm c);
-int exaCrystalTransfer(exaHandle h,int field);
-int exaCrystalFinalize(exaHandle h);
+void exaSplitComm(exaHandle h,int bin);
 //
 // exaVector operations
 //
