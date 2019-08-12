@@ -62,7 +62,6 @@ exaInt  exaSize   (exaHandle h);
 exaInt  exaRank   (exaHandle h);
 
 int exaCrystalInit    (exaHandle h);
-int exaCrystalTransfer(exaHandle h,int field);
 int exaCrystalFinalize(exaHandle h);
 
 int exaScan  (exaHandle h);
