@@ -31,7 +31,6 @@ struct exaComm_private{
 struct exaHandle_private{
   exaComm comm;
   struct crystal cr;
-  exaArray array;
   int dbgLevel;
   int printStat;
 };
