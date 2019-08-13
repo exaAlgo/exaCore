@@ -24,29 +24,31 @@ SRCS = $(wildcard $(SRCDIR)/*.c)
 OBJS = $(patsubst $(SRCDIR)/%.c,$(BUILDDIR)/%.o,$(SRCS))
 DEPS = $(patsubst $(BUILDDIR)/%.o,$(DEPDIR)/%.d,$(OBJS))
 
-INCFLAGS = -I$(SRCDIR) -I$(GSDIR)/include
+INCFLAGS  = -I$(SRCDIR) -I$(GSDIR)/include
 compile.c = $(CC) $(CFLAGS) $(CPPFLAGS) $(INCFLAGS) -c
-link.o = $(AR) crs
-LIBS = $(GSDIR)/lib/libgs.a
-EXT = a
+link.o    = $(AR) crs
+LDFLAGS  += $(GSDIR)/lib/libgs.a
+EXT       = a
 
 ifneq ($(SHARED),0)
-  CFLAGS += -fPIC
-  link.o += $(CC) $(LDFLAGS) -shared -o
-  LIBS = -L$(GSDIR)/lib -lgs
-  EXT = so
+  CFLAGS  += -fPIC
+  link.o  += $(CC) $(LDFLAGS) -shared -o
+  LDFLAGS += -L$(GSDIR)/lib -lgs
+  EXT      = so
 endif
+
+LIBNAME = libexa.$(EXT)
 
 .PHONY: lib
 lib: $(OBJS)
-	$(link.o) $(BUILDDIR)/libexa.$(EXT) $(OBJS) $(LIBS) $(LDFLAGS)
+	$(link.o) $(BUILDDIR)/$(LIBNAME) $(OBJS) $(LIBS) $(LDFLAGS)
 
 .PHONY: install
-install:
+install: lib
 	@mkdir -p $(DESTDIR)$(PREFIX)/lib
 	@mkdir -p $(DESTDIR)$(PREFIX)/include
 	@cp $(SRCDIR)/*.h $(GSDIR)/include/*.h $(DESTDIR)$(PREFIX)/include/
-	@cp $(BUILDDIR)/libexa.$(EXT) $(DESTDIR)$(PREFIX)/lib/
+	@cp $(BUILDDIR)/$(LIBNAME) $(DESTDIR)$(PREFIX)/lib/
 
 $(DEPDIR)/%.d: $(SRCDIR)/%.c
 	@$(CPP) $(CFLAGS) $(INCFLAGS) $< -MM -MT $(@:$(DEPDIR)/%.d=$(BUILDDIR)/%.deps) >$@
