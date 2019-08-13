@@ -1,2 +1,4 @@
-# exaSort
-Exascale sorting library
+# exaCore
+
+exaCore provides data sructrues and communication primitives
+for writing exa-scale algorithms.
