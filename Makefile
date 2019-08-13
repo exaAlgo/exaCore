@@ -13,7 +13,7 @@ DEBUG ?= 1
 SHARED ?= 0
 
 # Install prefix
-PREFIX ?= /home/thilina/local/
+PREFIX ?= $(HOME)/local/
 
 # Meta info about the package
 SRCDIR ?= src
@@ -26,7 +26,7 @@ DEPS = $(patsubst $(BUILDDIR)/%.o,$(DEPDIR)/%.d,$(OBJS))
 
 INCFLAGS = -I$(SRCDIR) -I$(GSDIR)/include
 compile.c = $(CC) $(CFLAGS) $(CPPFLAGS) $(INCFLAGS) -c
-link.o = $(AR) crvs
+link.o = $(AR) crs
 LIBS = $(GSDIR)/lib/libgs.a
 EXT = a
 
@@ -45,7 +45,7 @@ lib: $(OBJS)
 install:
 	@mkdir -p $(DESTDIR)$(PREFIX)/lib
 	@mkdir -p $(DESTDIR)$(PREFIX)/include
-	@cp $(SRCDIR)/*.h $(DESTDIR)$(PREFIX)/include/
+	@cp $(SRCDIR)/*.h $(GSDIR)/include/*.h $(DESTDIR)$(PREFIX)/include/
 	@cp $(BUILDDIR)/libexa.$(EXT) $(DESTDIR)$(PREFIX)/lib/
 
 $(DEPDIR)/%.d: $(SRCDIR)/%.c

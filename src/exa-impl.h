@@ -46,7 +46,6 @@ int exaDestroyHandle(exaHandle h);
 struct exaVector_private{
   exaInt size;
   exaScalar *data;
-  void *vec_ptr;
 };
 //
 // exaArray: just a gslib array
