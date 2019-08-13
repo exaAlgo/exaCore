@@ -47,10 +47,6 @@ struct exaVector_private{
   exaScalar *data;
 };
 //
-// exaArray: just a gslib array
-//
-typedef struct array exaArray_private;
-//
 // Memory management routines
 //
 #define exaMalloc(n, p)  exaMallocArray ((n), sizeof(**(p)), p)
