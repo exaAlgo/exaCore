@@ -13,7 +13,7 @@ DEBUG ?= 1
 SHARED ?= 0
 
 # Install prefix
-PREFIX ?= $(HOME)/local/
+PREFIX ?= $(HOME)/local/exa
 
 # Meta info about the package
 SRCDIR ?= src
@@ -32,7 +32,7 @@ EXT       = a
 
 ifneq ($(SHARED),0)
   CFLAGS  += -fPIC
-  link.o  += $(CC) $(LDFLAGS) -shared -o
+  link.o   = $(CC) $(LDFLAGS) -shared -o
   LDFLAGS += -L$(GSDIR)/lib -lgs
   EXT      = so
 endif
