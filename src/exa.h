@@ -104,15 +104,17 @@ int exaDestroyVector(exaVector x);
 //
 // exaArray: just a gslib array
 //
-#define exaArrayInit(T,a,max) do{\
-  array_init(T,a,max); \
-  (*(a)).n=max; \
-} while(0);
+#define exaArrayCreate(T,array,n) \
+  array_init(T,array,n);
+#define exaArrayGetPointer(T,array) \
+  ((T *) array->ptr)
+#define exaArrayGetElement(T,array,i) \
+  ((T *) array->ptr)[i]
+#define exaArrayTransfer(T,array,proc_field,cr) \
+  sarray_transfer(T,array,proc_field,1,cr);
 
-#define exaArrayTransfer(T,h,a,proc_field) sarray_transfer(T,a,proc_field,1,h->cr);
-
-int exaArrayFree(exaArray a);
 exaInt exaArraySize(exaArray a);
+int    exaArrayFree(exaArray a);
 //
 // Debug routines
 //
