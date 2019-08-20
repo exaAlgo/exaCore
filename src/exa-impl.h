@@ -37,7 +37,7 @@ struct exaHandle_private{
 //
 // exaHandle: Create, Destroy
 //
-int exaCreateHandle(exaHandle h);
+int exaCreateHandle (exaHandle h);
 int exaDestroyHandle(exaHandle h);
 //
 // exaVector
