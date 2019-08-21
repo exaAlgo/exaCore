@@ -14,10 +14,10 @@ typedef unsigned long long exaULong;
 #define exaULongMAX ULLONG_MAX
 #define exaULongMIN 0
 
-#define EXA_LONG MPI_LONG_LONG
-#define EXA_UNSIGNED_LONG MPI_UNSIGNED_LONG_LONG
-
-#define exa_gs_long gs_long_long
+#define exaLongCommType  MPI_LONG_LONG
+#define exaULongCommType MPI_UNSIGNED_LONG_LONG
+#define exaLongCommType  MPI_LONG_LONG
+#define exaLongType 1
 
 typedef int exaInt;
 typedef unsigned int exaUInt;
@@ -28,17 +28,24 @@ typedef unsigned int exaUInt;
 #define exaUIntMAX UINT_MAX
 #define exaUIntMIN 0
 
-#define EXA_INT MPI_INT
-#define EXA_UNSIGNED_INT MPI_UNSIGNED_INT
-
-#define exa_gs_int gs_int
+#define exaIntCommType  MPI_INT
+#define exaUIntCommType MPI_UNSIGNED_INT
+#define exaIntGSType gs_int
+#define exaIntType 0
 
 typedef double exaScalar;
-#define exa_gs_scalar gs_double
 #define exaScalarFormat "%lf"
 #define exaScalarMAX DBL_MAX
 #define exaScalarMIN DBL_MIN
 
-#define EXA_SCALAR MPI_DOUBLE
+#define exaScalarCommType MPI_DOUBLE
+#define exaScalarGSType gs_double
+#define exaScalarType 3
+
+#define exaTypeGetMax(T) T##MAX
+#define exaTypeGetMin(T) T##MIN
+#define exaTypeGetType(T) T##Type
+#define exaTypeGetCommType(T) T##CommType
+#define exaTypeGetGSType(T) T##GSType
 
 #endif
