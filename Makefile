@@ -26,14 +26,14 @@ DEPS = $(patsubst $(BUILDDIR)/%.o,$(DEPDIR)/%.d,$(OBJS))
 
 INCFLAGS  = -I$(SRCDIR) -I$(GSDIR)/include
 compile.c = $(CC) $(CFLAGS) $(CPPFLAGS) $(INCFLAGS) -c
-link.o    = $(AR) crs
-LDFLAGS  += $(GSDIR)/lib/libgs.a
+link.o    = $(AR) crsT
+LIBS      = $(GSDIR)/lib/libgs.a
 EXT       = a
 
 ifneq ($(SHARED),0)
   CFLAGS  += -fPIC
   link.o   = $(CC) $(LDFLAGS) -shared -o
-  LDFLAGS += -L$(GSDIR)/lib -lgs
+  LDFLAGS += -Wl,-whole-archive -L$(GSDIR)/lib -lgs -Wl,-no-whole-archive -lm
   EXT      = so
 endif
 
