@@ -54,30 +54,36 @@ int exaCallocArray (size_t n,size_t unit,void *p);
 int exaReallocArray(size_t n,size_t unit,void *p);
 int exaFree        (void *p);
 //
-// exa communication routines
+// exaHandle: wraps an exaComm, buffer and other options
 //
-exaComm exaGetComm(exaHandle h);
-int     exaSetComm(exaHandle h,exaComm c);
-exaInt  exaSize   (exaHandle h);
-exaInt  exaRank   (exaHandle h);
-
-int exaCrystalInit    (exaHandle h);
-int exaCrystalFinalize(exaHandle h);
-
-int exaScan  (exaHandle h);
-int exaGop   (exaHandle h,void *v,exaInt size,exaDataType type,exaInt op);
-int exaReduce(exaHandle h,void *out,void *in,exaInt size,exaDataType type,exaInt op);
-int exaBcast (exaHandle h,void *in,exaInt count,exaDataType type);
+int     exaInit    (exaHandle *h,exaCommExternal ce);
+int     exaFinalize(exaHandle h);
+exaComm exaGetComm (exaHandle h);
+int     exaSetComm (exaHandle h,exaComm c);
+exaInt  exaSize    (exaHandle h);
+exaInt  exaRank    (exaHandle h);
+int     exaScan    (exaHandle h);
+void    exaSplit   (exaHandle h,int bin);
+int     exaGop     (exaHandle h,void *v,exaInt size,exaDataType type,exaInt op);
+int     exaReduce  (exaHandle h,void *out,void *in,exaInt size,exaDataType type,exaInt op);
+int     exaBcast   (exaHandle h,void *in,exaInt count,exaDataType type);
 //
-// exaComm
+// exaComm: wraps gslib comm and crystal router
 //
-int exaCreateComm(exaComm *c,exaCommExternal ce);
-exaInt exaCommSize(exaComm c);
-exaInt exaCommRank(exaComm c);
-int exaDestroyComm(exaComm c);
-void exaSplitComm(exaHandle h,int bin);
+int    exaCommCreate (exaComm *c,exaCommExternal ce);
+int    exaCommDestroy(exaComm c);
+exaInt exaCommSize   (exaComm c);
+exaInt exaCommRank   (exaComm c);
+int    exaCommScan   (exaComm c);
+void   exaCommSplit  (exaComm c,int bin);
+int    exaCommGop    (exaComm c,void *v,exaInt size,exaDataType type,exaInt op);
+int    exaCommReduce (exaComm c,void *out,void *in,exaInt size,exaDataType type,exaInt op);
+int    exaCommBcast  (exaComm c,void *in,exaInt count,exaDataType type,int root);
+// crystal router functionality
+int exaCrystalInit    (exaComm c);
+int exaCrystalFinalize(exaComm c);
 //
-// exaVector operations
+// exaVector: wraps a vector currently just a host vector
 //
 int exaCreateVector(exaVector *x,exaInt size);
 int exaSetVector(exaVector x,exaScalar *array);
