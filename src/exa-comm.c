@@ -2,15 +2,13 @@
 //
 // exaComm
 //
-int exaCreateComm(exaComm *c,exaCommExternal ce){
+int exaCommCreate(exaComm *c,exaCommExternal ce){
   exaMalloc(1,c);
   comm_init(&(*c)->gsComm,ce);
-  buffer_init(&(*c)->buf,1024);
   return 0;
 }
 
-int exaDestroyComm(exaComm c){
-  buffer_free(&c->buf);
+int exaCommDestroy(exaComm c){
   comm_free(&c->gsComm);
   exaFree(c);
   return 0;
@@ -24,17 +22,22 @@ exaInt exaCommRank(exaComm c){
   return (exaInt) c->gsComm.id;
 }
 
-exaComm exaGetComm(exaHandle h){
-  return h->comm;
+int exaCommScan(exaComm c){
+  return 0;
 }
 
-int exaSetComm(exaHandle h,exaComm c){
-  // malloc and a copy
-  h->comm=c;
+void exaCommSplit(exaComm c,int bin){
+  exaCommExternal local;
+  exaInt id = exaCommRank(c);
+  MPI_Comm_split(c->gsComm.c,bin,id,&local);
+  exaCrystalFinalize(c);
+  exaCommDestroy(c);
+  exaCommCreate(&c,local);
+  MPI_Comm_free(&local);
+  exaCrystalInit(c);
 }
 
-int exaGop(exaHandle h,void *v,exaInt size,exaDataType type,exaInt op){
-  exaComm c=exaGetComm(h);
+int exaCommGop(exaComm c,void *v,exaInt size,exaDataType type,exaInt op){
   switch(op){
     case EXA_SUM:
       MPI_Allreduce(MPI_IN_PLACE,v,size,type,MPI_SUM,c->gsComm.c);
@@ -51,8 +54,7 @@ int exaGop(exaHandle h,void *v,exaInt size,exaDataType type,exaInt op){
   return 0;
 }
 
-int exaReduce(exaHandle h,void *out,void *in,exaInt size,exaDataType type,exaInt op){
-  exaComm c=exaGetComm(h);
+int exaCommReduce(exaComm c,void *out,void *in,exaInt size,exaDataType type,exaInt op){
   switch(op) {
     case EXA_SUM:
       MPI_Reduce(in,out,size,type,MPI_SUM,0,c->gsComm.c);
@@ -69,30 +71,16 @@ int exaReduce(exaHandle h,void *out,void *in,exaInt size,exaDataType type,exaInt
   return 0;
 }
 
-int exaBcast(exaHandle h,void *in,exaInt count,exaDataType type){
-  exaComm c=exaGetComm(h);
-  return MPI_Bcast(in,count,type,0,c->gsComm.c);
+int exaCommBcast(exaComm c,void *in,exaInt count,exaDataType type,int root){
+  return MPI_Bcast(in,count,type,root,c->gsComm.c);
 }
-
-int exaCrystalInit(exaHandle h) {
-  exaComm c=exaGetComm(h);
-  crystal_init(&(h->cr),&(c->gsComm));
+// Crystal router functionality
+int exaCrystalInit(exaComm c) {
+  crystal_init(&(c->cr),&(c->gsComm));
   return 0;
 }
 
-int exaCrystalFinalize(exaHandle h){
-  crystal_free(&(h->cr));
+int exaCrystalFinalize(exaComm c){
+  crystal_free(&(c->cr));
   return 0;
-}
-
-void exaSplitComm(exaHandle h,int bin){
-  exaComm c=exaGetComm(h);
-  exaCommExternal local;
-  exaInt id = exaCommRank(c);
-  MPI_Comm_split(c->gsComm.c,bin,id,&local);
-  exaCrystalFinalize(h);
-  exaDestroyComm(c);
-  exaCreateComm(&(h->comm),local);
-  MPI_Comm_free(&local);
-  exaCrystalInit(h);
 }

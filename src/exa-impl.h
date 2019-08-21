@@ -23,16 +23,17 @@
 //
 struct exaComm_private{
   struct comm gsComm;
-  buffer buf;
+  struct crystal cr;
 };
 //
 // exaHandle
 //
 struct exaHandle_private{
   exaComm comm;
-  struct crystal cr;
+  buffer buf;
   int dbgLevel;
   int printStat;
+  int root;
 };
 //
 // exaHandle: Create, Destroy

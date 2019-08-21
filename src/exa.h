@@ -42,11 +42,6 @@ typedef struct exaHandle_private *exaHandle;
 typedef struct exaVector_private *exaVector;
 typedef struct array *exaArray;
 //
-// exa: Init, Finalize
-//
-int exaInit(exaHandle *h, exaCommExternal ce);
-int exaFinalize(exaHandle h);
-//
 // exaMalloc, Realloc, Calloc and Free
 //
 int exaMallocArray (size_t n,size_t unit,void *p);
