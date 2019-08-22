@@ -105,14 +105,15 @@ int exaDestroyVector(exaVector x);
 //
 // exaArray: just a gslib array
 //
-#define exaArrayCreate(T,array,n) \
-  array_init(T,array,n);
-#define exaArrayGetPointer(T,array) \
-  ((T *) array->ptr)
-#define exaArrayGetElement(T,array,i) \
-  ((T *) array->ptr)[i]
-#define exaArrayTransfer(T,array,proc_field,cr) \
-  sarray_transfer(T,array,proc_field,1,cr);
+#define exaArrayCreate(T,array_,n) \
+  exaCallocArray(1,sizeof(struct array),(&array_)); \
+  array_init(T,array_,n);
+#define exaArrayGetPointer(T,array_) \
+  ((T *) array_->ptr)
+#define exaArrayGetElement(T,array_,i) \
+  ((T *) array_->ptr)[i]
+#define exaArrayTransfer(T,array_,proc_field,cr) \
+  sarray_transfer(T,array_,proc_field,1,cr);
 
 exaInt exaArraySize(exaArray a);
 int    exaArrayFree(exaArray a);
