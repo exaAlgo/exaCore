@@ -1,6 +1,8 @@
 #ifndef _EXA_TYPES_H_
 #define _EXA_TYPES_H_
 
+#include <float.h>
+
 #include <exa-gslib.h>
 //
 // exa types

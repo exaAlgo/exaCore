@@ -4,6 +4,7 @@
 //
 int exaArrayFree(exaArray a) {
   array_free(a);
+  exaFree(a);
   return 0;
 }
 //
