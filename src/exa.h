@@ -108,9 +108,9 @@ int exaDestroyVector(exaVector x);
 #define exaArrayCreate(T,array_,n) \
   exaCallocArray(1,sizeof(struct array),(&array_)); \
   array_init(T,array_,n);
-#define exaArrayGetPointer(T,array_) \
+#define exaArrayPointer(T,array_) \
   ((T *) array_->ptr)
-#define exaArrayGetElement(T,array_,i) \
+#define exaArrayElement(T,array_,i) \
   ((T *) array_->ptr)[i]
 #define exaArrayTransfer(T,array_,proc_field,cr) \
   sarray_transfer(T,array_,proc_field,1,cr);
