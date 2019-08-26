@@ -74,7 +74,13 @@ int exaCommReduce(exaComm c,void *out,void *in,exaInt size,exaDataType type,exaI
 int exaCommBcast(exaComm c,void *in,exaInt count,exaDataType type,int root){
   return MPI_Bcast(in,count,type,root,c->gsComm.c);
 }
+
+void exaCommBarrier(exaComm c) {
+  comm_barrier(&(c->gsComm));
+}
+//
 // Crystal router functionality
+//
 int exaCrystalInit(exaComm c) {
   crystal_init(&(c->cr),&(c->gsComm));
   return 0;

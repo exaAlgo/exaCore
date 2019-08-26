@@ -109,3 +109,7 @@ int exaReduce(exaHandle h,void *out,void *in,exaInt size,exaDataType type,exaInt
 int exaBcast(exaHandle h,void *in,exaInt count,exaDataType type){
   return exaCommBcast(exaGetComm(h),in,count,type,h->root);
 }
+
+void exaBarrier(exaHandle h) {
+  exaCommBarrier(exaGetComm(h));
+}

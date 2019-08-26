@@ -62,6 +62,7 @@ void    exaSplit   (exaHandle h,int bin);
 int     exaGop     (exaHandle h,void *v,exaInt size,exaDataType type,exaInt op);
 int     exaReduce  (exaHandle h,void *out,void *in,exaInt size,exaDataType type,exaInt op);
 int     exaBcast   (exaHandle h,void *in,exaInt count,exaDataType type);
+void    exaBarrier (exaHandle h);
 //
 // exaComm: wraps gslib comm and crystal router
 //
@@ -74,6 +75,7 @@ void   exaCommSplit  (exaComm c,int bin);
 int    exaCommGop    (exaComm c,void *v,exaInt size,exaDataType type,exaInt op);
 int    exaCommReduce (exaComm c,void *out,void *in,exaInt size,exaDataType type,exaInt op);
 int    exaCommBcast  (exaComm c,void *in,exaInt count,exaDataType type,int root);
+void   exaCommBarrier(exaComm c);
 // crystal router functionality
 int exaCrystalInit    (exaComm c);
 int exaCrystalFinalize(exaComm c);
