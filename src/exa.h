@@ -13,13 +13,6 @@
 //
 #include <mpi.h>
 //
-// exa Operators
-//
-#define EXA_SUM 0
-#define EXA_MAX 1
-#define EXA_MIN 2
-#define EXA_MUL 3
-//
 // exa Memory Align
 //
 #define EXA_ALIGN 32
@@ -30,9 +23,35 @@
 #define EXA_DP_TOL 1e-12
 #define EXA_TOL EXA_DP_TOL
 //
+// exa Operators
+//
+typedef enum {
+  EXA_ADD =0,
+  EXA_MAX =1,
+  EXA_MIN =2,
+  EXA_MUL =3
+} exaOp;
+
+gs_op  exaOpGetGSOp (exaOp t);
+MPI_Op exaOpGetMPIOp(exaOp t);
+//
+// exaDataType
+//
+typedef enum {
+  EXA_INT   =0,
+  EXA_UINT  =1,
+  EXA_LONG  =2,
+  EXA_ULONG =3,
+  EXA_SCALAR=4
+} exaDataType;
+
+void         exaDataTypeGetMin    (exaDataType t,void *out);
+void         exaDataTypeGetMax    (exaDataType t,void *out);
+gs_dom       exaDataTypeGetGSType (exaDataType t);
+MPI_Datatype exaDataTypeGetMPIType(exaDataType t);
+//
 // exaCommExternal
 //
-typedef MPI_Datatype exaDataType;
 typedef MPI_Comm exaCommExternal;
 //
 // exa Pointer types
@@ -59,8 +78,8 @@ exaInt  exaSize    (exaHandle h);
 exaInt  exaRank    (exaHandle h);
 int     exaScan    (exaHandle h);
 void    exaSplit   (exaHandle h,int bin);
-int     exaGop     (exaHandle h,void *v,exaInt size,exaDataType type,exaInt op);
-int     exaReduce  (exaHandle h,void *out,void *in,exaInt size,exaDataType type,exaInt op);
+int     exaGop     (exaHandle h,void *v,exaInt size,exaDataType type,exaOp op);
+int     exaReduce  (exaHandle h,void *out,void *in,exaInt size,exaDataType type,exaOp op);
 int     exaBcast   (exaHandle h,void *in,exaInt count,exaDataType type);
 void    exaBarrier (exaHandle h);
 //
@@ -72,8 +91,8 @@ exaInt exaCommSize   (exaComm c);
 exaInt exaCommRank   (exaComm c);
 int    exaCommScan   (exaComm c);
 void   exaCommSplit  (exaComm c,int bin);
-int    exaCommGop    (exaComm c,void *v,exaInt size,exaDataType type,exaInt op);
-int    exaCommReduce (exaComm c,void *out,void *in,exaInt size,exaDataType type,exaInt op);
+int    exaCommGop    (exaComm c,void *v,exaInt size,exaDataType type,exaOp op);
+int    exaCommReduce (exaComm c,void *out,void *in,exaInt size,exaDataType type,exaOp op);
 int    exaCommBcast  (exaComm c,void *in,exaInt count,exaDataType type,int root);
 void   exaCommBarrier(exaComm c);
 // crystal router functionality

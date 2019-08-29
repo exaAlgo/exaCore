@@ -37,42 +37,18 @@ void exaCommSplit(exaComm c,int bin){
   exaCrystalInit(c);
 }
 
-int exaCommGop(exaComm c,void *v,exaInt size,exaDataType type,exaInt op){
-  switch(op){
-    case EXA_SUM:
-      MPI_Allreduce(MPI_IN_PLACE,v,size,type,MPI_SUM,c->gsComm.c);
-      break;
-    case EXA_MAX:
-      MPI_Allreduce(MPI_IN_PLACE,v,size,type,MPI_MAX,c->gsComm.c);
-      break;
-    case EXA_MIN:
-      MPI_Allreduce(MPI_IN_PLACE,v,size,type,MPI_MIN,c->gsComm.c);
-      break;
-    default:
-      break;
-  }
-  return 0;
+int exaCommGop(exaComm c,void *v,exaInt size,exaDataType type,exaOp op){
+  return MPI_Allreduce(MPI_IN_PLACE,v,size,exaDataTypeGetMPIType(type),
+		       exaOpGetMPIOp(op),c->gsComm.c);
 }
 
-int exaCommReduce(exaComm c,void *out,void *in,exaInt size,exaDataType type,exaInt op){
-  switch(op) {
-    case EXA_SUM:
-      MPI_Reduce(in,out,size,type,MPI_SUM,0,c->gsComm.c);
-      break;
-    case EXA_MAX:
-      MPI_Reduce(in,out,size,type,MPI_MAX,0,c->gsComm.c);
-      break;
-    case EXA_MIN:
-      MPI_Reduce(in,out,size,type,MPI_MIN,0,c->gsComm.c);
-      break;
-    default:
-      break;
-  }
-  return 0;
+int exaCommReduce(exaComm c,void *out,void *in,exaInt size,exaDataType type,exaOp op){
+  return MPI_Reduce(in,out,size,exaDataTypeGetMPIType(type),
+		    exaOpGetMPIOp(op),0,c->gsComm.c);
 }
 
 int exaCommBcast(exaComm c,void *in,exaInt count,exaDataType type,int root){
-  return MPI_Bcast(in,count,type,root,c->gsComm.c);
+  return MPI_Bcast(in,count,exaDataTypeGetMPIType(type),root,c->gsComm.c);
 }
 
 void exaCommBarrier(exaComm c) {

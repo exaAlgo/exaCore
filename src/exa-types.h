@@ -15,11 +15,14 @@ typedef unsigned long long exaULong;
 #define exaLongMIN LLONG_MIN
 #define exaULongMAX ULLONG_MAX
 #define exaULongMIN 0
-
-#define exaLongCommType  MPI_LONG_LONG
-#define exaULongCommType MPI_UNSIGNED_LONG_LONG
-#define exaLongCommType  MPI_LONG_LONG
+#define exaLongMPIType  MPI_LONG_LONG
+#define exaULongMPIType MPI_UNSIGNED_LONG_LONG
+#define exaLongGSType gs_long
+#define exaULongGSType gs_long
+#define exaLongGSSortType 1
+#define exaULongGSSortType 1
 #define exaLongType 1
+#define exaULongType 1
 
 typedef int exaInt;
 typedef unsigned int exaUInt;
@@ -29,25 +32,28 @@ typedef unsigned int exaUInt;
 #define exaIntMIN INT_MIN
 #define exaUIntMAX UINT_MAX
 #define exaUIntMIN 0
-
-#define exaIntCommType  MPI_INT
-#define exaUIntCommType MPI_UNSIGNED_INT
+#define exaIntMPIType  MPI_INT
+#define exaUIntMPIType MPI_UNSIGNED_INT
 #define exaIntGSType gs_int
+#define exaUIntGSType gs_int
+#define exaIntGSSortType 0
+#define exaUIntGSSortType 0
 #define exaIntType 0
+#define exaUIntType 0
 
 typedef double exaScalar;
 #define exaScalarFormat "%lf"
 #define exaScalarMAX DBL_MAX
 #define exaScalarMIN DBL_MIN
-
-#define exaScalarCommType MPI_DOUBLE
+#define exaScalarMPIType MPI_DOUBLE
 #define exaScalarGSType gs_double
-#define exaScalarType 3
+#define exaScalarGSSortType 3
 
 #define exaTypeGetMax(T) T##MAX
 #define exaTypeGetMin(T) T##MIN
-#define exaTypeGetType(T) T##Type
-#define exaTypeGetCommType(T) T##CommType
+#define exaTypeGetDataType(T) T##Type
+#define exaTypeGetMPIType(T) T##MPIType
 #define exaTypeGetGSType(T) T##GSType
+#define exaTypeGetGSSortType(T) T##GSSortType
 
 #endif
