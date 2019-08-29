@@ -89,7 +89,7 @@ int    exaCommCreate (exaComm *c,exaCommExternal ce);
 int    exaCommDestroy(exaComm c);
 exaInt exaCommSize   (exaComm c);
 exaInt exaCommRank   (exaComm c);
-int    exaCommScan   (exaComm c);
+int    exaCommScan   (exaComm c,void *out,void *in,void *buf,int N);
 void   exaCommSplit  (exaComm c,int bin);
 int    exaCommGop    (exaComm c,void *v,exaInt size,exaDataType type,exaOp op);
 int    exaCommReduce (exaComm c,void *out,void *in,exaInt size,exaDataType type,exaOp op);

@@ -22,7 +22,7 @@ exaInt exaCommRank(exaComm c){
   return (exaInt) c->gsComm.id;
 }
 
-int exaCommScan(exaComm c){
+int exaCommScan(exaComm c,void *out,void *in,void *buf,int N){
   return 0;
 }
 
