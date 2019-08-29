@@ -21,8 +21,6 @@ typedef unsigned long long exaULong;
 #define exaULongGSType gs_long
 #define exaLongGSSortType 1
 #define exaULongGSSortType 1
-#define exaLongType 1
-#define exaULongType 1
 
 typedef int exaInt;
 typedef unsigned int exaUInt;
@@ -38,8 +36,6 @@ typedef unsigned int exaUInt;
 #define exaUIntGSType gs_int
 #define exaIntGSSortType 0
 #define exaUIntGSSortType 0
-#define exaIntType 0
-#define exaUIntType 0
 
 typedef double exaScalar;
 #define exaScalarFormat "%lf"
@@ -51,7 +47,6 @@ typedef double exaScalar;
 
 #define exaTypeGetMax(T) T##MAX
 #define exaTypeGetMin(T) T##MIN
-#define exaTypeGetDataType(T) T##Type
 #define exaTypeGetMPIType(T) T##MPIType
 #define exaTypeGetGSType(T) T##GSType
 #define exaTypeGetGSSortType(T) T##GSSortType

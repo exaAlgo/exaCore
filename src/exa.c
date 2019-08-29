@@ -117,19 +117,19 @@ void exaBarrier(exaHandle h) {
 gs_dom exaDataTypeGetGSType(exaDataType t) {
   gs_dom out;
   switch(t) {
-    case EXA_INT:
+    case exaDataType_exaInt:
       out=exaIntGSType;
       break;
-    case EXA_UINT:
+    case exaDataType_exaUInt:
       out=exaIntGSType;
       break;
-    case EXA_LONG:
+    case exaDataType_exaLong:
       out=exaLongGSType;
       break;
-    case EXA_ULONG:
+    case exaDataType_exaULong:
       out=exaLongGSType;
       break;
-    case EXA_SCALAR:
+    case exaDataType_exaScalar:
       out=exaScalarGSType;
       break;
     default:
@@ -162,19 +162,19 @@ gs_op exaOpGetGSOp(exaOp t) {
 MPI_Datatype exaDataTypeGetMPIType(exaDataType t) {
   MPI_Datatype out;
   switch(t) {
-    case EXA_INT:
+    case exaDataType_exaInt:
       out=exaIntMPIType;
       break;
-    case EXA_UINT:
+    case exaDataType_exaUInt:
       out=exaIntMPIType;
       break;
-    case EXA_LONG:
+    case exaDataType_exaLong:
       out=exaLongMPIType;
       break;
-    case EXA_ULONG:
+    case exaDataType_exaULong:
       out=exaLongMPIType;
       break;
-    case EXA_SCALAR:
+    case exaDataType_exaScalar:
       out=exaScalarMPIType;
       break;
     default:
@@ -203,19 +203,19 @@ MPI_Op exaOpGetMPIOp(exaOp t) {
 
 void exaDataTypeGetMin(exaDataType t,void *out) {
   switch(t) {
-    case EXA_INT:
+    case exaDataType_exaInt:
       *((exaInt *)out)=exaIntMIN;
       break;
-    case EXA_UINT:
+    case exaDataType_exaUInt:
       *((exaUInt *)out)=exaUIntMIN;
       break;
-    case EXA_LONG:
+    case exaDataType_exaLong:
       *((exaLong *)out)=exaLongMIN;
       break;
-    case EXA_ULONG:
+    case exaDataType_exaULong:
       *((exaULong *)out)=exaULongMIN;
       break;
-    case EXA_SCALAR:
+    case exaDataType_exaScalar:
       *((exaScalar *)out)=exaScalarMIN;
       break;
     default:
@@ -225,19 +225,19 @@ void exaDataTypeGetMin(exaDataType t,void *out) {
 
 void exaDataTypeGetMax(exaDataType t,void *out) {
   switch(t) {
-    case EXA_INT:
+    case exaDataType_exaInt:
       *((exaInt *)out)=exaIntMAX;
       break;
-    case EXA_UINT:
+    case exaDataType_exaUInt:
       *((exaUInt *)out)=exaUIntMAX;
       break;
-    case EXA_LONG:
+    case exaDataType_exaLong:
       *((exaLong *)out)=exaLongMAX;
       break;
-    case EXA_ULONG:
+    case exaDataType_exaULong:
       *((exaULong *)out)=exaULongMAX;
       break;
-    case EXA_SCALAR:
+    case exaDataType_exaScalar:
       *((exaScalar *)out)=exaScalarMAX;
       break;
     default:

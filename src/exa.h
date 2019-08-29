@@ -38,12 +38,13 @@ MPI_Op exaOpGetMPIOp(exaOp t);
 // exaDataType
 //
 typedef enum {
-  EXA_INT   =0,
-  EXA_UINT  =1,
-  EXA_LONG  =2,
-  EXA_ULONG =3,
-  EXA_SCALAR=4
+  exaDataType_exaInt   =0,
+  exaDataType_exaUInt  =1,
+  exaDataType_exaLong  =2,
+  exaDataType_exaULong =3,
+  exaDataType_exaScalar=4
 } exaDataType;
+#define exaTypeGetDataType(T) exaDataType_##T
 
 void         exaDataTypeGetMin    (exaDataType t,void *out);
 void         exaDataTypeGetMax    (exaDataType t,void *out);
