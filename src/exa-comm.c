@@ -22,8 +22,8 @@ exaInt exaCommRank(exaComm c){
   return (exaInt) c->gsComm.id;
 }
 
-int exaCommScan(exaComm c,void *out,void *in,void *buf,int N){
-  return 0;
+void exaCommScan(exaComm c,void *out,void *in,void *buf,exaInt size,exaDataType t,exaOp op){
+  comm_scan(out,&c->gsComm,exaDataTypeGetGSType(t),exaOpGetGSOp(op),in,size,buf);
 }
 
 void exaCommSplit(exaComm c,int bin){
