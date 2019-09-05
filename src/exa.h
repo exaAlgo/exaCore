@@ -128,7 +128,7 @@ int exaDestroyVector(exaVector x);
 // exaArray: just a gslib array
 //
 #define exaArrayCreate(T,array_,n_) \
-  exaCallocArray(1,sizeof(struct array),(&array_)); \
+  array_=(struct array*)malloc(sizeof(struct array)); \
   array_init(T,array_,n_); \
   array_->n=n_;
 #define exaArrayPointer(T,array_) \
