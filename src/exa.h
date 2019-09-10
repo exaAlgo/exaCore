@@ -60,7 +60,7 @@ typedef MPI_Comm exaCommExternal;
 typedef struct exaComm_private *exaComm;
 typedef struct exaHandle_private *exaHandle;
 typedef struct exaVector_private *exaVector;
-typedef struct array *exaArray;
+typedef struct exaArray_private *exaArray;
 //
 // exaMalloc, Realloc, Calloc and Free
 //
@@ -125,18 +125,16 @@ exaScalar exaNormVector(exaVector x, exaInt p);
 int exaPrintVector(exaVector x);
 int exaDestroyVector(exaVector x);
 //
-// exaArray: just a gslib array
+// exaArray
 //
-#define exaArrayCreate(T,array_,n_) \
-  array_=(struct array*)malloc(sizeof(struct array)); \
-  array_init(T,array_,n_); \
-  array_->n=n_;
-#define exaArrayPointer(T,array_) \
-  ((T *) array_->ptr)
-#define exaArrayElement(T,array_,i) \
-  ((T *) array_->ptr)[i]
+int exaArrayInit_(exaArray *array_,size_t unitSize,size_t nUnits,const char *file,
+  const unsigned int line);
+#define exaArrayInit(array_,unitSize,nUnits) exaArrayInit_(array_,unitSize,nUnits,__FILE__,__LINE__)
+
+void *exaArrayPointer(exaArray array);
+
 #define exaArrayTransfer(T,array_,proc_field,cr) \
-  sarray_transfer(T,array_,proc_field,1,cr);
+  sarray_transfer(T,exaArrayPointer(array_),proc_field,1,cr);
 
 exaInt exaArraySize(exaArray a);
 int    exaArrayFree(exaArray a);

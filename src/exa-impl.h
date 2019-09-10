@@ -12,6 +12,12 @@
 
 #include "exa.h"
 //
+// exa Memory allocation
+//
+#define exaMalloc(n, p)  exaMallocArray ((n), sizeof(**(p)), p)
+#define exaCalloc(n, p)  exaCallocArray ((n), sizeof(**(p)), p)
+#define exaRealloc(n, p) exaReallocArray((n), sizeof(**(p)), p)
+//
 // Fiedler fields
 //
 #define EXA_FIEDLER 0
@@ -48,10 +54,12 @@ struct exaVector_private{
   exaScalar *data;
 };
 //
-// Memory management routines
+// exaArray
 //
-#define exaMalloc(n, p)  exaMallocArray ((n), sizeof(**(p)), p)
-#define exaCalloc(n, p)  exaCallocArray ((n), sizeof(**(p)), p)
-#define exaRealloc(n, p) exaReallocArray((n), sizeof(**(p)), p)
+struct exaArray_private{
+  exaInt size;
+  size_t unitSize;
+  struct array arr;
+};
 
 #endif

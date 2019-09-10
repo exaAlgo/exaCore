@@ -2,7 +2,6 @@
 #include <stdio.h>
 
 #include "exa-impl.h"
-
 //
 // exaMalloc, Realloc, Calloc and Free
 //

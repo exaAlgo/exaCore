@@ -43,8 +43,13 @@ int exaCommGop(exaComm c,void *v,exaInt size,exaDataType type,exaOp op){
 }
 
 int exaCommReduce(exaComm c,void *out,void *in,exaInt size,exaDataType type,exaOp op){
-  return MPI_Reduce(in,out,size,exaDataTypeGetMPIType(type),
+  if(out==in && exaCommRank(c)==0){ // we should use MPI_IN_PLACE at root
+    return MPI_Reduce(MPI_IN_PLACE,out,size,exaDataTypeGetMPIType(type),
 		    exaOpGetMPIOp(op),0,c->gsComm.c);
+  } else{
+    return MPI_Reduce(in,out,size,exaDataTypeGetMPIType(type),
+		    exaOpGetMPIOp(op),0,c->gsComm.c);
+  }
 }
 
 int exaCommBcast(exaComm c,void *in,exaInt count,exaDataType type,int root){
