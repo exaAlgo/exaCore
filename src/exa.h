@@ -140,7 +140,7 @@ int exaArrayInit_(exaArray *array_,size_t unitSize,size_t nUnits,const char *fil
 void *exaArrayPointer(exaArray array);
 
 #define exaArrayTransfer(T,array_,proc_field,cr) \
-  sarray_transfer(T,exaArrayPointer(array_),proc_field,1,cr);
+  sarray_transfer(T,&(array_->arr),proc_field,1,cr);
 
 exaInt exaArraySize(exaArray a);
 int    exaArrayFree(exaArray a);
