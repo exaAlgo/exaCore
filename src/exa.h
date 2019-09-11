@@ -26,10 +26,10 @@
 // exa Operators
 //
 typedef enum {
-  EXA_ADD =0,
-  EXA_MAX =1,
-  EXA_MIN =2,
-  EXA_MUL =3
+  exaAddOp =0,
+  exaMaxOp =1,
+  exaMinOp =2,
+  exaMulOp =3
 } exaOp;
 
 gs_op  exaOpGetGSOp (exaOp t);
@@ -38,13 +38,13 @@ MPI_Op exaOpGetMPIOp(exaOp t);
 // exaDataType
 //
 typedef enum {
-  exaDataType_exaInt   =0,
-  exaDataType_exaUInt  =1,
-  exaDataType_exaLong  =2,
-  exaDataType_exaULong =3,
-  exaDataType_exaScalar=4
+  exaInt_t   =0,
+  exaUInt_t  =1,
+  exaLong_t  =2,
+  exaULong_t =3,
+  exaScalar_t=4
 } exaDataType;
-#define exaTypeGetDataType(T) exaDataType_##T
+#define exaTypeGetDataType(T) T##_t
 
 void         exaDataTypeGetMin    (exaDataType t,void *out);
 void         exaDataTypeGetMax    (exaDataType t,void *out);
@@ -79,7 +79,8 @@ struct comm exaGetGSComm (exaHandle h);
 int         exaSetComm   (exaHandle h,exaComm c);
 exaInt      exaSize      (exaHandle h);
 exaInt      exaRank      (exaHandle h);
-int         exaScan      (exaHandle h);
+int         exaScan      (exaHandle h,void *out,void *in,void *buf,exaInt size,
+                         exaDataType t,exaOp op);
 void        exaSplit     (exaHandle h,int bin);
 int         exaGop       (exaHandle h,void *v,exaInt size,exaDataType type,exaOp op);
 int         exaReduce    (exaHandle h,void *out,void *in,exaInt size,exaDataType type,
@@ -95,7 +96,7 @@ MPI_Comm    exaCommGetMPIComm(exaComm c);
 struct comm exaCommGetGSComm (exaComm c);
 exaInt      exaCommSize      (exaComm c);
 exaInt      exaCommRank      (exaComm c);
-void        exaCommScan      (exaComm c,void *out,void *in,void *buf,exaInt size,
+int         exaCommScan      (exaComm c,void *out,void *in,void *buf,exaInt size,
                               exaDataType t,exaOp op);
 void        exaCommSplit     (exaComm c,int bin);
 int         exaCommGop       (exaComm c,void *v,exaInt size,exaDataType type,exaOp op);
@@ -126,7 +127,7 @@ exaScalar exaAbsMaxVector(exaVector x);
 exaScalar exaMaxVector(exaVector x);
 exaScalar exaAbsMinVector(exaVector x);
 exaScalar exaMinVector(exaVector x);
-exaScalar exaNormVector(exaVector x, exaInt p);
+exaScalar exaNormVector(exaVector x,exaInt p);
 
 int exaPrintVector(exaVector x);
 int exaDestroyVector(exaVector x);

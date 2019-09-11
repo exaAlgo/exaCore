@@ -30,7 +30,8 @@ exaInt exaCommRank(exaComm c){
   return (exaInt) c->gsComm.id;
 }
 
-void exaCommScan(exaComm c,void *out,void *in,void *buf,exaInt size,exaDataType t,exaOp op){
+int exaCommScan(exaComm c,void *out,void *in,void *buf,exaInt size,
+  exaDataType t,exaOp op){
   comm_scan(out,&c->gsComm,exaDataTypeGetGSType(t),exaOpGetGSOp(op),in,size,buf);
 }
 

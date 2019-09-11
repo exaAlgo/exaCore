@@ -96,8 +96,9 @@ exaInt exaRank(exaHandle h){
   return exaCommRank(exaGetComm(h));
 }
 
-int exaScan(exaHandle h){
-  return 0;
+int exaScan(exaHandle h,void *out,void *in,void *buf,exaInt size,
+  exaDataType t,exaOp op){
+  return exaCommScan(exaGetComm(h),out,in,buf,size,t,op);
 }
 
 void exaSplit(exaHandle h,int bin){
@@ -124,19 +125,19 @@ void exaBarrier(exaHandle h) {
 gs_dom exaDataTypeGetGSType(exaDataType t) {
   gs_dom out;
   switch(t) {
-    case exaDataType_exaInt:
+    case exaInt_t:
       out=exaIntGSType;
       break;
-    case exaDataType_exaUInt:
+    case exaUInt_t:
       out=exaIntGSType;
       break;
-    case exaDataType_exaLong:
+    case exaLong_t:
       out=exaLongGSType;
       break;
-    case exaDataType_exaULong:
+    case exaULong_t:
       out=exaLongGSType;
       break;
-    case exaDataType_exaScalar:
+    case exaScalar_t:
       out=exaScalarGSType;
       break;
     default:
@@ -148,16 +149,16 @@ gs_dom exaDataTypeGetGSType(exaDataType t) {
 gs_op exaOpGetGSOp(exaOp t) {
   gs_op out;
   switch(t) {
-    case EXA_ADD:
+    case exaAddOp:
       out=gs_add;
       break;
-    case EXA_MAX:
+    case exaMaxOp:
       out=gs_max;
       break;
-    case EXA_MIN:
+    case exaMinOp:
       out=gs_min;
       break;
-    case EXA_MUL:
+    case exaMulOp:
       out=gs_mul;
       break;
     default:
@@ -169,19 +170,19 @@ gs_op exaOpGetGSOp(exaOp t) {
 MPI_Datatype exaDataTypeGetMPIType(exaDataType t) {
   MPI_Datatype out;
   switch(t) {
-    case exaDataType_exaInt:
+    case exaInt_t:
       out=exaIntMPIType;
       break;
-    case exaDataType_exaUInt:
+    case exaUInt_t:
       out=exaIntMPIType;
       break;
-    case exaDataType_exaLong:
+    case exaLong_t:
       out=exaLongMPIType;
       break;
-    case exaDataType_exaULong:
+    case exaULong_t:
       out=exaLongMPIType;
       break;
-    case exaDataType_exaScalar:
+    case exaScalar_t:
       out=exaScalarMPIType;
       break;
     default:
@@ -193,13 +194,13 @@ MPI_Datatype exaDataTypeGetMPIType(exaDataType t) {
 MPI_Op exaOpGetMPIOp(exaOp t) {
   MPI_Op out;
   switch(t) {
-    case EXA_ADD:
+    case exaAddOp:
       out=MPI_SUM;
       break;
-    case EXA_MAX:
+    case exaMaxOp:
       out=MPI_MAX;
       break;
-    case EXA_MIN:
+    case exaMinOp:
       out=MPI_MIN;
       break;
     default:
@@ -210,19 +211,19 @@ MPI_Op exaOpGetMPIOp(exaOp t) {
 
 void exaDataTypeGetMin(exaDataType t,void *out) {
   switch(t) {
-    case exaDataType_exaInt:
+    case exaInt_t:
       *((exaInt *)out)=exaIntMIN;
       break;
-    case exaDataType_exaUInt:
+    case exaUInt_t:
       *((exaUInt *)out)=exaUIntMIN;
       break;
-    case exaDataType_exaLong:
+    case exaLong_t:
       *((exaLong *)out)=exaLongMIN;
       break;
-    case exaDataType_exaULong:
+    case exaULong_t:
       *((exaULong *)out)=exaULongMIN;
       break;
-    case exaDataType_exaScalar:
+    case exaScalar_t:
       *((exaScalar *)out)=exaScalarMIN;
       break;
     default:
@@ -232,19 +233,19 @@ void exaDataTypeGetMin(exaDataType t,void *out) {
 
 void exaDataTypeGetMax(exaDataType t,void *out) {
   switch(t) {
-    case exaDataType_exaInt:
+    case exaInt_t:
       *((exaInt *)out)=exaIntMAX;
       break;
-    case exaDataType_exaUInt:
+    case exaUInt_t:
       *((exaUInt *)out)=exaUIntMAX;
       break;
-    case exaDataType_exaLong:
+    case exaLong_t:
       *((exaLong *)out)=exaLongMAX;
       break;
-    case exaDataType_exaULong:
+    case exaULong_t:
       *((exaULong *)out)=exaULongMAX;
       break;
-    case exaDataType_exaScalar:
+    case exaScalar_t:
       *((exaScalar *)out)=exaScalarMAX;
       break;
     default:
