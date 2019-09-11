@@ -71,31 +71,37 @@ int exaFree        (void *p);
 //
 // exaHandle: wraps an exaComm, buffer and other options
 //
-int     exaInit    (exaHandle *h,exaCommExternal ce);
-int     exaFinalize(exaHandle h);
-exaComm exaGetComm (exaHandle h);
-int     exaSetComm (exaHandle h,exaComm c);
-exaInt  exaSize    (exaHandle h);
-exaInt  exaRank    (exaHandle h);
-int     exaScan    (exaHandle h);
-void    exaSplit   (exaHandle h,int bin);
-int     exaGop     (exaHandle h,void *v,exaInt size,exaDataType type,exaOp op);
-int     exaReduce  (exaHandle h,void *out,void *in,exaInt size,exaDataType type,exaOp op);
-int     exaBcast   (exaHandle h,void *in,exaInt count,exaDataType type);
-void    exaBarrier (exaHandle h);
+int         exaInit      (exaHandle *h,exaCommExternal ce);
+int         exaFinalize  (exaHandle h);
+exaComm     exaGetComm   (exaHandle h);
+MPI_Comm    exaGetMPIComm(exaHandle h);
+struct comm exaGetGSComm (exaHandle h);
+int         exaSetComm   (exaHandle h,exaComm c);
+exaInt      exaSize      (exaHandle h);
+exaInt      exaRank      (exaHandle h);
+int         exaScan      (exaHandle h);
+void        exaSplit     (exaHandle h,int bin);
+int         exaGop       (exaHandle h,void *v,exaInt size,exaDataType type,exaOp op);
+int         exaReduce    (exaHandle h,void *out,void *in,exaInt size,exaDataType type,
+                          exaOp op);
+int         exaBcast     (exaHandle h,void *in,exaInt count,exaDataType type);
+void        exaBarrier   (exaHandle h);
 //
 // exaComm: wraps gslib comm and crystal router
 //
-int    exaCommCreate (exaComm *c,exaCommExternal ce);
-int    exaCommDestroy(exaComm c);
-exaInt exaCommSize   (exaComm c);
-exaInt exaCommRank   (exaComm c);
-void   exaCommScan   (exaComm c,void *out,void *in,void *buf,exaInt size,exaDataType t,exaOp op);
-void   exaCommSplit  (exaComm c,int bin);
-int    exaCommGop    (exaComm c,void *v,exaInt size,exaDataType type,exaOp op);
-int    exaCommReduce (exaComm c,void *out,void *in,exaInt size,exaDataType type,exaOp op);
-int    exaCommBcast  (exaComm c,void *in,exaInt count,exaDataType type,int root);
-void   exaCommBarrier(exaComm c);
+int         exaCommCreate    (exaComm *c,exaCommExternal ce);
+int         exaCommDestroy   (exaComm c);
+MPI_Comm    exaCommGetMPIComm(exaComm c);
+struct comm exaCommGetGSComm (exaComm c);
+exaInt      exaCommSize      (exaComm c);
+exaInt      exaCommRank      (exaComm c);
+void        exaCommScan      (exaComm c,void *out,void *in,void *buf,exaInt size,
+                              exaDataType t,exaOp op);
+void        exaCommSplit     (exaComm c,int bin);
+int         exaCommGop       (exaComm c,void *v,exaInt size,exaDataType type,exaOp op);
+int         exaCommReduce    (exaComm c,void *out,void *in,exaInt size,exaDataType type,exaOp op);
+int         exaCommBcast     (exaComm c,void *in,exaInt count,exaDataType type,int root);
+void        exaCommBarrier   (exaComm c);
 // crystal router functionality
 int exaCrystalInit    (exaComm c);
 int exaCrystalFinalize(exaComm c);

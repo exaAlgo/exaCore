@@ -14,6 +14,14 @@ int exaCommDestroy(exaComm c){
   return 0;
 }
 
+MPI_Comm exaCommGetMPIComm(exaComm c){
+  return  c->gsComm.c;
+}
+
+struct comm exaCommGetGSComm(exaComm c){
+  return c->gsComm;
+}
+
 exaInt exaCommSize(exaComm c){
   return (exaInt) c->gsComm.np;
 }

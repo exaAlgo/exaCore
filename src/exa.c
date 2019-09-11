@@ -75,6 +75,14 @@ exaComm exaGetComm(exaHandle h){
   return h->comm;
 }
 
+MPI_Comm exaGetMPIComm(exaHandle h){
+  return exaCommGetMPIComm(exaGetComm(h));
+}
+
+struct comm exaGetGSComm(exaHandle h) {
+  return exaCommGetGSComm(exaGetComm(h));
+}
+
 int exaSetComm(exaHandle h,exaComm c){
   // TODO: malloc and a copy
   h->comm=c;
