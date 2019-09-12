@@ -7,6 +7,13 @@ int exaArrayInit_(exaArray *array_,size_t unitSize,size_t nUnits,const char *fil
   exaMalloc(1,array_);
   array_init_(&((*array_)->arr),nUnits,unitSize,file,line);
   (*array_)->arr.n=nUnits;
+  (*array_)->unitSize=unitSize;
+}
+//
+// exaArrayUnitSize
+//
+size_t exaArrayUnitSize(exaArray array){
+  return array->unitSize;
 }
 //
 // exaArrayPointer
@@ -17,7 +24,7 @@ void *exaArrayPointer(exaArray array){
 //
 // exaArrayFree
 //
-int exaArrayFree(exaArray a) {
+int exaArrayFree(exaArray a){
   array_free(&(a->arr));
   exaFree(a);
   return 0;
@@ -25,6 +32,6 @@ int exaArrayFree(exaArray a) {
 //
 // exaArraySize
 //
-exaInt exaArraySize(exaArray a) {
+exaInt exaArraySize(exaArray a){
   return (exaInt) a->arr.n;
 }
