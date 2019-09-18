@@ -28,9 +28,16 @@ exaInt exaArrayGetSize(exaArray a){
   return (exaInt) a->arr.n;
 }
 //
+// exaArrayGetMax
+//
+exaInt exaArrayGetMax(exaArray a){
+  return (exaInt) a->arr.max;
+}
+//
 // exaArraySetSize
 //
 exaInt exaArraySetSize(exaArray a,size_t n){
+  if(n>a->arr.max) exaArrayResize_(a,n,__FILE__,__LINE__);
   a->arr.n=n;
 }
 //
