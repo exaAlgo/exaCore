@@ -138,13 +138,17 @@ int exaArrayInit_(exaArray *array_,size_t unitSize,size_t nUnits,const char *fil
   const unsigned int line);
 #define exaArrayInit(array_,unitSize,nUnits) exaArrayInit_(array_,unitSize,nUnits,__FILE__,__LINE__)
 
-void *exaArrayPointer(exaArray array);
+exaInt exaArrayResize_(exaArray a,size_t max,const char *file,const unsigned int line);
+#define exaArrayResize(array_,max) exaArrayResize_(array_,max,__FILE__,__LINE__)
+
+void *exaArrayGetPointer(exaArray array);
 
 #define exaArrayTransfer(T,array_,proc_field,cr) \
   sarray_transfer(T,&(array_->arr),proc_field,1,cr)
 
-exaInt exaArraySize(exaArray a);
-size_t exaArrayUnitSize(exaArray array);
+exaInt exaArrayGetSize(exaArray a);
+exaInt exaArraySetSize(exaArray a,size_t n);
+size_t exaArrayGetUnitSize(exaArray array);
 int    exaArrayFree(exaArray a);
 //
 // Debug routines
