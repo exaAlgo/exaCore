@@ -11,14 +11,10 @@
 #endif
 
 #include "exa.h"
+#include "exa-memory.h"
+
 //
-// exa Memory allocation
-//
-#define exaMalloc(n, p)  exaMallocArray ((n), sizeof(**(p)), p)
-#define exaCalloc(n, p)  exaCallocArray ((n), sizeof(**(p)), p)
-#define exaRealloc(n, p) exaReallocArray((n), sizeof(**(p)), p)
-//
-// Fiedler fields
+// Some commonly occuring fields
 //
 #define EXA_FIEDLER 0
 #define EXA_GLOBALID 1
