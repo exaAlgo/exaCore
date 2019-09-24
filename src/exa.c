@@ -47,7 +47,7 @@ int exaInit(exaHandle *h, exaCommExternal ce) {
   // Create comm
   exaCommCreate(&h_->comm,ce);
   // Init crystal router
-  exaCrystalInit(exaGetComm(h_));
+  exaCrystalInit(h_);
   // Init the buffer
   buffer_init(&h_->buf,1024);
 
@@ -60,7 +60,7 @@ int exaInit(exaHandle *h, exaCommExternal ce) {
 }
 int exaFinalize(exaHandle h) {
   // Finalize crystal router
-  exaCrystalFinalize(exaGetComm(h));
+  exaCrystalFinalize(h);
   // Finalize communication
   exaCommDestroy(exaGetComm(h));
   // Finalize the buffer
@@ -251,4 +251,12 @@ void exaDataTypeGetMax(exaDataType t,void *out) {
     default:
       break;
   }
+}
+
+int exaCrystalInit(exaHandle h){
+  exaCommCrystalInit(exaGetComm(h));
+}
+
+int exaCrystalFinalize(exaHandle h){
+  exaCommCrystalFinalize(exaGetComm(h));
 }

@@ -80,13 +80,15 @@ int         exaSetComm   (exaHandle h,exaComm c);
 exaInt      exaSize      (exaHandle h);
 exaInt      exaRank      (exaHandle h);
 int         exaScan      (exaHandle h,void *out,void *in,void *buf,exaInt size,
-                         exaDataType t,exaOp op);
+                          exaDataType t,exaOp op);
 void        exaSplit     (exaHandle h,int bin);
 int         exaGop       (exaHandle h,void *v,exaInt size,exaDataType type,exaOp op);
 int         exaReduce    (exaHandle h,void *out,void *in,exaInt size,exaDataType type,
                           exaOp op);
 int         exaBcast     (exaHandle h,void *in,exaInt count,exaDataType type);
 void        exaBarrier   (exaHandle h);
+int         exaCrystalInit    (exaHandle h);
+int         exaCrystalFinalize(exaHandle h);
 //
 // exaComm: wraps gslib comm and crystal router
 //
@@ -104,8 +106,8 @@ int         exaCommReduce    (exaComm c,void *out,void *in,exaInt size,exaDataTy
 int         exaCommBcast     (exaComm c,void *in,exaInt count,exaDataType type,int root);
 void        exaCommBarrier   (exaComm c);
 // crystal router functionality
-int exaCrystalInit    (exaComm c);
-int exaCrystalFinalize(exaComm c);
+int         exaCommCrystalInit    (exaComm c);
+int         exaCommCrystalFinalize(exaComm c);
 //
 // exaVector: wraps a vector currently just a host vector
 //

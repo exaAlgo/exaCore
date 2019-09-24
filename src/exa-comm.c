@@ -39,11 +39,11 @@ void exaCommSplit(exaComm c,int bin){
   exaCommExternal local;
   exaInt id = exaCommRank(c);
   MPI_Comm_split(c->gsComm.c,bin,id,&local);
-  exaCrystalFinalize(c);
+  exaCommCrystalFinalize(c);
   exaCommDestroy(c);
   exaCommCreate(&c,local);
   MPI_Comm_free(&local);
-  exaCrystalInit(c);
+  exaCommCrystalInit(c);
 }
 
 int exaCommGop(exaComm c,void *v,exaInt size,exaDataType type,exaOp op){
@@ -71,12 +71,12 @@ void exaCommBarrier(exaComm c) {
 //
 // Crystal router functionality
 //
-int exaCrystalInit(exaComm c) {
+int exaCommCrystalInit(exaComm c) {
   crystal_init(&(c->cr),&(c->gsComm));
   return 0;
 }
 
-int exaCrystalFinalize(exaComm c){
+int exaCommCrystalFinalize(exaComm c){
   crystal_free(&(c->cr));
   return 0;
 }
