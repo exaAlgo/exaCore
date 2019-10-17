@@ -57,5 +57,16 @@ struct exaArray_private{
   size_t unitSize;
   struct array arr;
 };
-
+//
+// exaBuffer
+//
+struct exaBuffer_private{
+  buffer buf;
+};
+//
+// exaTopology
+//
+struct exaTopology_private{
+  struct gs_data *topology;
+};
 #endif

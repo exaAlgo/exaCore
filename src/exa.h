@@ -61,6 +61,8 @@ typedef struct exaComm_private *exaComm;
 typedef struct exaHandle_private *exaHandle;
 typedef struct exaVector_private *exaVector;
 typedef struct exaArray_private *exaArray;
+typedef struct exaBuffer_private *exaBuffer;
+typedef struct exaTopology_private *exaTopology;
 //
 // exaMalloc, Realloc, Calloc and Free
 //
@@ -90,7 +92,7 @@ void        exaBarrier   (exaHandle h);
 int         exaCrystalInit    (exaHandle h);
 int         exaCrystalFinalize(exaHandle h);
 //
-// exaComm: wraps gslib comm and crystal router
+// exaComm: wraps gslib comm, gs_op and crystal router
 //
 int         exaCommCreate    (exaComm *c,exaCommExternal ce);
 int         exaCommDestroy   (exaComm c);
@@ -105,6 +107,9 @@ int         exaCommGop       (exaComm c,void *v,exaInt size,exaDataType type,exa
 int         exaCommReduce    (exaComm c,void *out,void *in,exaInt size,exaDataType type,exaOp op);
 int         exaCommBcast     (exaComm c,void *in,exaInt count,exaDataType type,int root);
 void        exaCommBarrier   (exaComm c);
+// gs topology setup and gs_op
+int exaTopologySetup(void *ids,exaUInt n,exaComm c,int unique,int verbose,exaTopology t);
+int exaTopologyOp(void *v,exaDataType T,exaOp op,unsigned transpose,exaTopology t,exaBuffer buf);
 // crystal router functionality
 int         exaCommCrystalInit    (exaComm c);
 int         exaCommCrystalFinalize(exaComm c);
