@@ -154,8 +154,10 @@ void *exaArrayGetPointer(exaArray array);
   sarray_transfer(T,&(array_->arr),proc_field,1,cr)
 
 exaInt exaArrayGetSize(exaArray a);
+exaInt exaArrayGetMaxSize(exaArray a);
 exaInt exaArraySetSize(exaArray a,size_t n);
 size_t exaArrayGetUnitSize(exaArray array);
+int    exaArrayAppend(exaArray arr,void *p);
 int    exaArrayFree(exaArray a);
 //
 // Debug routines

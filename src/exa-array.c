@@ -6,9 +6,10 @@
 int exaArrayInit_(exaArray *array_,size_t unitSize,size_t nUnits,const char *file,
   const unsigned int line){
   exaMalloc(1,array_);
-  array_init_(&((*array_)->arr),nUnits,unitSize,file,line);
-  (*array_)->arr.n=nUnits;
-  (*array_)->unitSize=unitSize;
+  exaArray array=*array_;
+  array_init_(&(array->arr),nUnits,unitSize,file,line);
+  array->arr.n=0;
+  array->unitSize=unitSize;
 }
 //
 // exaArrayResize
@@ -31,7 +32,7 @@ exaInt exaArrayGetSize(exaArray a){
 //
 // exaArrayGetMax
 //
-exaInt exaArrayGetMax(exaArray a){
+exaInt exaArrayGetMaxSize(exaArray a){
   return (exaInt) a->arr.max;
 }
 //
@@ -46,6 +47,19 @@ exaInt exaArraySetSize(exaArray a,size_t n){
 //
 size_t exaArrayGetUnitSize(exaArray array){
   return array->unitSize;
+}
+//
+// exaArrayAppend
+//
+int exaArrayAppend(exaArray arr,void *p){
+  size_t size=exaArrayGetSize(arr);
+  if(size==exaArrayGetMaxSize(arr)){ // array is full, so resize
+    exaArrayResize(arr,size+size/2+1);
+  }
+  void *ptr=exaArrayGetPointer(arr);
+  size_t unitSize=exaArrayGetUnitSize(arr);
+  memcpy(ptr+size*unitSize,p,unitSize);
+  exaArraySetSize(arr,size+1);
 }
 //
 // exaArrayFree
