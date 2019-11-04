@@ -1,4 +1,5 @@
 #include "exa-impl.h"
+#include "exa-memory.h"
 //
 // exaArrayInit
 //
@@ -6,7 +7,7 @@ int exaArrayInit_(exaArray *array_,size_t unitSize,size_t nUnits,const char *fil
   const unsigned int line){
   exaMalloc(1,array_);
   array_init_(&((*array_)->arr),nUnits,unitSize,file,line);
-  (*array_)->arr.n=0;
+  (*array_)->arr.n=nUnits;
   (*array_)->unitSize=unitSize;
 }
 //

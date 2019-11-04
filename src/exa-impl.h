@@ -11,8 +11,6 @@
 #endif
 
 #include "exa.h"
-#include "exa-memory.h"
-
 //
 // Some commonly occuring fields
 //
@@ -36,6 +34,7 @@ struct exaHandle_private{
   int dbgLevel;
   int printStat;
   int root;
+  exaTopology t;
 };
 //
 // exaHandle: Create, Destroy
@@ -53,7 +52,6 @@ struct exaVector_private{
 // exaArray
 //
 struct exaArray_private{
-  exaInt size;
   size_t unitSize;
   struct array arr;
 };

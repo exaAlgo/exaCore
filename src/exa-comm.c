@@ -1,4 +1,5 @@
 #include "exa-impl.h"
+#include "exa-memory.h"
 //
 // exaComm
 //
@@ -83,9 +84,9 @@ int exaCommCrystalFinalize(exaComm c){
 //
 // gs_op setup
 //
-int exaTopologySetup(void *ids,exaUInt n,exaComm c,int unique,int verbose,exaTopology t){
-  exaMalloc(1,&t);
-  t->topology=gs_setup(ids,n,&c->gsComm,unique,gs_auto,verbose);
+int exaTopologySetup(exaLong *ids,exaUInt n,exaComm c,int unique,int verbose,exaTopology *t){
+  exaMalloc(1,t);
+  (*t)->topology=gs_setup(ids,n,&c->gsComm,unique,gs_auto,verbose);
   return 0;
 }
 

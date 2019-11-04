@@ -1,6 +1,6 @@
 # Compilers and flags
 CC ?= mpicc
-CFLAGS ?= -O2
+CFLAGS ?= -O0
 CPP ?= cpp
 CPPFLAGS ?=
 LDFLAGS ?=
@@ -51,8 +51,8 @@ lib: $(OBJS)
 install: lib
 	@mkdir -p $(DESTDIR)$(PREFIX)/lib
 	@mkdir -p $(DESTDIR)$(PREFIX)/include
-	@cp $(SRCDIR)/*.h $(GSDIR)/include/*.h $(DESTDIR)$(PREFIX)/include/
-	@cp $(BUILDDIR)/$(LIBNAME) $(DESTDIR)$(PREFIX)/lib/
+	@cp -u $(SRCDIR)/*.h $(GSDIR)/include/*.h $(DESTDIR)$(PREFIX)/include/
+	@cp -u $(BUILDDIR)/$(LIBNAME) $(DESTDIR)$(PREFIX)/lib/
 
 $(DEPDIR)/%.d: $(SRCDIR)/%.c
 	@$(CPP) $(CFLAGS) $(INCFLAGS) $< -MM -MT $(@:$(DEPDIR)/%.d=$(BUILDDIR)/%.deps) >$@
