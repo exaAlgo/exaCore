@@ -62,6 +62,20 @@ int exaArrayAppend(exaArray arr,void *p){
   exaArraySetSize(arr,size+1);
 }
 //
+// exaArrayBcast
+//
+int exaArrayBcast(exaComm c,exaInt source,exaArray arr){
+  exaInt rank=exaCommRank(c);
+  exaInt size=exaArrayGetSize(arr);
+  exaCommBcast(c,&size,1,exaInt_t,source);
+
+  if(rank!=source) exaArrayResize(arr,size);
+
+  size_t unitSize=exaArrayGetUnitSize(arr);
+  exaCommBcast(c,exaArrayGetPointer(arr),size*unitSize,exaByte_t,source);
+  exaArraySetSize(arr,size);
+}
+//
 // exaArrayFree
 //
 int exaArrayFree(exaArray a){

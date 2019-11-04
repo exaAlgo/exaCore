@@ -42,7 +42,8 @@ typedef enum {
   exaUInt_t  =1,
   exaLong_t  =2,
   exaULong_t =3,
-  exaScalar_t=4
+  exaScalar_t=4,
+  exaByte_t  =5
 } exaDataType;
 #define exaTypeGetDataType(T) T##_t
 
@@ -158,6 +159,7 @@ exaInt exaArrayGetMaxSize(exaArray a);
 exaInt exaArraySetSize(exaArray a,size_t n);
 size_t exaArrayGetUnitSize(exaArray array);
 int    exaArrayAppend(exaArray arr,void *p);
+int    exaArrayBcast(exaComm c,exaInt source,exaArray arr);
 int    exaArrayFree(exaArray a);
 //
 // Debug routines

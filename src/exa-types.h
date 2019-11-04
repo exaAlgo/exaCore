@@ -45,6 +45,9 @@ typedef double exaScalar;
 #define exaScalarGSType gs_double
 #define exaScalarGSSortType 3
 
+typedef char exaByte;
+#define exaByteMPIType MPI_BYTE
+
 #define exaTypeGetMax(T) T##MAX
 #define exaTypeGetMin(T) T##MIN
 #define exaTypeGetMPIType(T) T##MPIType

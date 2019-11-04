@@ -186,6 +186,9 @@ MPI_Datatype exaDataTypeGetMPIType(exaDataType t) {
     case exaScalar_t:
       out=exaScalarMPIType;
       break;
+    case exaByte_t:
+      out=exaByteMPIType;
+      break;
     default:
       break;
   }
