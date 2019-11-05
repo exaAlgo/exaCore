@@ -49,8 +49,8 @@ int exaInit(exaHandle *h, exaCommExternal ce) {
   exaCommCreate(&h_->comm,ce);
   // Init crystal router
   exaCrystalInit(h_);
-  // Init the buffer
-  buffer_init(&h_->buf,1024);
+  // Create the buffer
+  exaBufferCreate(&h_->buf,1024);
 
   // Default value for options
   h_->dbgLevel = 0;
@@ -65,7 +65,7 @@ int exaFinalize(exaHandle h) {
   // Finalize communication
   exaCommDestroy(exaGetComm(h));
   // Finalize the buffer
-  buffer_free(&h->buf);
+  exaBufferFree(h->buf);
 
   exaFree(h);
 

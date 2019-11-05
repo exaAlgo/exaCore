@@ -30,11 +30,10 @@ struct exaComm_private{
 //
 struct exaHandle_private{
   exaComm comm;
-  buffer buf;
+  exaBuffer buf;
   int dbgLevel;
   int printStat;
   int root;
-  exaTopology t;
 };
 //
 // exaHandle: Create, Destroy

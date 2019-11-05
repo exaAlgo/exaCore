@@ -108,12 +108,20 @@ int         exaCommGop       (exaComm c,void *v,exaInt size,exaDataType type,exa
 int         exaCommReduce    (exaComm c,void *out,void *in,exaInt size,exaDataType type,exaOp op);
 int         exaCommBcast     (exaComm c,void *in,exaInt count,exaDataType type,int root);
 void        exaCommBarrier   (exaComm c);
-// gs topology setup and gs_op
-int exaTopologySetup(exaLong *ids,exaUInt n,exaComm c,int unique,int verbose,exaTopology *t);
-int exaTopologyOp(void *v,exaDataType T,exaOp op,unsigned transpose,exaTopology t,exaBuffer buf);
 // crystal router functionality
 int         exaCommCrystalInit    (exaComm c);
 int         exaCommCrystalFinalize(exaComm c);
+//
+// exaBuffer:
+//
+int exaBufferCreate(exaBuffer *buf,size_t size);
+int exaBufferFree(exaBuffer buf);
+//
+// exaTopology: gs topology setup and gs_op
+//
+int exaTopologySetup(exaLong *ids,exaUInt n,exaComm c,int unique,int verbose,exaTopology *t);
+int exaTopologyOp(void *v,exaDataType T,exaOp op,unsigned transpose,exaTopology t,exaBuffer buf);
+int exaTopologyFree(exaTopology t);
 //
 // exaVector: wraps a vector currently just a host vector
 //
