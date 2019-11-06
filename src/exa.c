@@ -41,21 +41,21 @@ int exaFree(void *p) {
 //
 // exaHandle: wraps exaComm, buffer and other options
 //
-int exaInit(exaHandle *h, exaCommExternal ce) {
-  exaMalloc(1,h);
-  exaHandle h_ = *h;
+int exaInit(exaHandle *h_, exaCommExternal ce) {
+  exaMalloc(1,h_);
+  exaHandle h=*h_;
 
   // Create comm
-  exaCommCreate(&h_->comm,ce);
+  exaCommCreate(&h->comm,ce);
   // Init crystal router
-  exaCrystalInit(h_);
+  exaCrystalInit(h);
   // Create the buffer
-  exaBufferCreate(&h_->buf,1024);
+  exaBufferCreate(&h->buf,1024);
 
   // Default value for options
-  h_->dbgLevel = 0;
-  h_->printStat = 0;
-  h_->root = 0;
+  h->dbgLevel = 0;
+  h->root = 0;
+  h->refs=1;
 
   return 0;
 }

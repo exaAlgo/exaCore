@@ -31,9 +31,12 @@ struct exaComm_private{
 struct exaHandle_private{
   exaComm comm;
   exaBuffer buf;
+
+  int refs;
   int dbgLevel;
-  int printStat;
   int root;
+
+  int (*vectorCreate)(exaVector x,exaInt size);
 };
 //
 // exaHandle: Create, Destroy
@@ -44,8 +47,10 @@ int exaDestroyHandle(exaHandle h);
 // exaVector
 //
 struct exaVector_private{
+  exaHandle handle;
+  int refs;
   exaInt size;
-  exaScalar *data;
+  void *data;
 };
 //
 // exaArray

@@ -8,28 +8,24 @@
 //
 // Vector operations
 //
-int exaCreateVector(exaVector *x, exaInt size) {
-  /* Asserts:
-       - size > 0
-  */
-  assert(size > 0);
+int exaCreateVector(exaHandle h,exaInt size,exaVector *x){
+  exaAssert(size>0);
 
-  exaMalloc(1, x);
-  if(*x == NULL) {
-    return 1;
-  }
+  exaMalloc(1,x);
+  if(*x==NULL) return 1;
 
+  (*x)->handle=h;
+  h->refs++;
+
+  (*x)->refs=1;
   (*x)->size = size;
-  (*x)->data = NULL;
 
-  exaMalloc((size_t)size, &(*x)->data);
-  if((*x)->data == NULL) {
-    return 1;
-  }
+  h->vectorCreate(*x,size);
 
   return 0;
 }
 
+#if 0
 int exaVectorsEqual(exaVector x, exaVector y,
                        exaScalar tol) {
   /* Asserts:
@@ -247,3 +243,4 @@ int exaPrintVector(exaVector x) {
 
   return 0;
 }
+#endif

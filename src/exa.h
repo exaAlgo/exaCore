@@ -23,6 +23,12 @@
 #define EXA_DP_TOL 1e-12
 #define EXA_TOL EXA_DP_TOL
 //
+// exaAssert
+//
+#define exaAssert(x) do{\
+  assert(x);\
+} while(0)
+//
 // exa Operators
 //
 typedef enum {
@@ -123,9 +129,9 @@ int exaTopologySetup(exaLong *ids,exaUInt n,exaComm c,int unique,int verbose,exa
 int exaTopologyOp(void *v,exaDataType T,exaOp op,unsigned transpose,exaTopology t,exaBuffer buf);
 int exaTopologyFree(exaTopology t);
 //
-// exaVector: wraps a vector currently just a host vector
+// exaVector: wraps a vector. Currently just a host vector.
 //
-int exaCreateVector(exaVector *x,exaInt size);
+int exaVectorCreate(exaHandle h,exaInt size,exaVector *x);
 int exaSetVector(exaVector x,exaScalar *array);
 int exaGetVector(exaVector x,exaScalar *array);
 
