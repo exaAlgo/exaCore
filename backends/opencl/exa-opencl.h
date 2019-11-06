@@ -7,7 +7,7 @@
 #include <CL/cl.h>
 #endif
 
-typedef exaOpenCLHandle_private *exaOpenCLHandle;
-typedef exaOpenCLKernel_private *exaOpenCLKernel;
+typedef struct exaOpenCLHandle_private *exaOpenCLHandle;
+typedef struct exaOpenCLKernel_private *exaOpenCLKernel;
 
 #endif
