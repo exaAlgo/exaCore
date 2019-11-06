@@ -264,3 +264,7 @@ int exaCrystalInit(exaHandle h){
 int exaCrystalFinalize(exaHandle h){
   exaCommCrystalFinalize(exaGetComm(h));
 }
+
+int exaHandleGetData(exaHandle h,void *data){
+  data=h->data;
+}

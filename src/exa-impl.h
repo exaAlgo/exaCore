@@ -31,6 +31,7 @@ struct exaComm_private{
 struct exaHandle_private{
   exaComm comm;
   exaBuffer buf;
+  void *data;
 
   int refs;
   int dbgLevel;
