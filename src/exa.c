@@ -265,6 +265,12 @@ int exaCrystalFinalize(exaHandle h){
   exaCommCrystalFinalize(exaGetComm(h));
 }
 
-int exaHandleGetData(exaHandle h,void *data){
-  data=h->data;
+int exaHandleGetData(exaHandle h,void **data){
+  *data=h->data;
+  return 0;
+}
+
+int exaHandleSetData(exaHandle h,void **data){
+  h->data=*data;
+  return 0;
 }
