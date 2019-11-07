@@ -25,10 +25,13 @@ PREFIX ?= $(HOME)/local/exa
 SRCDIR   = src
 BUILDDIR = build
 DEPDIR   = .deps
+EXAMPLESDIR = examples
 
 SRCS = $(wildcard $(SRCDIR)/*.c)
 OBJS = $(patsubst $(SRCDIR)/%.c,$(BUILDDIR)/%.o,$(SRCS))
 DEPS = $(patsubst $(BUILDDIR)/%.o,$(DEPDIR)/%.d,$(OBJS))
+EXAMPLESRCS = $(wildcard $(EXAMPLESDIR)/*.c)
+EXAMPLEOBJS = $(patsubst $(EXAMPLESDIR)/%.c,$(BUILDDIR)/examples/%.o,$(EXAMPLESRCS))
 
 ### Backends ###
 ifneq ($(OPENCL),0)
@@ -43,7 +46,7 @@ endif
 
 ### Set various flags ###
 INCFLAGS  = -I$(SRCDIR) -I$(GSDIR)/include
-compile.c = $(CC) $(CFLAGS) $(CPPFLAGS) $(INCFLAGS) -c
+compile.c = $(CC) $(CFLAGS) $(CPPFLAGS) $(INCFLAGS)
 link.o    = $(AR) crs
 LIBS      = $(GSDIR)/lib/libgs.a
 EXT       = a
@@ -62,6 +65,9 @@ endif
 LIBNAME = libexa.$(EXT)
 
 ### Make targets ###
+.PHONY: all
+all: lib install examples
+
 .PHONY: lib
 lib: $(OBJS)
 	$(link.o) $(BUILDDIR)/$(LIBNAME) $(OBJS) $(LIBS) $(LDFLAGS)
@@ -79,19 +85,26 @@ $(DEPDIR)/%.d: $(SRCDIR)/%.c
 -include $(DEPS)
 
 $(BUILDDIR)/%.o: $(SRCDIR)/%.c $(BUILDDIR)/%.deps
-	$(compile.c) $< -o $@
+	$(compile.c) -c $< -o $@
 
 $(BUILDDIR)/backends/opencl/%.o: $(OpenCL.srcdir)/%.c
-	$(compile.c) $(OpenCL.cflags) $< -o $@ $(OpenCL.ldflags)
+	$(compile.c) $(OpenCL.cflags) -c $< -o $@ $(OpenCL.ldflags)
 
 .PHONY: clean
 clean:
 	@rm -rf $(BUILDDIR) $(DEPDIR)
+
+.PHONY: examples
+examples: $(EXAMPLEOBJS)
+
+$(BUILDDIR)/examples/%.o: $(EXAMPLESDIR)/%.c
+	$(compile.c) $< -o $@ -I$(SRCDIR) -I$(OpenCL.srcdir) -L$(BUILDDIR) -lexa -L$(GSDIR)/lib -lgs -L$(OPENCL_LIBDIR) -lOpenCL
 
 .PHONY: print
 print :
 	@echo $(VAR)=$($(VAR))
 
 $(shell mkdir -p $(BUILDDIR))
+$(shell mkdir -p $(BUILDDIR)/examples)
 $(shell mkdir -p $(OpenCL.builddir))
 $(shell mkdir -p $(DEPDIR))

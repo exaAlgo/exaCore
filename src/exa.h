@@ -99,7 +99,8 @@ void        exaBarrier   (exaHandle h);
 int         exaCrystalInit    (exaHandle h);
 int         exaCrystalFinalize(exaHandle h);
 // functions related to the backend
-int         exaHandleGetData(exaHandle h,void *data);
+int         exaHandleGetData(exaHandle h,void **data);
+int         exaHandleSetData(exaHandle h,void **data);
 //
 // exaComm: wraps gslib comm, gs_op and crystal router
 //
