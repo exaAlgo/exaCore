@@ -42,8 +42,14 @@ struct exaOpenCLHandle_private{
 };
 
 struct exaOpenCLKernel_private{
+  exaOpenCLHandle handle;
   cl_program program;
   cl_kernel kernel;
+};
+
+struct exaOpenCLVector_private{
+  exaOpenCLHandle handle;
+  cl_mem data;
 };
 
 #endif

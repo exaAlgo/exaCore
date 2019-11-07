@@ -11,9 +11,14 @@
 
 typedef struct exaOpenCLHandle_private *exaOpenCLHandle;
 typedef struct exaOpenCLKernel_private *exaOpenCLKernel;
-
+typedef struct exaOpenCLVector_private *exaOpenCLVector;
+//
+// Init and finalize the backend
+//
 int exaOpenCLInit(exaHandle h,const char *backend);
 int exaOpenCLFinalize(exaHandle h);
-
+//
+// create an opencl vector
+//
 int exaOpenCLVectorCreate(exaVector x,exaInt size);
 #endif
