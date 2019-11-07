@@ -3,6 +3,22 @@
 
 #include "exa-impl.h"
 #include "exa-memory.h"
+
+static int numBackends=0;
+
+typedef struct{
+  char *prefix;
+  void (*init)(exaHandle h,const char *backend);
+} exaBackend;
+static exaBackend backends[EXA_MAX_BACKENDS];
+//
+// exaRegister
+//
+void exaRegister(void (*init)(exaHandle,const char*),const char *prefix){
+  backends[numBackends].init=init;
+  exaMalloc(strlen(prefix),&backends[numBackends].prefix);
+  strcpy(backends[numBackends].prefix,prefix);
+}
 //
 // exaMalloc, Realloc, Calloc and Free
 //
@@ -41,7 +57,7 @@ int exaFree(void *p) {
 //
 // exaHandle: wraps exaComm, buffer and other options
 //
-int exaInit(exaHandle *h_, exaCommExternal ce) {
+int exaInit(exaHandle *h_,exaCommExternal ce,const char *backend) {
   exaMalloc(1,h_);
   exaHandle h=*h_;
 
@@ -57,8 +73,13 @@ int exaInit(exaHandle *h_, exaCommExternal ce) {
   h->root = 0;
   h->refs=1;
 
+  int i;
+//  for(i=0;i<numBackends;i++)
+//  if(strncmp(backends[i].base,backend)==0) backends[i].init(h,backend);
+
   return 0;
 }
+
 int exaFinalize(exaHandle h) {
   // Finalize crystal router
   exaCrystalFinalize(h);

@@ -13,13 +13,17 @@
 //
 #include <mpi.h>
 //
+// exa max backends
+//
+#define EXA_MAX_BACKENDS 32
+//
 // exa Memory Align
 //
 #define EXA_ALIGN 32
 //
 // exa tolerances
 //
-#define EXA_SP_TOL 1e-05
+
 #define EXA_DP_TOL 1e-12
 #define EXA_TOL EXA_DP_TOL
 //
@@ -71,6 +75,10 @@ typedef struct exaArray_private *exaArray;
 typedef struct exaBuffer_private *exaBuffer;
 typedef struct exaTopology_private *exaTopology;
 //
+// exaRegister
+//
+void exaRegister(void (*init)(exaHandle,const char*),const char *prefix);
+//
 // exaMalloc, Realloc, Calloc and Free
 //
 int exaMallocArray (size_t n,size_t unit,void *p);
@@ -80,7 +88,7 @@ int exaFree        (void *p);
 //
 // exaHandle: wraps an exaComm, buffer and other options
 //
-int         exaInit      (exaHandle *h,exaCommExternal ce);
+int         exaInit      (exaHandle *h,exaCommExternal ce,const char *backend);
 int         exaFinalize  (exaHandle h);
 exaComm     exaGetComm   (exaHandle h);
 MPI_Comm    exaGetMPIComm(exaHandle h);

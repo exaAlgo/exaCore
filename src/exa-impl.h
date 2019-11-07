@@ -37,6 +37,8 @@ struct exaHandle_private{
   int dbgLevel;
   int root;
 
+  int (*backendInit)(exaHandle h,const char *backend);
+  int (*backendFinalize)(exaHandle h);
   int (*vectorCreate)(exaVector x,exaInt size);
 };
 //

@@ -12,9 +12,8 @@
 typedef struct exaOpenCLHandle_private *exaOpenCLHandle;
 typedef struct exaOpenCLKernel_private *exaOpenCLKernel;
 
-void exaOpenCLChk(cl_int err);
-int exaOpenCLInit(exaHandle h);
+int exaOpenCLInit(exaHandle h,const char *backend);
 int exaOpenCLFinalize(exaHandle h);
 
-int vectorCreateOpenCL(exaVector x,exaInt size);
+int exaOpenCLVectorCreate(exaVector x,exaInt size);
 #endif

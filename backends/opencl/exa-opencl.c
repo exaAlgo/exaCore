@@ -1,7 +1,7 @@
 #include "exa-opencl-impl.h"
 #include "exa-memory.h"
 
-int exaOpenCLInit(exaHandle h){
+int exaOpenCLInit(exaHandle h,const char *backend){
   exaOpenCLHandle oclh;
   exaMalloc(1,&oclh);
 
@@ -19,9 +19,23 @@ int exaOpenCLInit(exaHandle h){
 
   oclh->queue=clCreateCommandQueue(oclh->context,oclh->deviceId,NULL,&err);
   exaOpenCLChk(err);
+
+  exaHandleSetData(h,(void **)&oclh);
+
+  // set call back functions for the backend
+  h->backendFinalize=exaOpenCLFinalize;
+  h->vectorCreate=exaOpenCLVectorCreate;
 }
 
-int exaOpenCLFinalize(exaHandle h){}
+int exaOpenCLFinalize(exaHandle h){
+  exaOpenCLHandle oclh; exaHandleGetData(h,(void **)&oclh);
+  clReleaseCommandQueue(oclh->queue);
+  clReleaseContext(oclh->context);
+  exaFree(oclh);
+  oclh=NULL;
+  exaHandleSetData(h,(void **)&oclh);
+  return 0;
+}
 
-int vectorCreateOpenCL(exaVector x,exaInt size){
+int exaOpenCLvectorCreate(exaVector x,exaInt size){
 }
