@@ -5,9 +5,7 @@ int main(int argc,char *argv){
   MPI_Init(NULL,NULL);
 
   exaHandle h;
-  exaInit(&h,MPI_COMM_WORLD);
-
-  exaOpenCLInit(h);
+  exaInit(&h,MPI_COMM_WORLD,"/opencl/gpu");
 
   exaFinalize(h);
   MPI_Finalize();

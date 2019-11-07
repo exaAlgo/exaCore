@@ -8,7 +8,7 @@ static int numBackends=0;
 
 typedef struct{
   char *prefix;
-  void (*init)(exaHandle h,const char *backend);
+  int (*init)(exaHandle h,const char *backend);
 } exaBackend;
 static exaBackend backends[EXA_MAX_BACKENDS];
 //
@@ -18,6 +18,7 @@ void exaRegister(int (*init)(exaHandle,const char*),const char *prefix){
   backends[numBackends].init=init;
   exaMalloc(strlen(prefix),&backends[numBackends].prefix);
   strcpy(backends[numBackends].prefix,prefix);
+  numBackends++;
 }
 //
 // exaMalloc, Realloc, Calloc and Free
@@ -74,8 +75,8 @@ int exaInit(exaHandle *h_,exaCommExternal ce,const char *backend) {
   h->refs=1;
 
   int i;
-//  for(i=0;i<numBackends;i++)
-//  if(strncmp(backends[i].base,backend)==0) backends[i].init(h,backend);
+  for(i=0;i<numBackends;i++)
+    if(strcmp(backends[i].prefix,backend)==0) backends[i].init(h,backend);
 
   return 0;
 }
