@@ -77,7 +77,7 @@ typedef struct exaTopology_private *exaTopology;
 //
 // exaRegister
 //
-void exaRegister(void (*init)(exaHandle,const char*),const char *prefix);
+void exaRegister(int (*init)(exaHandle,const char*),const char *prefix);
 //
 // exaMalloc, Realloc, Calloc and Free
 //

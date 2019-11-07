@@ -37,5 +37,11 @@ int exaOpenCLFinalize(exaHandle h){
   return 0;
 }
 
-int exaOpenCLvectorCreate(exaVector x,exaInt size){
+int exaOpenCLVectorCreate(exaVector x,exaInt size){
+}
+
+__attribute__((constructor))
+static void Register(void){
+  exaRegister(exaOpenCLInit,"/opencl/gpu");
+  exaRegister(exaOpenCLInit,"/opencl/cpu");
 }

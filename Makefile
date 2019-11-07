@@ -11,7 +11,6 @@ GSDIR ?=
 
 # Build options
 DEBUG ?= 1
-SHARED ?= 0
 
 # OpenCL options
 OPENCL ?= 1
@@ -33,6 +32,19 @@ DEPS = $(patsubst $(BUILDDIR)/%.o,$(DEPDIR)/%.d,$(OBJS))
 EXAMPLESRCS = $(wildcard $(EXAMPLESDIR)/*.c)
 EXAMPLEOBJS = $(patsubst $(EXAMPLESDIR)/%.c,$(BUILDDIR)/examples/%.o,$(EXAMPLESRCS))
 
+### Set various flags ###
+ifneq ($(DEBUG),0)
+  CFLAGS += -g
+endif
+
+CFLAGS   += -fPIC
+incflags  = -I$(SRCDIR) -I$(GSDIR)/include
+compile.c = $(CC) $(CFLAGS) $(CPPFLAGS) $(incflags)
+link.o    = $(CC) $(LDFLAGS) -shared -o
+LDFLAGS  += -L$(GSDIR)/lib -lgs -lm
+EXT       = so
+LIBNAME   = libexa.$(EXT)
+
 ### Backends ###
 ifneq ($(OPENCL),0)
   OpenCL.srcdir   = backends/opencl
@@ -41,28 +53,10 @@ ifneq ($(OPENCL),0)
   OpenCL.o        = $(patsubst $(OpenCL.srcdir)/%.c,$(BUILDDIR)/backends/opencl/%.o,$(OpenCL.c))
   OpenCL.cflags  ?= -I$(OpenCL.srcdir) -I$(OPENCL_INCDIR)
   OpenCL.ldflags ?= -L$(OPENCL_LIBDIR) -lOpenCL
-  OBJS            += $(OpenCL.o)
+  LDFLAGS        += $(OpenCL.ldflags)
+  OBJS           += $(OpenCL.o)
 endif
 
-### Set various flags ###
-INCFLAGS  = -I$(SRCDIR) -I$(GSDIR)/include
-compile.c = $(CC) $(CFLAGS) $(CPPFLAGS) $(INCFLAGS)
-link.o    = $(AR) crs
-LIBS      = $(GSDIR)/lib/libgs.a
-EXT       = a
-
-ifneq ($(DEBUG),0)
-  CFLAGS += -g
-endif
-
-ifneq ($(SHARED),0)
-  CFLAGS  += -fPIC
-  link.o   = $(CC) $(LDFLAGS) -shared -o
-  LDFLAGS += -Wl,-whole-archive -L$(GSDIR)/lib -lgs -Wl,-no-whole-archive -lm
-  EXT      = so
-endif
-
-LIBNAME = libexa.$(EXT)
 
 ### Make targets ###
 .PHONY: all
@@ -70,7 +64,7 @@ all: lib install examples
 
 .PHONY: lib
 lib: $(OBJS)
-	$(link.o) $(BUILDDIR)/$(LIBNAME) $(OBJS) $(LIBS) $(LDFLAGS)
+	$(link.o) $(BUILDDIR)/$(LIBNAME) $(OBJS) $(LDFLAGS)
 
 .PHONY: install
 install: lib
@@ -80,7 +74,7 @@ install: lib
 	@cp -u $(BUILDDIR)/$(LIBNAME) $(DESTDIR)$(PREFIX)/lib/
 
 $(DEPDIR)/%.d: $(SRCDIR)/%.c
-	@$(CPP) $(CFLAGS) $(INCFLAGS) $< -MM -MT $(@:$(DEPDIR)/%.d=$(BUILDDIR)/%.deps) >$@
+	@$(CPP) $(CFLAGS) $(incflags) $< -MM -MT $(@:$(DEPDIR)/%.d=$(BUILDDIR)/%.deps) >$@
 
 -include $(DEPS)
 
@@ -98,7 +92,7 @@ clean:
 examples: $(EXAMPLEOBJS)
 
 $(BUILDDIR)/examples/%.o: $(EXAMPLESDIR)/%.c
-	$(compile.c) $< -o $@ -I$(SRCDIR) -I$(OpenCL.srcdir) -L$(BUILDDIR) -lexa -L$(GSDIR)/lib -lgs -L$(OPENCL_LIBDIR) -lOpenCL
+	$(compile.c) $< -o $@ -I$(SRCDIR) -I$(OpenCL.srcdir) -L$(BUILDDIR) -lexa
 
 .PHONY: print
 print :

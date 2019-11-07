@@ -14,7 +14,7 @@ static exaBackend backends[EXA_MAX_BACKENDS];
 //
 // exaRegister
 //
-void exaRegister(void (*init)(exaHandle,const char*),const char *prefix){
+void exaRegister(int (*init)(exaHandle,const char*),const char *prefix){
   backends[numBackends].init=init;
   exaMalloc(strlen(prefix),&backends[numBackends].prefix);
   strcpy(backends[numBackends].prefix,prefix);
