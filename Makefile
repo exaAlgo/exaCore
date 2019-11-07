@@ -1,14 +1,15 @@
-### Compilers and flags ###
+## User configurations ###
+# Compilers and flags
 CC ?= mpicc
 CFLAGS ?= -O2
 CPP ?= cpp
 CPPFLAGS ?=
 LDFLAGS ?=
 
-### Dependency locations ###
+# Dependency locations
 GSDIR ?=
 
-## Build options ###
+# Build options
 DEBUG ?= 1
 SHARED ?= 0
 
@@ -21,9 +22,9 @@ OPENCL_LIBDIR ?= /usr/lib/x86_64-linux-gnu
 PREFIX ?= $(HOME)/local/exa
 
 ### Meta info about the package ###
-SRCDIR ?= src
-BUILDDIR ?= build
-DEPDIR ?= .deps
+SRCDIR   = src
+BUILDDIR = build
+DEPDIR   = .deps
 
 SRCS = $(wildcard $(SRCDIR)/*.c)
 OBJS = $(patsubst $(SRCDIR)/%.c,$(BUILDDIR)/%.o,$(SRCS))
