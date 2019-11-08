@@ -3,7 +3,7 @@
 
 #include "exa-opencl.h"
 
-#define exaOpenCLChk_(err,file,line) do {\
+#define exaOpenCLChk_(err,file,line) do{\
   switch(err){\
     case CL_INVALID_PLATFORM:\
       fprintf(stderr,"%s:%d: CL_INVALID_PLATFORM\n",file,line);\
@@ -42,13 +42,11 @@ struct exaOpenCLHandle_private{
 };
 
 struct exaOpenCLKernel_private{
-  exaOpenCLHandle handle;
   cl_program program;
   cl_kernel kernel;
 };
 
 struct exaOpenCLVector_private{
-  exaOpenCLHandle handle;
   cl_mem data;
 };
 

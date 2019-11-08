@@ -72,7 +72,6 @@ int exaInit(exaHandle *h_,exaCommExternal ce,const char *backend) {
   // Default value for options
   h->dbgLevel = 0;
   h->root = 0;
-  h->refs=1;
 
   int i;
   for(i=0;i<numBackends;i++)

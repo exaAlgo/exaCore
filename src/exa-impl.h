@@ -33,13 +33,13 @@ struct exaHandle_private{
   exaBuffer buf;
   void *data;
 
-  int refs;
   int dbgLevel;
   int root;
 
   int (*backendInit)(exaHandle h,const char *backend);
   int (*backendFinalize)(exaHandle h);
   int (*vectorCreate)(exaVector x,exaInt size);
+  int (*vectorFree)(exaVector x);
 };
 //
 // exaHandle: Create, Destroy
@@ -51,7 +51,6 @@ int exaDestroyHandle(exaHandle h);
 //
 struct exaVector_private{
   exaHandle handle;
-  int refs;
   exaInt size;
   void *data;
 };

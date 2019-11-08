@@ -25,6 +25,7 @@ int exaOpenCLInit(exaHandle h,const char *backend){
   // set call back functions for the backend
   h->backendFinalize=exaOpenCLFinalize;
   h->vectorCreate=exaOpenCLVectorCreate;
+  h->vectorFree=exaOpenCLVectorFree;
 }
 
 int exaOpenCLFinalize(exaHandle h){
@@ -38,6 +39,24 @@ int exaOpenCLFinalize(exaHandle h){
 }
 
 int exaOpenCLVectorCreate(exaVector x,exaInt size){
+  exaHandle h;
+  exaOpenCLHandle oclh;
+  exaVectorGetHandle(x,&h);
+  exaHandleGetData(h,(void**)&oclh);
+
+  exaOpenCLVector vec;
+  exaMalloc(1,&vec);
+  cl_int err;
+  vec->data=clCreateBuffer(oclh->context,CL_MEM_READ_WRITE,sizeof(double)*size,NULL,&err);
+  exaOpenCLChk(err);
+  exaVectorSetData(x,(void**)&vec);
+}
+
+int exaOpenCLVectorFree(exaVector x){
+  exaOpenCLVector vec;
+  exaVectorGetData(x,(void**)&vec);
+  clReleaseMemObject(vec->data);
+  exaFree(vec);
 }
 
 __attribute__((constructor))

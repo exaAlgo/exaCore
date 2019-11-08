@@ -17,6 +17,7 @@ typedef struct exaOpenCLVector_private *exaOpenCLVector;
 //
 int exaOpenCLInit(exaHandle h,const char *backend);
 int exaOpenCLFinalize(exaHandle h);
+int exaOpenCLVectorFree(exaVector x);
 //
 // create an opencl vector
 //

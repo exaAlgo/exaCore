@@ -8,21 +8,38 @@
 //
 // Vector operations
 //
-int exaCreateVector(exaHandle h,exaInt size,exaVector *x){
-  exaAssert(size>0);
-
+int exaVectorCreate(exaHandle h,exaInt size,exaVector *x){
   exaMalloc(1,x);
   if(*x==NULL) return 1;
 
   (*x)->handle=h;
-  h->refs++;
-
-  (*x)->refs=1;
   (*x)->size = size;
 
   h->vectorCreate(*x,size);
 
   return 0;
+}
+
+int exaVectorGetHandle(exaVector x,exaHandle *h){
+  *h=x->handle;
+  return 0;
+}
+
+int exaVectorSetData(exaVector x,void **data){
+  x->data=*data;
+  return 0;
+}
+
+int exaVectorGetData(exaVector x,void **data){
+  *data=x->data;
+  return 0;
+}
+
+int exaVectorFree(exaVector vec){
+  exaHandle h;
+  exaVectorGetHandle(vec,&h);
+  h->vectorFree(vec);
+  exaFree(vec);
 }
 
 #if 0
