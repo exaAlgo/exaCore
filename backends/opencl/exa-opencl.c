@@ -192,6 +192,15 @@ int exaOpenCLKernelRun(exaKernel k,exaKernelArg args){
     exaOpenCLChk(err);
   }
 
+  err=clGetKernelWorkGroupInfo(oclk->kernel,oclh->deviceId,CL_KERNEL_WORK_GROUP_SIZE,
+    sizeof(oclk->local),&oclk->local,NULL);
+  exaOpenCLChk(err);
+  oclk->global=10;
+
+  err=clEnqueueNDRangeKernel(oclh->queue,oclk->kernel,1,NULL,&oclk->global,
+    &oclk->local,0,NULL,NULL);
+  exaOpenCLChk(err);
+
   return 0;
 }
 
