@@ -93,7 +93,7 @@ int exaOpenCLProgramCreate(exaProgram p,const char *fname){
 
   int rank=exaRank(h);
   if(rank==0){
-    fp=fopen(fname,"r");
+    fp=fopen(fname,"rb");
     fseek(fp,0,SEEK_END);
     size=ftell(fp);
     fseek(fp,0,SEEK_SET);
@@ -169,7 +169,7 @@ int exaOpenCLKernelFree(exaKernel k){
 
   exaFree(oclk);
   oclk=NULL;
-  exaKernelSetData(k,&oclk);
+  exaKernelSetData(k,(void**)&oclk);
 
   return 0;
 }
