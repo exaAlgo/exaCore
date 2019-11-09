@@ -9,7 +9,7 @@ int exaProgramCreate(exaHandle h,const char *fname,exaProgram *p_){
   p->handle=h;
 
   int length=strlen(fname);
-  exaMalloc(length,&p->fname);
+  exaMalloc(length+1,&p->fname);
   strcpy(p->fname,fname);
 
   h->programCreate(p,fname);

@@ -71,6 +71,7 @@ typedef struct exaComm_private *exaComm;
 typedef struct exaHandle_private *exaHandle;
 typedef struct exaVector_private *exaVector;
 typedef struct exaProgram_private *exaProgram;
+typedef struct exaKernelArg_private *exaKernelArg;
 typedef struct exaKernel_private *exaKernel;
 typedef struct exaArray_private *exaArray;
 typedef struct exaBuffer_private *exaBuffer;
@@ -147,6 +148,8 @@ int exaVectorCreate(exaHandle h,exaInt size,exaVector *x);
 int exaVectorGetHandle(exaVector x,exaHandle *h);
 int exaVectorSetData(exaVector x,void **data);
 int exaVectorGetData(exaVector x,void **data);
+exaInt exaVectorGetSize(exaVector x);
+int exaVectorGetDevicePointer(exaVector x,void **ptr,size_t *size);
 int exaVectorFree(exaVector vec);
 //
 // exaProgram: wraps a exaProgram

@@ -57,6 +57,8 @@ struct exaVector_private{
   exaHandle handle;
   exaInt size;
   void *data;
+
+  int (*getDevicePointer)(exaVector x,void **ptr,size_t *size);
 };
 //
 // exaProgram
@@ -69,10 +71,16 @@ struct exaProgram_private{
 //
 // exaKernel
 //
+struct exaKernelArg_private{
+  void *arg;
+  size_t size;
+};
+
 struct exaKernel_private{
   exaHandle handle;
   int nArgs;
   exaDataType args[EXA_KERNEL_ARGS_MAX];
+  int (*kernelRun)(exaKernel k,exaKernelArg args);
   void *data;
 };
 //

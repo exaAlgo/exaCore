@@ -37,6 +37,15 @@ int exaVectorGetData(exaVector x,void **data){
   return 0;
 }
 
+exaInt exaVectorGetSize(exaVector x){
+  return x->size;
+}
+
+int exaVectorGetDevicePointer(exaVector x,void **ptr,size_t *size){
+  x->getDevicePointer(x,ptr,size);
+  return 0;
+}
+
 int exaVectorFree(exaVector vec){
   exaHandle h;
   exaVectorGetHandle(vec,&h);

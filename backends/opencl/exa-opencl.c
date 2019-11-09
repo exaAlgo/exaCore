@@ -54,6 +54,8 @@ int exaOpenCLVectorCreate(exaVector x,exaInt size){
   exaVectorGetHandle(x,&h);
   exaHandleGetData(h,(void**)&oclh);
 
+  x->getDevicePointer=exaOpenCLVectorGetDevicePointer;
+
   exaOpenCLVector vec;
   exaMalloc(1,&vec);
   cl_int err;
@@ -64,6 +66,14 @@ int exaOpenCLVectorCreate(exaVector x,exaInt size){
   exaVectorSetData(x,(void**)&vec);
 
   return 0;
+}
+
+int exaOpenCLVectorGetDevicePointer(exaVector x,void **ptr,size_t *size){
+  exaOpenCLVector vec;
+  exaVectorGetData(x,(void**)&vec);
+
+  *ptr=&vec->data;
+  *size=sizeof(cl_mem);
 }
 
 int exaOpenCLVectorFree(exaVector x){
@@ -100,7 +110,7 @@ int exaOpenCLProgramCreate(exaProgram p,const char *fname){
   }
 
   exaBcast(h,&size,1,exaLong_t);
-  exaMalloc(size*sizeof(char),&source);
+  exaMalloc(size*sizeof(char)+1,&source);
 
   size_t read;
   if(rank==0){
@@ -162,6 +172,10 @@ int exaOpenCLKernelCreate(exaProgram p,const char *kernelName,exaKernel k){
 
   exaKernelSetData(k,(void**)&oclk);
 
+  return 0;
+}
+
+int exaOpenCLKernelRun(exaKernel k,exaKernelArg args){
   return 0;
 }
 
