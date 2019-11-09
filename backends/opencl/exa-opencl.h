@@ -31,7 +31,7 @@ int exaOpenCLProgramFree(exaProgram p);
 //
 // Create an OpenCL kernel
 //
-int exaOpenCLKernelCreate(exaProgram p,const char *kernelName,exaKernel *k);
+int exaOpenCLKernelCreate(exaProgram p,const char *kernelName,exaKernel k);
 int exaOpenCLKernelRun(exaKernel k,...);
 int exaOpenCLKernelFree(exaKernel k);
 #endif

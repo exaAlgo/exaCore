@@ -42,7 +42,7 @@ struct exaHandle_private{
   int (*vectorFree)(exaVector x);
   int (*programCreate)(exaProgram p,const char *fname);
   int (*programFree)(exaProgram p);
-  int (*kernelCreate)(exaProgram p,const char *kernelName,exaKernel *k);
+  int (*kernelCreate)(exaProgram p,const char *kernelName,exaKernel k);
   int (*kernelFree)(exaKernel k);
 };
 //

@@ -1,42 +1,59 @@
 #include "exa-impl.h"
 #include "exa-memory.h"
+
 #include <stdio.h>
+#include <stdarg.h>
 
-int exaProgramCreate(exaHandle h,const char *fname,exaProgram *p_){
-  exaMalloc(1,p_);
-  exaProgram p=*p_;
-
-  p->handle=h;
-
-  int length=strlen(fname);
-  exaMalloc(length,&p->fname);
-  strcpy(p->fname,fname);
-
-  h->programCreate(p,fname);
-}
-
-int exaProgramGetHandle(exaProgram p,exaHandle *h){
-  *h=p->handle;
-}
-
-int exaProgramGetData(exaProgram p,void **data){
-  *data=p->data;
-}
-
-int exaProgramSetData(exaProgram p,void **data){
-  p->data=*data;
-}
-
-int exaProgramFree(exaProgram p){
+int exaKernelCreate(exaProgram p,const char *kernelName,exaKernel *k_,int nArgs,...){
   exaHandle h;
   exaProgramGetHandle(p,&h);
 
-  h->programFree(p);
+  exaMalloc(1,k_);
+  exaKernel k=*k_;
 
-  exaFree(p->fname);
-  exaFree(p);
+  va_list vaList;
+  int i;
+
+  va_start(vaList,nArgs);
+  for(i=0;i<nArgs;i++){
+    k->args[i]=va_arg(vaList,exaDataType);
+  }
+  va_end(vaList);
+
+  k->handle=h;
+  h->kernelCreate(p,kernelName,k);
+
+  return 0;
 }
 
-int exaKernelCreate(exaProgram p,const char *source,int nArgs,exaKernel *k,...){
-  exaMalloc(1,k);
+int exaKernelGetHandle(exaKernel k,exaHandle *h){
+  *h=k->handle;
+}
+
+int exaKernelSetData(exaKernel k,void **data){
+  k->data=*data;
+  return 0;
+}
+
+int exaKernelGetData(exaKernel k,void **data){
+  *data=k->data;
+  return 0;
+}
+
+int exaKernelRun(exaKernel k,...){
+  exaHandle h;
+  exaKernelGetHandle(k,&h);
+
+  return 0;
+}
+
+int exaKernelFree(exaKernel k){
+  exaHandle h;
+  exaKernelGetHandle(k,&h);
+
+  h->kernelFree(k);
+
+  exaFree(k);
+
+  return 0;
 }

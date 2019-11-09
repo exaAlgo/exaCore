@@ -26,6 +26,9 @@
     case CL_INVALID_PROGRAM:\
       fprintf(stderr,"%s:%d: CL_INVALID_PROGRAM\n",file,line);\
       break;\
+    case CL_INVALID_PROGRAM_EXECUTABLE:\
+      fprintf(stderr,"%s:%d: CL_INVALID_PROGRAM_EXECUTABLE\n",file,line);\
+      break;\
     case CL_INVALID_VALUE:\
       fprintf(stderr,"%s:%d CL_INVALID_VALUE\n",file,line);\
       break;\
@@ -46,6 +49,12 @@
       break;\
     case CL_BUILD_PROGRAM_FAILURE:\
       fprintf(stderr,"%s:%d CL_BUILD_PROGRAM_FAILURE\n",file,line);\
+      break;\
+    case CL_INVALID_KERNEL_NAME:\
+      fprintf(stderr,"%s:%d CL_INVALID_KERNEL_NAME\n",file,line);\
+      break;\
+    case CL_INVALID_KERNEL_DEFINITION:\
+      fprintf(stderr,"%s:%d CL_INVALID_KERNEL_DEFINITION\n",file,line);\
       break;\
     default:\
       break;\

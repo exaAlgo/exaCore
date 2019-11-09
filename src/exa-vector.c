@@ -8,14 +8,16 @@
 //
 // Vector operations
 //
-int exaVectorCreate(exaHandle h,exaInt size,exaVector *x){
-  exaMalloc(1,x);
-  if(*x==NULL) return 1;
+int exaVectorCreate(exaHandle h,exaInt size,exaVector *x_){
+  exaMalloc(1,x_);
 
-  (*x)->handle=h;
-  (*x)->size = size;
+  exaVector x=*x_;
 
-  h->vectorCreate(*x,size);
+  if(x==NULL) return 1;
+  x->handle=h;
+  x->size = size;
+
+  h->vectorCreate(x,size);
 
   return 0;
 }

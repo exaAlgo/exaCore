@@ -7,14 +7,22 @@ int main(int argc,char *argv){
   exaHandle h;
   exaInit(&h,MPI_COMM_WORLD,"/opencl/gpu");
 
-  exaVector vec;
-  exaVectorCreate(h,10,&vec);
+  exaVector input,output;
+  exaVectorCreate(h,10,&input);
+  exaVectorCreate(h,10,&output);
 
   exaProgram p;
   exaProgramCreate(h,"kernels.cl",&p);
 
+  exaKernel k;
+  exaKernelCreate(p,"square",&k,3,exaVector_t,exaVector_t,exaUInt_t);
+
+  exaKernelRun(k,input,output,10);
+
+  //exaKernelFree(k);
   exaProgramFree(p);
-  exaVectorFree(vec);
+  exaVectorFree(input);
+  exaVectorFree(output);
   exaFinalize(h);
 
   MPI_Finalize();

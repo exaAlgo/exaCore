@@ -159,34 +159,12 @@ int exaProgramFree(exaProgram p);
 //
 // exaKernel: wraps a kernel
 //
-int exaKernelCreate(exaProgram p,const char *kernelName,int nArgs,exaKernel *k,...);
+int exaKernelCreate(exaProgram p,const char *kernelName,exaKernel *k,int nArgs,...);
 int exaKernelRun(exaKernel k,...);
+int exaKernelGetHandle(exaKernel k,exaHandle *h);
 int exaKernelGetData(exaKernel k,void **data);
 int exaKernelSetData(exaKernel k,void **data);
 int exaKernelFree(exaKernel k);
-#if 0
-int exaSetVector(exaVector x,exaScalar *array);
-int exaGetVector(exaVector x,exaScalar *array);
-
-int exaCreateRandomVector(exaVector *x,exaInt size,exaInt seed);
-int exaCreateOnesVector(exaVector *x,exaInt size);
-int exaCreateZerosVector(exaVector *x,exaInt size);
-
-int exaScaleVector(exaVector y,exaVector x,exaScalar alpha);
-int exaAxpbyVector(exaVector z,exaVector x,exaScalar alpha,exaVector y,exaScalar beta);
-
-int exaVectorsEqual(exaVector x,exaVector y,exaScalar tol);
-int exaCopyVector(exaVector x, exaVector y);
-exaScalar exaDotVector(exaVector x, exaVector y);
-exaScalar exaAbsMaxVector(exaVector x);
-exaScalar exaMaxVector(exaVector x);
-exaScalar exaAbsMinVector(exaVector x);
-exaScalar exaMinVector(exaVector x);
-exaScalar exaNormVector(exaVector x,exaInt p);
-
-int exaPrintVector(exaVector x);
-int exaDestroyVector(exaVector x);
-#endif
 //
 // exaArray
 //

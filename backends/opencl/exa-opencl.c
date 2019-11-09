@@ -103,8 +103,10 @@ int exaOpenCLProgramCreate(exaProgram p,const char *fname){
   exaMalloc(size*sizeof(char),&source);
 
   size_t read;
-  if(rank==0) read=fread(source,sizeof(char),size,fp);
-  assert(read==size);
+  if(rank==0){
+    read=fread(source,sizeof(char),size,fp);
+    assert(read==size);
+  }
   exaBcast(h,source,size*sizeof(char),exaByte_t);
 
   exaOpenCLProgram oclp;
@@ -119,6 +121,13 @@ int exaOpenCLProgramCreate(exaProgram p,const char *fname){
 
   err=clBuildProgram(oclp->program,1,&oclh->deviceId,NULL,NULL,NULL);
   exaOpenCLChk(err);
+#if 0
+  size_t len;
+  char buffer[2048];
+  clGetProgramBuildInfo(oclp->program,oclh->deviceId,CL_PROGRAM_BUILD_LOG,
+    sizeof(buffer),buffer,&len);
+  printf("%s\n", buffer);
+#endif
 
   exaProgramSetData(p,(void**)&oclp);
 }
@@ -138,10 +147,31 @@ int exaOpenCLProgramFree(exaProgram p){
 //
 // Create an OpenCL kernel
 //
-int exaOpenCLKernelCreate(exaProgram p,const char *kernelName,exaKernel *k){
+int exaOpenCLKernelCreate(exaProgram p,const char *kernelName,exaKernel k){
+  exaHandle h;
+  exaKernelGetHandle(k,&h);
+
+  exaOpenCLProgram oclp;
+  exaProgramGetData(p,(void**)&oclp);
+
+  exaOpenCLKernel oclk;
+  exaMalloc(1,&oclk);
+  cl_int err;
+  oclk->kernel=clCreateKernel(oclp->program,kernelName,&err);
+  exaOpenCLChk(err);
 }
 
 int exaOpenCLKernelFree(exaKernel k){
+  exaOpenCLKernel oclk;
+  exaKernelGetData(k,(void**)&oclk);
+
+  clReleaseKernel(oclk->kernel);
+
+  exaFree(oclk);
+  oclk=NULL;
+  exaKernelSetData(k,&oclk);
+
+  return 0;
 }
 
 __attribute__((constructor))
