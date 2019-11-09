@@ -4,6 +4,8 @@ __kernel void square(
    const unsigned int count)
 {
    int i = get_global_id(0);
-   if(i < count)
+   if(i < count){
+       input[i]  = i;
        output[i] = input[i] * input[i];
+   }
 }

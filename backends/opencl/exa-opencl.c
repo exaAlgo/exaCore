@@ -159,6 +159,10 @@ int exaOpenCLKernelCreate(exaProgram p,const char *kernelName,exaKernel k){
   cl_int err;
   oclk->kernel=clCreateKernel(oclp->program,kernelName,&err);
   exaOpenCLChk(err);
+
+  exaKernelSetData(k,(void**)&oclk);
+
+  return 0;
 }
 
 int exaOpenCLKernelFree(exaKernel k){

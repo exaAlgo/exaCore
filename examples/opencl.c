@@ -19,7 +19,7 @@ int main(int argc,char *argv){
 
   exaKernelRun(k,input,output,10);
 
-  //exaKernelFree(k);
+  exaKernelFree(k);
   exaProgramFree(p);
   exaVectorFree(input);
   exaVectorFree(output);
