@@ -17,14 +17,35 @@
     case CL_DEVICE_NOT_AVAILABLE:\
       fprintf(stderr,"%s:%d CL_DEVICE_NOT_AVAILABLE\n",file,line);\
       break;\
-    case CL_INVALID_VALUE:\
-      fprintf(stderr,"%s:%d CL_INVALID_VALUE\n",file,line);\
-      break;\
     case CL_DEVICE_NOT_FOUND:\
       fprintf(stderr,"%s:%d: CL_DEVICE_NOT_FOUND\n",file,line);\
       break;\
+    case CL_INVALID_CONTEXT:\
+      fprintf(stderr,"%s:%d: CL_INVALID_CONTEXT\n",file,line);\
+      break;\
+    case CL_INVALID_PROGRAM:\
+      fprintf(stderr,"%s:%d: CL_INVALID_PROGRAM\n",file,line);\
+      break;\
+    case CL_INVALID_VALUE:\
+      fprintf(stderr,"%s:%d CL_INVALID_VALUE\n",file,line);\
+      break;\
+    case CL_INVALID_BINARY:\
+      fprintf(stderr,"%s:%d CL_INVALID_BINARY\n",file,line);\
+      break;\
+    case CL_INVALID_BUILD_OPTIONS:\
+      fprintf(stderr,"%s:%d CL_INVALID_BUILD_OPTIONS\n",file,line);\
+      break;\
     case CL_OUT_OF_HOST_MEMORY:\
       fprintf(stderr,"%s:%d CL_OUT_OF_HOST_MEMORY\n",file,line);\
+      break;\
+    case CL_INVALID_OPERATION:\
+      fprintf(stderr,"%s:%d CL_INVALID_OPERATION\n",file,line);\
+      break;\
+    case CL_COMPILER_NOT_AVAILABLE:\
+      fprintf(stderr,"%s:%d CL_COMPILER_NOT_AVAILABLE\n",file,line);\
+      break;\
+    case CL_BUILD_PROGRAM_FAILURE:\
+      fprintf(stderr,"%s:%d CL_BUILD_PROGRAM_FAILURE\n",file,line);\
       break;\
     default:\
       break;\
@@ -41,8 +62,11 @@ struct exaOpenCLHandle_private{
   cl_command_queue queue;
 };
 
-struct exaOpenCLKernel_private{
+struct exaOpenCLProgram_private{
   cl_program program;
+};
+
+struct exaOpenCLKernel_private{
   cl_kernel kernel;
 };
 

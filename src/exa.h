@@ -17,6 +17,10 @@
 //
 #define EXA_MAX_BACKENDS 32
 //
+// exa kernels (we can get rid of this)
+//
+#define EXA_KERNEL_ARGS_MAX 64
+//
 // exa Memory Align
 //
 #define EXA_ALIGN 32
@@ -47,7 +51,8 @@ typedef enum {
   exaLong_t  =2,
   exaULong_t =3,
   exaScalar_t=4,
-  exaByte_t  =5
+  exaByte_t  =5,
+  exaVector_t=6
 } exaDataType;
 #define exaTypeGetDataType(T) T##_t
 
@@ -65,6 +70,8 @@ typedef MPI_Comm exaCommExternal;
 typedef struct exaComm_private *exaComm;
 typedef struct exaHandle_private *exaHandle;
 typedef struct exaVector_private *exaVector;
+typedef struct exaProgram_private *exaProgram;
+typedef struct exaKernel_private *exaKernel;
 typedef struct exaArray_private *exaArray;
 typedef struct exaBuffer_private *exaBuffer;
 typedef struct exaTopology_private *exaTopology;
@@ -141,7 +148,22 @@ int exaVectorGetHandle(exaVector x,exaHandle *h);
 int exaVectorSetData(exaVector x,void **data);
 int exaVectorGetData(exaVector x,void **data);
 int exaVectorFree(exaVector vec);
-
+//
+// exaProgram: wraps a exaProgram
+//
+int exaProgramCreate(exaHandle h,const char *fname,exaProgram *p);
+int exaProgramGetHandle(exaProgram p,exaHandle *h);
+int exaProgramSetData(exaProgram p,void **data);
+int exaProgramGetData(exaProgram p,void **data);
+int exaProgramFree(exaProgram p);
+//
+// exaKernel: wraps a kernel
+//
+int exaKernelCreate(exaProgram p,const char *kernelName,int nArgs,exaKernel *k,...);
+int exaKernelRun(exaKernel k,...);
+int exaKernelGetData(exaKernel k,void **data);
+int exaKernelSetData(exaKernel k,void **data);
+int exaKernelFree(exaKernel k);
 #if 0
 int exaSetVector(exaVector x,exaScalar *array);
 int exaGetVector(exaVector x,exaScalar *array);

@@ -40,6 +40,10 @@ struct exaHandle_private{
   int (*backendFinalize)(exaHandle h);
   int (*vectorCreate)(exaVector x,exaInt size);
   int (*vectorFree)(exaVector x);
+  int (*programCreate)(exaProgram p,const char *fname);
+  int (*programFree)(exaProgram p);
+  int (*kernelCreate)(exaProgram p,const char *kernelName,exaKernel *k);
+  int (*kernelFree)(exaKernel k);
 };
 //
 // exaHandle: Create, Destroy
@@ -52,6 +56,23 @@ int exaDestroyHandle(exaHandle h);
 struct exaVector_private{
   exaHandle handle;
   exaInt size;
+  void *data;
+};
+//
+// exaProgram
+//
+struct exaProgram_private{
+  exaHandle handle;
+  char *fname;
+  void *data;
+};
+//
+// exaKernel
+//
+struct exaKernel_private{
+  exaHandle handle;
+  int nArgs;
+  exaDataType args[EXA_KERNEL_ARGS_MAX];
   void *data;
 };
 //

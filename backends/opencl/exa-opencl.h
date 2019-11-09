@@ -10,6 +10,7 @@
 #endif
 
 typedef struct exaOpenCLHandle_private *exaOpenCLHandle;
+typedef struct exaOpenCLProgram_private *exaOpenCLProgram;
 typedef struct exaOpenCLKernel_private *exaOpenCLKernel;
 typedef struct exaOpenCLVector_private *exaOpenCLVector;
 //
@@ -17,9 +18,20 @@ typedef struct exaOpenCLVector_private *exaOpenCLVector;
 //
 int exaOpenCLInit(exaHandle h,const char *backend);
 int exaOpenCLFinalize(exaHandle h);
-int exaOpenCLVectorFree(exaVector x);
 //
-// create an opencl vector
+// Create an Opencl vector
 //
 int exaOpenCLVectorCreate(exaVector x,exaInt size);
+int exaOpenCLVectorFree(exaVector x);
+//
+// Create an OpenCL program
+//
+int exaOpenCLProgramCreate(exaProgram p,const char *fname);
+int exaOpenCLProgramFree(exaProgram p);
+//
+// Create an OpenCL kernel
+//
+int exaOpenCLKernelCreate(exaProgram p,const char *kernelName,exaKernel *k);
+int exaOpenCLKernelRun(exaKernel k,...);
+int exaOpenCLKernelFree(exaKernel k);
 #endif

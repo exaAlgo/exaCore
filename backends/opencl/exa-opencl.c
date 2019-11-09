@@ -26,18 +26,28 @@ int exaOpenCLInit(exaHandle h,const char *backend){
   h->backendFinalize=exaOpenCLFinalize;
   h->vectorCreate=exaOpenCLVectorCreate;
   h->vectorFree=exaOpenCLVectorFree;
+  h->programCreate=exaOpenCLProgramCreate;
+  h->programFree=exaOpenCLProgramFree;
+  h->kernelCreate=exaOpenCLKernelCreate;
+  h->kernelFree=exaOpenCLKernelFree;
 }
 
 int exaOpenCLFinalize(exaHandle h){
-  exaOpenCLHandle oclh; exaHandleGetData(h,(void **)&oclh);
+  exaOpenCLHandle oclh;
+  exaHandleGetData(h,(void **)&oclh);
+
   clReleaseCommandQueue(oclh->queue);
   clReleaseContext(oclh->context);
+
   exaFree(oclh);
   oclh=NULL;
   exaHandleSetData(h,(void **)&oclh);
+
   return 0;
 }
-
+//
+// Create an Opencl vector
+//
 int exaOpenCLVectorCreate(exaVector x,exaInt size){
   exaHandle h;
   exaOpenCLHandle oclh;
@@ -47,16 +57,91 @@ int exaOpenCLVectorCreate(exaVector x,exaInt size){
   exaOpenCLVector vec;
   exaMalloc(1,&vec);
   cl_int err;
-  vec->data=clCreateBuffer(oclh->context,CL_MEM_READ_WRITE,sizeof(double)*size,NULL,&err);
+  vec->data=clCreateBuffer(oclh->context,CL_MEM_READ_WRITE,
+    sizeof(double)*size,NULL,&err);
   exaOpenCLChk(err);
+
   exaVectorSetData(x,(void**)&vec);
+
+  return 0;
 }
 
 int exaOpenCLVectorFree(exaVector x){
   exaOpenCLVector vec;
   exaVectorGetData(x,(void**)&vec);
+
   clReleaseMemObject(vec->data);
+
   exaFree(vec);
+  vec=NULL;
+  exaVectorSetData(x,(void **)&vec);
+
+  return 0;
+}
+//
+// Create an OpenCL program
+//
+int exaOpenCLProgramCreate(exaProgram p,const char *fname){
+  exaHandle h;
+  exaOpenCLHandle oclh;
+  exaProgramGetHandle(p,&h);
+  exaHandleGetData(h,(void**)&oclh);
+
+  exaLong size;
+  char *source;
+  FILE *fp;
+
+  int rank=exaRank(h);
+  if(rank==0){
+    fp=fopen(fname,"r");
+    fseek(fp,0,SEEK_END);
+    size=ftell(fp);
+    fseek(fp,0,SEEK_SET);
+  }
+
+  exaBcast(h,&size,1,exaLong_t);
+  exaMalloc(size*sizeof(char),&source);
+
+  size_t read;
+  if(rank==0) read=fread(source,sizeof(char),size,fp);
+  assert(read==size);
+  exaBcast(h,source,size*sizeof(char),exaByte_t);
+
+  exaOpenCLProgram oclp;
+  exaMalloc(1,&oclp);
+
+  cl_int err;
+  oclp->program=clCreateProgramWithSource(oclh->context,1,
+    (const char**)&source,NULL,&err);
+  exaOpenCLChk(err);
+
+  exaFree(source);
+
+  err=clBuildProgram(oclp->program,1,&oclh->deviceId,NULL,NULL,NULL);
+  exaOpenCLChk(err);
+
+  exaProgramSetData(p,(void**)&oclp);
+}
+
+int exaOpenCLProgramFree(exaProgram p){
+  exaOpenCLProgram oclp;
+  exaProgramGetData(p,(void**)&oclp);
+
+  clReleaseProgram(oclp->program);
+
+  exaFree(oclp);
+  oclp=NULL;
+  exaProgramSetData(p,(void**)&oclp);
+
+  return 0;
+}
+//
+// Create an OpenCL kernel
+//
+int exaOpenCLKernelCreate(exaProgram p,const char *kernelName,exaKernel *k){
+}
+
+int exaOpenCLKernelFree(exaKernel k){
 }
 
 __attribute__((constructor))

@@ -10,7 +10,12 @@ int main(int argc,char *argv){
   exaVector vec;
   exaVectorCreate(h,10,&vec);
 
+  exaProgram p;
+  exaProgramCreate(h,"kernels.cl",&p);
+
+  exaProgramFree(p);
   exaVectorFree(vec);
   exaFinalize(h);
+
   MPI_Finalize();
 }
