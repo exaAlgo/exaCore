@@ -50,6 +50,24 @@
     case CL_BUILD_PROGRAM_FAILURE:\
       fprintf(stderr,"%s:%d CL_BUILD_PROGRAM_FAILURE\n",file,line);\
       break;\
+    case CL_INVALID_KERNEL:\
+      fprintf(stderr,"%s:%d CL_INVALID_KERNEL\n",file,line);\
+      break;\
+    case CL_INVALID_ARG_INDEX:\
+      fprintf(stderr,"%s:%d CL_INVALID_ARG_INDEX\n",file,line);\
+      break;\
+    case CL_INVALID_ARG_VALUE:\
+      fprintf(stderr,"%s:%d CL_INVALID_ARG_VALUE\n",file,line);\
+      break;\
+    case CL_INVALID_ARG_SIZE:\
+      fprintf(stderr,"%s:%d CL_INVALID_ARG_SIZE\n",file,line);\
+      break;\
+    case CL_INVALID_SAMPLER:\
+      fprintf(stderr,"%s:%d CL_INVALID_SAMPLER\n",file,line);\
+      break;\
+    case CL_INVALID_MEM_OBJECT:\
+      fprintf(stderr,"%s:%d CL_INVALID_MEM_OBJECT\n",file,line);\
+      break;\
     case CL_INVALID_KERNEL_NAME:\
       fprintf(stderr,"%s:%d CL_INVALID_KERNEL_NAME\n",file,line);\
       break;\

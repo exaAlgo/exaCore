@@ -164,6 +164,8 @@ int exaOpenCLKernelCreate(exaProgram p,const char *kernelName,exaKernel k){
   exaOpenCLProgram oclp;
   exaProgramGetData(p,(void**)&oclp);
 
+  k->runKernel=exaOpenCLKernelRun;
+
   exaOpenCLKernel oclk;
   exaMalloc(1,&oclk);
   cl_int err;
@@ -176,6 +178,20 @@ int exaOpenCLKernelCreate(exaProgram p,const char *kernelName,exaKernel k){
 }
 
 int exaOpenCLKernelRun(exaKernel k,exaKernelArg args){
+  exaHandle h;
+  exaKernelGetHandle(k,&h);
+  exaOpenCLHandle oclh;
+  exaHandleGetData(h,(void**)&oclh);
+
+  exaOpenCLKernel oclk;
+  exaKernelGetData(k,(void**)&oclk);
+
+  cl_int err;
+  for(int i=0;i<k->nArgs;k++){
+    err=clSetKernelArg(oclk->kernel,i,args[i].size,args[i].arg);
+    exaOpenCLChk(err);
+  }
+
   return 0;
 }
 

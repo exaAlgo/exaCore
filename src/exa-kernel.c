@@ -96,6 +96,8 @@ int exaKernelRun(exaKernel k,...){
     setKernelArgFromArgList(&args[i],argList,k->args[i]);
   }
 
+  k->runKernel(k,args);
+
   exaFree(args);
   va_end(argList);
 

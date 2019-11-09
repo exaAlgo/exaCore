@@ -80,7 +80,7 @@ struct exaKernel_private{
   exaHandle handle;
   int nArgs;
   exaDataType args[EXA_KERNEL_ARGS_MAX];
-  int (*kernelRun)(exaKernel k,exaKernelArg args);
+  int (*runKernel)(exaKernel k,exaKernelArg args);
   void *data;
 };
 //
