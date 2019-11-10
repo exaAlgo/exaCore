@@ -7,17 +7,18 @@ int exaOpenCLInit(exaHandle h,const char *backend){
 
   // set platformId,deviceType
   // these should be set based on user input
-  oclh->platformId=0;
+  //oclh->platformId=0;
   oclh->deviceType=CL_DEVICE_TYPE_GPU;
 
   cl_int err;
-  err=clGetDeviceIDs(oclh->platformId,oclh->deviceType,1,&oclh->deviceId,NULL);
+  //err=clGetDeviceIDs(oclh->platformId,oclh->deviceType,1,&oclh->deviceId,NULL);
+  err=clGetDeviceIDs(NULL,oclh->deviceType,1,&oclh->deviceId,NULL);
   exaOpenCLChk(err);
 
-  oclh->context=clCreateContext(NULL,1,&oclh->deviceId,NULL,NULL,&err);
+  oclh->context=clCreateContext(0,1,&oclh->deviceId,NULL,NULL,&err);
   exaOpenCLChk(err);
 
-  oclh->queue=clCreateCommandQueue(oclh->context,oclh->deviceId,NULL,&err);
+  oclh->queue=clCreateCommandQueue(oclh->context,oclh->deviceId,0,&err);
   exaOpenCLChk(err);
 
   exaHandleSetData(h,(void **)&oclh);
@@ -30,6 +31,7 @@ int exaOpenCLInit(exaHandle h,const char *backend){
   h->programFree=exaOpenCLProgramFree;
   h->kernelCreate=exaOpenCLKernelCreate;
   h->kernelFree=exaOpenCLKernelFree;
+  h->barrier=exaOpenCLBarrier;
 }
 
 int exaOpenCLFinalize(exaHandle h){
@@ -55,12 +57,14 @@ int exaOpenCLVectorCreate(exaVector x,exaInt size){
   exaHandleGetData(h,(void**)&oclh);
 
   x->getDevicePointer=exaOpenCLVectorGetDevicePointer;
+  x->vectorRead=exaOpenCLVectorRead;
+  x->vectorWrite=exaOpenCLVectorWrite;
 
   exaOpenCLVector vec;
   exaMalloc(1,&vec);
   cl_int err;
   vec->data=clCreateBuffer(oclh->context,CL_MEM_READ_WRITE,
-    sizeof(double)*size,NULL,&err);
+    sizeof(exaScalar)*size,NULL,&err);
   exaOpenCLChk(err);
 
   exaVectorSetData(x,(void**)&vec);
@@ -74,6 +78,30 @@ int exaOpenCLVectorGetDevicePointer(exaVector x,void **ptr,size_t *size){
 
   *ptr=&vec->data;
   *size=sizeof(cl_mem);
+}
+
+int exaOpenCLVectorRead(exaVector x,void **out){
+  exaHandle h;
+  exaVectorGetHandle(x,&h);
+  exaOpenCLHandle oclh;
+  exaHandleGetData(h,(void**)&oclh);
+  exaOpenCLVector oclv;
+  exaVectorGetData(x,(void**)&oclv);
+
+  cl_int err;
+  exaInt size=exaVectorGetSize(x);
+  exaScalar out_[10];
+  printf("size: %d\n",size);
+  clFinish(oclh->queue);
+  err=clEnqueueReadBuffer(oclh->queue,oclv->data,CL_TRUE,0,sizeof(exaScalar)*size,
+    out_,0,NULL,NULL);
+  for(int i=0;i<size;i++) printf("out[%d]=%lf\n",i,out_[i]);
+
+  return 0;
+}
+
+int exaOpenCLVectorWrite(exaVector x,void *in){
+  return 0;
 }
 
 int exaOpenCLVectorFree(exaVector x){
@@ -123,20 +151,21 @@ int exaOpenCLProgramCreate(exaProgram p,const char *fname){
   exaMalloc(1,&oclp);
 
   cl_int err;
-  oclp->program=clCreateProgramWithSource(oclh->context,1,
-    (const char**)&source,NULL,&err);
+  oclp->program=clCreateProgramWithSource(oclh->context,1,(const char**)&source,NULL,&err);
   exaOpenCLChk(err);
 
   exaFree(source);
 
-  err=clBuildProgram(oclp->program,1,&oclh->deviceId,NULL,NULL,NULL);
+  err=clBuildProgram(oclp->program,0,NULL,NULL,NULL,NULL);
   exaOpenCLChk(err);
-#if 0
+#if 1
+  if(err!=CL_SUCCESS){
   size_t len;
   char buffer[2048];
   clGetProgramBuildInfo(oclp->program,oclh->deviceId,CL_PROGRAM_BUILD_LOG,
     sizeof(buffer),buffer,&len);
   printf("%s\n", buffer);
+  }
 #endif
 
   exaProgramSetData(p,(void**)&oclp);
@@ -187,8 +216,9 @@ int exaOpenCLKernelRun(exaKernel k,exaKernelArg args){
   exaKernelGetData(k,(void**)&oclk);
 
   cl_int err;
-  for(int i=0;i<k->nArgs;k++){
+  for(int i=0;i<k->nArgs;i++){
     err=clSetKernelArg(oclk->kernel,i,args[i].size,args[i].arg);
+    printf("2 ptr=%p size=%zu\n",args[i].arg,args[i].size);
     exaOpenCLChk(err);
   }
 
@@ -196,6 +226,9 @@ int exaOpenCLKernelRun(exaKernel k,exaKernelArg args){
     sizeof(oclk->local),&oclk->local,NULL);
   exaOpenCLChk(err);
   oclk->global=10;
+  oclk->local=1;
+
+  printf("local=%zu global=%zu\n",oclk->local,oclk->global);
 
   err=clEnqueueNDRangeKernel(oclh->queue,oclk->kernel,1,NULL,&oclk->global,
     &oclk->local,0,NULL,NULL);
@@ -213,6 +246,15 @@ int exaOpenCLKernelFree(exaKernel k){
   exaFree(oclk);
   oclk=NULL;
   exaKernelSetData(k,(void**)&oclk);
+
+  return 0;
+}
+
+int exaOpenCLBarrier(exaHandle h){
+  exaOpenCLHandle oclh;
+  exaHandleGetData(h,(void**)&oclh);
+
+  clFinish(oclh->queue);
 
   return 0;
 }

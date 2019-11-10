@@ -2,27 +2,29 @@
 #include "exa-memory.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdarg.h>
 
-int exaKernelCreate(exaProgram p,const char *kernelName,exaKernel *k_,int nArgs,...){
+int exaKernelCreate(exaProgram p,const char *kernelName,exaKernel *k,int nArgs,...){
   exaHandle h;
   exaProgramGetHandle(p,&h);
 
-  exaMalloc(1,k_);
-  exaKernel k=*k_;
-  k->nArgs=nArgs;
+  *k=NULL;
+  exaMalloc(1,k);
+  (*k)->nArgs=nArgs;
 
   va_list vaList;
   int i;
 
   va_start(vaList,nArgs);
   for(i=0;i<nArgs;i++){
-    k->args[i]=va_arg(vaList,exaDataType);
+    (*k)->args[i]=va_arg(vaList,exaDataType);
+    printf("create: %d\n",(*k)->args[i]);
   }
   va_end(vaList);
 
-  k->handle=h;
-  h->kernelCreate(p,kernelName,k);
+  (*k)->handle=h;
+  h->kernelCreate(p,kernelName,*k);
 
   return 0;
 }
@@ -41,44 +43,44 @@ int exaKernelGetData(exaKernel k,void **data){
   return 0;
 }
 
-int setKernelArgFromArgList(exaKernelArg arg,va_list argList,exaDataType t){
-  void *ptr=NULL;
-  size_t size=0;
+#define setKernelArgFromArgList(argi,argList,t) do{\
+  void *ptr=NULL;\
+  size_t size=0;\
+  \
+  exaVector val;\
+  exaScalar val1;\
+  exaULong val2;\
+  exaUInt val3;\
+  \
+  switch(t){\
+    case exaVector_t:\
+      val=va_arg(argList,exaVector);\
+      exaVectorGetDevicePointer(val,&ptr,&size);\
+      break;\
+    case exaScalar_t:\
+      val1=va_arg(argList,exaScalar);\
+      ptr=(void*)&val1;\
+      size=sizeof(exaScalar);\
+      break;\
+    case exaULong_t:\
+      val2=va_arg(argList,exaULong);\
+      ptr=(void*)&val2;\
+      size=sizeof(exaULong);\
+      break;\
+    case exaUInt_t:\
+      val3=va_arg(argList,exaUInt);\
+      ptr=(void*)&val3;\
+      size=sizeof(exaUInt);\
+      break;\
+    default:\
+      break;\
+  }\
+  \
+  argi->arg=ptr;\
+  argi->size=size;\
+  printf("0 ptr=%p size=%zu\n",ptr,size);\
+} while(0)
 
-  exaVector val;
-  exaScalar val1;
-  exaULong val2;
-  exaUInt val3;
-
-  switch(t){
-    case exaVector_t:
-      val=va_arg(argList,exaVector);
-      exaVectorGetDevicePointer(val,&ptr,&size);
-      break;
-    case exaScalar_t:
-      val1=va_arg(argList,exaScalar);
-      ptr=(void*)&val1;
-      size=sizeof(exaScalar);
-      break;
-    case exaULong_t:
-      val2=va_arg(argList,exaULong);
-      ptr=(void*)&val2;
-      size=sizeof(exaULong);
-      break;
-    case exaUInt_t:
-      val3=va_arg(argList,exaUInt);
-      ptr=(void*)&val3;
-      size=sizeof(exaUInt);
-      break;
-    default:
-      break;
-  }
-
-  arg->arg=ptr;
-  arg->size=size;
-
-  return 0;
-}
 int exaKernelRun(exaKernel k,...){
   exaHandle h;
   exaKernelGetHandle(k,&h);
@@ -93,7 +95,10 @@ int exaKernelRun(exaKernel k,...){
 
   int i;
   for(i=0;i<nArgs;i++){
-    setKernelArgFromArgList(&args[i],argList,k->args[i]);
+    exaKernelArg argi=&args[i];
+    exaDataType t=k->args[i];
+    setKernelArgFromArgList(argi,argList,t);
+    printf("1 ptr=%p size=%zu\n",argi->arg,argi->size);\
   }
 
   k->runKernel(k,args);

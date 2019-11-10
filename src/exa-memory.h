@@ -3,8 +3,8 @@
 //
 // exa Memory allocation
 //
-#define exaMalloc(n, p)  exaMallocArray ((n), sizeof(**(p)), p)
-#define exaCalloc(n, p)  exaCallocArray ((n), sizeof(**(p)), p)
-#define exaRealloc(n, p) exaReallocArray((n), sizeof(**(p)), p)
+#define exaMalloc(n, p)  exaMallocArray ((n), sizeof(**(p)), (void**)p)
+#define exaCalloc(n, p)  exaCallocArray ((n), sizeof(**(p)), (void**)p)
+#define exaRealloc(n, p) exaReallocArray((n), sizeof(**(p)), (void**)p)
 
 #endif

@@ -1,11 +1,14 @@
+
+#pragma OPENCL EXTENSION cl_khr_fp64 : enable
+
 __kernel void square(
-   __global float* input,
-   __global float* output,
+   __global double* input,
+   __global double* output,
    const unsigned int count)
 {
    int i = get_global_id(0);
-   if(i < count){
-       input[i]  = i;
+   if(i < 10){
+       input[i]  = 5;
        output[i] = input[i] * input[i];
    }
 }

@@ -46,6 +46,14 @@ int exaVectorGetDevicePointer(exaVector x,void **ptr,size_t *size){
   return 0;
 }
 
+int exaVectorWrite(exaVector x,void *in){
+  return x->vectorWrite(x,in);
+}
+
+int exaVectorRead(exaVector x,void **out){
+  return x->vectorRead(x,out);
+}
+
 int exaVectorFree(exaVector vec){
   exaHandle h;
   exaVectorGetHandle(vec,&h);

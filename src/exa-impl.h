@@ -38,12 +38,16 @@ struct exaHandle_private{
 
   int (*backendInit)(exaHandle h,const char *backend);
   int (*backendFinalize)(exaHandle h);
+
   int (*vectorCreate)(exaVector x,exaInt size);
   int (*vectorFree)(exaVector x);
+
   int (*programCreate)(exaProgram p,const char *fname);
   int (*programFree)(exaProgram p);
+
   int (*kernelCreate)(exaProgram p,const char *kernelName,exaKernel k);
   int (*kernelFree)(exaKernel k);
+  int (*barrier)(exaHandle h);
 };
 //
 // exaHandle: Create, Destroy
@@ -59,6 +63,8 @@ struct exaVector_private{
   void *data;
 
   int (*getDevicePointer)(exaVector x,void **ptr,size_t *size);
+  int (*vectorWrite)(exaVector x,void *in);
+  int (*vectorRead)(exaVector x,void **out);
 };
 //
 // exaProgram

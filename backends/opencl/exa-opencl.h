@@ -24,6 +24,8 @@ int exaOpenCLFinalize(exaHandle h);
 int exaOpenCLVectorCreate(exaVector x,exaInt size);
 int exaOpenCLVectorFree(exaVector x);
 int exaOpenCLVectorGetDevicePointer(exaVector x,void **ptr,size_t *size);
+int exaOpenCLVectorRead(exaVector x,void **out);
+int exaOpenCLVectorWrite(exaVector x,void *in);
 //
 // Create an OpenCL program
 //
@@ -35,4 +37,8 @@ int exaOpenCLProgramFree(exaProgram p);
 int exaOpenCLKernelCreate(exaProgram p,const char *kernelName,exaKernel k);
 int exaOpenCLKernelRun(exaKernel k,exaKernelArg args);
 int exaOpenCLKernelFree(exaKernel k);
+//
+// Barrier
+//
+int exaOpenCLBarrier(exaHandle h);
 #endif

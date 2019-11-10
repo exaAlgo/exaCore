@@ -23,27 +23,27 @@ void exaRegister(int (*init)(exaHandle,const char*),const char *prefix){
 //
 // exaMalloc, Realloc, Calloc and Free
 //
-int exaMallocArray(size_t n, size_t unit, void *p) {
-  int ierr = posix_memalign((void **)p,EXA_ALIGN,n*unit);
+int exaMallocArray(size_t n,size_t unit,void **p) {
+  int ierr=posix_memalign(p,EXA_ALIGN,n*unit);
   if(ierr)
     printf("exaMallocArray Failed: %s:%d\n",__FILE__,__LINE__);
   return ierr;
 }
 
-int exaCallocArray(size_t n, size_t unit, void *p) {
+int exaCallocArray(size_t n,size_t unit,void **p) {
   int ierr = 0;
-  *(void **)p = calloc(n, unit);
-  if(n && unit && !*(void **)p) {
+  *p = calloc(n,unit);
+  if(n && unit && !*p) {
     ierr = 1;
     printf("exaCallocArray Failed: %s:%d\n", __FILE__, __LINE__);
   }
   return ierr;
 }
 
-int exaReallocArray(size_t n, size_t unit, void *p) {
+int exaReallocArray(size_t n,size_t unit,void **p) {
   int ierr = 0;
-  *(void **)p = realloc(*(void **)p, n * unit);
-  if(n && unit && !*(void **)p) {
+  *p = realloc(*p,n*unit);
+  if(n && unit && !*p) {
     ierr = 1;
     printf("exaReallocArray Failed: %s:%d\n", __FILE__, __LINE__);
   }
@@ -141,6 +141,7 @@ int exaBcast(exaHandle h,void *in,exaInt count,exaDataType type){
 }
 
 void exaBarrier(exaHandle h) {
+  h->barrier(h);
   exaCommBarrier(exaGetComm(h));
 }
 

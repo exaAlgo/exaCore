@@ -83,9 +83,9 @@ void exaRegister(int (*init)(exaHandle,const char*),const char *prefix);
 //
 // exaMalloc, Realloc, Calloc and Free
 //
-int exaMallocArray (size_t n,size_t unit,void *p);
-int exaCallocArray (size_t n,size_t unit,void *p);
-int exaReallocArray(size_t n,size_t unit,void *p);
+int exaMallocArray (size_t n,size_t unit,void **p);
+int exaCallocArray (size_t n,size_t unit,void **p);
+int exaReallocArray(size_t n,size_t unit,void **p);
 int exaFree        (void *p);
 //
 // exaHandle: wraps an exaComm, buffer and other options
@@ -150,6 +150,8 @@ int exaVectorSetData(exaVector x,void **data);
 int exaVectorGetData(exaVector x,void **data);
 exaInt exaVectorGetSize(exaVector x);
 int exaVectorGetDevicePointer(exaVector x,void **ptr,size_t *size);
+int exaVectorWrite(exaVector x,void *in );
+int exaVectorRead (exaVector x,void **out);
 int exaVectorFree(exaVector vec);
 //
 // exaProgram: wraps a exaProgram
