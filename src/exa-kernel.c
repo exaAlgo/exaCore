@@ -19,7 +19,6 @@ int exaKernelCreate(exaProgram p,const char *kernelName,exaKernel *k,int nArgs,.
   va_start(vaList,nArgs);
   for(i=0;i<nArgs;i++){
     (*k)->args[i]=va_arg(vaList,exaDataType);
-    printf("create: %d\n",(*k)->args[i]);
   }
   va_end(vaList);
 
@@ -78,7 +77,6 @@ int exaKernelGetData(exaKernel k,void **data){
   \
   argi->arg=ptr;\
   argi->size=size;\
-  printf("0 ptr=%p size=%zu\n",ptr,size);\
 } while(0)
 
 int exaKernelRun(exaKernel k,...){
@@ -98,7 +96,6 @@ int exaKernelRun(exaKernel k,...){
     exaKernelArg argi=&args[i];
     exaDataType t=k->args[i];
     setKernelArgFromArgList(argi,argList,t);
-    printf("1 ptr=%p size=%zu\n",argi->arg,argi->size);\
   }
 
   k->runKernel(k,args);

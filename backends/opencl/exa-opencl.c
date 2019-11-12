@@ -49,7 +49,7 @@ int exaOpenCLInit(exaHandle h,const char *backend){
   oclh->context=clCreateContext(0,1,&oclh->deviceId,NULL,NULL,&err);
   exaOpenCLChk(err);
 
-  oclh->queue=clCreateCommandQueue(oclh->context,oclh->deviceId,0,&err);
+  oclh->queue=clCreateCommandQueueWithProperties(oclh->context,oclh->deviceId,NULL,&err);
   exaOpenCLChk(err);
 
   exaHandleSetData(h,(void **)&oclh);
@@ -166,14 +166,14 @@ int exaOpenCLProgramCreate(exaProgram p,const char *fname){
   }
 
   exaBcast(h,&size,1,exaLong_t);
-  exaMalloc(size*sizeof(char)+1,&source);
+  exaCalloc((size+1)*sizeof(char),&source);
 
   size_t read;
   if(rank==0){
     read=fread(source,sizeof(char),size,fp);
     assert(read==size);
   }
-  exaBcast(h,source,size*sizeof(char),exaByte_t);
+  exaBcast(h,source,(size+1)*sizeof(char),exaByte_t);
 
   exaOpenCLProgram oclp;
   exaMalloc(1,&oclp);
@@ -186,7 +186,7 @@ int exaOpenCLProgramCreate(exaProgram p,const char *fname){
 
   err=clBuildProgram(oclp->program,0,NULL,NULL,NULL,NULL);
   exaOpenCLChk(err);
-#if 1
+#if 0
   if(err!=CL_SUCCESS){
   size_t len;
   char buffer[2048];
@@ -246,7 +246,6 @@ int exaOpenCLKernelRun(exaKernel k,exaKernelArg args){
   cl_int err;
   for(int i=0;i<k->nArgs;i++){
     err=clSetKernelArg(oclk->kernel,i,args[i].size,args[i].arg);
-    printf("2 ptr=%p size=%zu\n",args[i].arg,args[i].size);
     exaOpenCLChk(err);
   }
 
@@ -255,8 +254,6 @@ int exaOpenCLKernelRun(exaKernel k,exaKernelArg args){
   exaOpenCLChk(err);
   oclk->global=10;
   oclk->local=1;
-
-  printf("local=%zu global=%zu\n",oclk->local,oclk->global);
 
   err=clEnqueueNDRangeKernel(oclh->queue,oclk->kernel,1,NULL,&oclk->global,
     &oclk->local,0,NULL,NULL);
