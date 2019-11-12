@@ -165,7 +165,7 @@ int exaProgramFree(exaProgram p);
 // exaKernel: wraps a kernel
 //
 int exaKernelCreate(exaProgram p,const char *kernelName,exaKernel *k,int nArgs,...);
-int exaKernelRun(exaKernel k,...);
+int exaKernelRun(exaKernel k,exaUInt nThreads,...);
 int exaKernelGetHandle(exaKernel k,exaHandle *h);
 int exaKernelGetData(exaKernel k,void **data);
 int exaKernelSetData(exaKernel k,void **data);

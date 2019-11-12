@@ -2,6 +2,8 @@
 #include "exa.h"
 #include "exa-memory.h"
 
+#define N 10
+
 int main(int argc,char *argv){
   MPI_Init(NULL,NULL);
 
@@ -9,24 +11,24 @@ int main(int argc,char *argv){
   exaInit(&h,MPI_COMM_WORLD,"/opencl/gpu");
 
   exaVector input,output;
-  exaVectorCreate(h,10,&input);
-  exaVectorCreate(h,10,&output);
+  exaVectorCreate(h,N,&input);
+  exaVectorCreate(h,N,&output);
 
   exaProgram p;
   exaProgramCreate(h,"kernels.cl",&p);
 
   exaKernel k;
-  exaKernelCreate(p,"square",&k,2,exaVector_t,exaVector_t);
+  exaKernelCreate(p,"square",&k,3,exaVector_t,exaVector_t,exaUInt_t);
 
-  exaScalar *in; exaCalloc(10,&in);
-  for(int i=0;i<10;i++) in[i]=i;
+  exaScalar *in; exaCalloc(N,&in);
+  for(int i=0;i<N;i++) in[i]=i;
   exaVectorWrite(input,in);
 
-  exaKernelRun(k,input,output);
+  exaKernelRun(k,N,input,output,N);
   exaBarrier(h);
 
   exaVectorRead(output,in);
-  for(int i=0;i<10;i++) printf("%d: %lf\n",i,in[i]);
+  for(int i=0;i<N;i++) printf("%d: %lf\n",i,in[i]);
   exaFree(in);
 
   exaKernelFree(k);

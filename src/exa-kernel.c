@@ -79,7 +79,7 @@ int exaKernelGetData(exaKernel k,void **data){
   argi->size=size;\
 } while(0)
 
-int exaKernelRun(exaKernel k,...){
+int exaKernelRun(exaKernel k,exaUInt nThreads,...){
   exaHandle h;
   exaKernelGetHandle(k,&h);
 
@@ -89,7 +89,7 @@ int exaKernelRun(exaKernel k,...){
   exaMalloc(nArgs,&args);
 
   va_list argList;
-  va_start(argList,k);
+  va_start(argList,nThreads);
 
   int i;
   for(i=0;i<nArgs;i++){
@@ -98,7 +98,7 @@ int exaKernelRun(exaKernel k,...){
     setKernelArgFromArgList(argi,argList,t);
   }
 
-  k->runKernel(k,args);
+  k->runKernel(k,nThreads,args);
 
   exaFree(args);
   va_end(argList);

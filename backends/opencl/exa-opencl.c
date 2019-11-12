@@ -247,7 +247,7 @@ int exaOpenCLKernelCreate(exaProgram p,const char *kernelName,exaKernel k){
   return 0;
 }
 
-int exaOpenCLKernelRun(exaKernel k,exaKernelArg args){
+int exaOpenCLKernelRun(exaKernel k,exaUInt nThreads,exaKernelArg args){
   exaHandle h;
   exaKernelGetHandle(k,&h);
   exaOpenCLHandle oclh;
@@ -262,11 +262,14 @@ int exaOpenCLKernelRun(exaKernel k,exaKernelArg args){
     exaOpenCLChk(err);
   }
 
+  oclk->global=nThreads;
   err=clGetKernelWorkGroupInfo(oclk->kernel,oclh->deviceId,CL_KERNEL_WORK_GROUP_SIZE,
     sizeof(oclk->local),&oclk->local,NULL);
   exaOpenCLChk(err);
-  oclk->global=10;
-  oclk->local=1;
+
+  size_t multiple=oclk->global/oclk->local;
+  size_t remainder=oclk->global-multiple*oclk->local;
+  if(remainder) oclk->global=(multiple+1)*oclk->local;
 
   err=clEnqueueNDRangeKernel(oclh->queue,oclk->kernel,1,NULL,&oclk->global,
     &oclk->local,0,NULL,NULL);
