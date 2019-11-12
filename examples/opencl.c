@@ -1,5 +1,6 @@
 #include "exa-opencl.h"
 #include "exa.h"
+#include "exa-memory.h"
 
 int main(int argc,char *argv){
   MPI_Init(NULL,NULL);
@@ -21,9 +22,10 @@ int main(int argc,char *argv){
   exaKernelRun(k,input);
   exaBarrier(h);
 
-  exaScalar in[10]={0.0};
+  exaScalar *in; exaCalloc(10,&in);
   exaVectorRead(input,in);
-  //for(int i=0;i<10;i++) printf("%d: %lf\n",i,in[i]);
+  for(int i=0;i<10;i++) printf("%d: %lf\n",i,in[i]);
+  exaFree(in);
 
   exaKernelFree(k);
   exaProgramFree(p);
