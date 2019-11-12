@@ -16,14 +16,16 @@ int main(int argc,char *argv){
   exaProgramCreate(h,"kernels.cl",&p);
 
   exaKernel k;
-  exaKernelCreate(p,"square",&k,1,exaVector_t);
-
-  //exaKernelRun(k,input,output,10);
-  exaKernelRun(k,input);
-  exaBarrier(h);
+  exaKernelCreate(p,"square",&k,2,exaVector_t,exaVector_t);
 
   exaScalar *in; exaCalloc(10,&in);
-  exaVectorRead(input,in);
+  for(int i=0;i<10;i++) in[i]=i;
+  exaVectorWrite(input,in);
+
+  exaKernelRun(k,input,output);
+  exaBarrier(h);
+
+  exaVectorRead(output,in);
   for(int i=0;i<10;i++) printf("%d: %lf\n",i,in[i]);
   exaFree(in);
 

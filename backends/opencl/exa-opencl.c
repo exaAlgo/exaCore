@@ -129,6 +129,19 @@ int exaOpenCLVectorRead(exaVector x,exaScalar *out){
 }
 
 int exaOpenCLVectorWrite(exaVector x,exaScalar *in){
+  exaHandle h;
+  exaVectorGetHandle(x,&h);
+  exaOpenCLHandle oclh;
+  exaHandleGetData(h,(void**)&oclh);
+  exaOpenCLVector oclv;
+  exaVectorGetData(x,(void**)&oclv);
+
+  cl_int err;
+  exaInt size=exaVectorGetSize(x);
+  err=clEnqueueWriteBuffer(oclh->queue,oclv->data,CL_TRUE,0,sizeof(exaScalar)*size,
+    in,0,NULL,NULL);
+  exaOpenCLChk(err);
+
   return 0;
 }
 
