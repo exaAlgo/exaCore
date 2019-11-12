@@ -24,8 +24,8 @@ int exaOpenCLFinalize(exaHandle h);
 int exaOpenCLVectorCreate(exaVector x,exaInt size);
 int exaOpenCLVectorFree(exaVector x);
 int exaOpenCLVectorGetDevicePointer(exaVector x,void **ptr,size_t *size);
-int exaOpenCLVectorRead(exaVector x,void **out);
-int exaOpenCLVectorWrite(exaVector x,void *in);
+int exaOpenCLVectorRead(exaVector x ,exaScalar *out);
+int exaOpenCLVectorWrite(exaVector x,exaScalar *in);
 //
 // Create an OpenCL program
 //

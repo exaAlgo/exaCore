@@ -15,15 +15,15 @@ int main(int argc,char *argv){
   exaProgramCreate(h,"kernels.cl",&p);
 
   exaKernel k;
-  //exaKernelCreate(p,"square",&k,3,exaVector_t,exaVector_t,exaUInt_t);
   exaKernelCreate(p,"square",&k,1,exaVector_t);
 
   //exaKernelRun(k,input,output,10);
   exaKernelRun(k,input);
+  exaBarrier(h);
 
   exaScalar in[10];
-  exaVectorRead(input,(void**)&in);
-  for(int i=0;i<10;i++) printf("i: %d i^2:%lf\n",i,in[i]);
+  exaVectorRead(input,in);
+  for(int i=0;i<10;i++) printf("in=%p i: %lf\n",in,in[i]);
 
   exaKernelFree(k);
   exaProgramFree(p);

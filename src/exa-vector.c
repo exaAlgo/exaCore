@@ -12,8 +12,8 @@ int exaVectorCreate(exaHandle h,exaInt size,exaVector *x_){
   exaMalloc(1,x_);
 
   exaVector x=*x_;
-
   if(x==NULL) return 1;
+
   x->handle=h;
   x->size = size;
 
@@ -46,11 +46,11 @@ int exaVectorGetDevicePointer(exaVector x,void **ptr,size_t *size){
   return 0;
 }
 
-int exaVectorWrite(exaVector x,void *in){
+int exaVectorWrite(exaVector x,exaScalar *in){
   return x->vectorWrite(x,in);
 }
 
-int exaVectorRead(exaVector x,void **out){
+int exaVectorRead(exaVector x,exaScalar *out){
   return x->vectorRead(x,out);
 }
 

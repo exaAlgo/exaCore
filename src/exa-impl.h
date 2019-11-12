@@ -63,8 +63,8 @@ struct exaVector_private{
   void *data;
 
   int (*getDevicePointer)(exaVector x,void **ptr,size_t *size);
-  int (*vectorWrite)(exaVector x,void *in);
-  int (*vectorRead)(exaVector x,void **out);
+  int (*vectorWrite)(exaVector x,exaScalar *in);
+  int (*vectorRead)(exaVector x,exaScalar *out);
 };
 //
 // exaProgram

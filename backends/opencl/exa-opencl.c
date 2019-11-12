@@ -5,16 +5,47 @@ int exaOpenCLInit(exaHandle h,const char *backend){
   exaOpenCLHandle oclh;
   exaMalloc(1,&oclh);
 
-  // set platformId,deviceType
-  // these should be set based on user input
-  //oclh->platformId=0;
+  char *in,config[4][BUFSIZ];
+  exaMalloc(strlen(backend)+1,&in);
+  strcpy(in,backend);
+
+  int i=0;
+  char *pch=strtok(in,"/");
+  while(pch!=NULL){
+    strcpy(config[i],pch);
+    //printf("i=%d config[%d]=%s\n",i,i,config[i]);
+    i++;
+    pch=strtok(NULL,"/");
+  }
+  exaFree(in);
+
   oclh->deviceType=CL_DEVICE_TYPE_GPU;
+  if(strcmp(config[1],"cpu")==0)
+    oclh->deviceType=CL_DEVICE_TYPE_CPU;
+
+  int platformId=atoi(config[2]);
+  int deviceId=atoi(config[3]);
+  platformId=deviceId=0;
+
+  cl_uint platformCount;
+  clGetPlatformIDs(0,NULL,&platformCount);
+
+  cl_platform_id *platforms;
+  exaMalloc(platformCount,&platforms);
+  clGetPlatformIDs(platformCount,platforms,NULL);
+  oclh->platformId=platforms[platformId];
+  exaFree(platforms);
+
+  cl_uint deviceCount;
+  clGetDeviceIDs(oclh->platformId,oclh->deviceType,0,NULL,&deviceCount);
+
+  cl_device_id *devices;
+  exaMalloc(deviceCount,&devices);
+  clGetDeviceIDs(oclh->platformId,oclh->deviceType,deviceCount,devices,NULL);
+  oclh->deviceId=devices[deviceId];
+  exaFree(devices);
 
   cl_int err;
-  //err=clGetDeviceIDs(oclh->platformId,oclh->deviceType,1,&oclh->deviceId,NULL);
-  err=clGetDeviceIDs(NULL,oclh->deviceType,1,&oclh->deviceId,NULL);
-  exaOpenCLChk(err);
-
   oclh->context=clCreateContext(0,1,&oclh->deviceId,NULL,NULL,&err);
   exaOpenCLChk(err);
 
@@ -80,7 +111,7 @@ int exaOpenCLVectorGetDevicePointer(exaVector x,void **ptr,size_t *size){
   *size=sizeof(cl_mem);
 }
 
-int exaOpenCLVectorRead(exaVector x,void **out){
+int exaOpenCLVectorRead(exaVector x,exaScalar *out){
   exaHandle h;
   exaVectorGetHandle(x,&h);
   exaOpenCLHandle oclh;
@@ -90,17 +121,14 @@ int exaOpenCLVectorRead(exaVector x,void **out){
 
   cl_int err;
   exaInt size=exaVectorGetSize(x);
-  exaScalar out_[10];
-  printf("size: %d\n",size);
-  clFinish(oclh->queue);
   err=clEnqueueReadBuffer(oclh->queue,oclv->data,CL_TRUE,0,sizeof(exaScalar)*size,
-    out_,0,NULL,NULL);
-  for(int i=0;i<size;i++) printf("out[%d]=%lf\n",i,out_[i]);
+    out,0,NULL,NULL);
+  exaOpenCLChk(err);
 
   return 0;
 }
 
-int exaOpenCLVectorWrite(exaVector x,void *in){
+int exaOpenCLVectorWrite(exaVector x,exaScalar *in){
   return 0;
 }
 
@@ -131,7 +159,7 @@ int exaOpenCLProgramCreate(exaProgram p,const char *fname){
 
   int rank=exaRank(h);
   if(rank==0){
-    fp=fopen(fname,"rb");
+    fp=fopen(fname,"r");
     fseek(fp,0,SEEK_END);
     size=ftell(fp);
     fseek(fp,0,SEEK_SET);
