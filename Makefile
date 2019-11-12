@@ -1,7 +1,7 @@
 ## User configurations ###
 # Compilers and flags
 CC ?= mpicc
-CFLAGS ?= -O2
+CFLAGS ?= -O0
 CPP ?= cpp
 CPPFLAGS ?=
 LDFLAGS ?=

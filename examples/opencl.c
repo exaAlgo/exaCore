@@ -2,7 +2,7 @@
 #include "exa.h"
 #include "exa-memory.h"
 
-#define N 10
+#define N 5
 
 int main(int argc,char *argv){
   MPI_Init(NULL,NULL);
@@ -28,7 +28,7 @@ int main(int argc,char *argv){
   exaBarrier(h);
 
   exaVectorRead(output,in);
-  for(int i=0;i<N;i++) printf("%d: %lf\n",i,in[i]);
+  //for(int i=0;i<N;i++) printf("%d: %lf\n",i,in[i]);
   exaFree(in);
 
   exaKernelFree(k);

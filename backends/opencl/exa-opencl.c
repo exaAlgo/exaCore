@@ -5,15 +5,15 @@ int exaOpenCLInit(exaHandle h,const char *backend){
   exaOpenCLHandle oclh;
   exaMalloc(1,&oclh);
 
-  char *in,config[4][BUFSIZ];
-  exaMalloc(strlen(backend)+1,&in);
+  char *in,config[5][BUFSIZ];
+  exaCalloc(strlen(backend)+1,&in);
   strcpy(in,backend);
 
   int i=0;
   char *pch=strtok(in,"/");
   while(pch!=NULL){
     strcpy(config[i],pch);
-    //printf("i=%d config[%d]=%s\n",i,i,config[i]);
+    printf("i=%d config[%d]=%s\n",i,i,config[i]);
     i++;
     pch=strtok(NULL,"/");
   }
