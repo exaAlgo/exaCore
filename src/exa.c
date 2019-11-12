@@ -81,6 +81,8 @@ int exaInit(exaHandle *h_,exaCommExternal ce,const char *backend) {
 }
 
 int exaFinalize(exaHandle h) {
+  // Finalize the backend
+  h->backendFinalize(h);
   // Finalize crystal router
   exaCrystalFinalize(h);
   // Finalize communication

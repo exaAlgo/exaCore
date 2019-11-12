@@ -21,9 +21,9 @@ int main(int argc,char *argv){
   exaKernelRun(k,input);
   exaBarrier(h);
 
-  exaScalar in[10];
+  exaScalar in[10]={0.0};
   exaVectorRead(input,in);
-  for(int i=0;i<10;i++) printf("in=%p i: %lf\n",in,in[i]);
+  //for(int i=0;i<10;i++) printf("%d: %lf\n",i,in[i]);
 
   exaKernelFree(k);
   exaProgramFree(p);

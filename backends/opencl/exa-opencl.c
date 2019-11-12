@@ -23,8 +23,8 @@ int exaOpenCLInit(exaHandle h,const char *backend){
   if(strcmp(config[1],"cpu")==0)
     oclh->deviceType=CL_DEVICE_TYPE_CPU;
 
-  int platformId=atoi(config[2]);
-  int deviceId=atoi(config[3]);
+  int platformId;//=atoi(config[2]);
+  int deviceId;//=atoi(config[3]);
   platformId=deviceId=0;
 
   cl_uint platformCount;
