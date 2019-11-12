@@ -28,7 +28,7 @@ int main(int argc,char *argv){
   exaBarrier(h);
 
   exaVectorRead(output,in);
-  //for(int i=0;i<N;i++) printf("%d: %lf\n",i,in[i]);
+  for(int i=0;i<N;i++) printf("%d: %lf\n",i,in[i]);
   exaFree(in);
 
   exaKernelFree(k);
