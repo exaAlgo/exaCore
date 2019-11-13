@@ -91,7 +91,7 @@
     sizeof(buffer),buffer,&len);\
   printf("%s:%d: %s\n",file,line,buffer);\
 } while(0)
-#define exaGetProgramBuildLog(oclp) exaGetProgramBuildLog(oclp,__FILE__,__LINE__)
+#define exaGetProgramBuildLog(oclp) exaGetProgramBuildLog_(oclp,__FILE__,__LINE__)
 
 struct exaOpenCLHandle_private{
   cl_platform_id platformId;
