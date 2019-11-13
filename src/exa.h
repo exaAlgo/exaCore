@@ -68,6 +68,8 @@ typedef MPI_Comm exaCommExternal;
 // exa Pointer types
 //
 typedef struct exaComm_private *exaComm;
+typedef struct exaSetting_private *exaSetting;
+typedef struct exaSettings_private *exaSettings;
 typedef struct exaHandle_private *exaHandle;
 typedef struct exaVector_private *exaVector;
 typedef struct exaProgram_private *exaProgram;
@@ -90,7 +92,7 @@ int exaFree        (void *p);
 //
 // exaHandle: wraps an exaComm, buffer and other options
 //
-int         exaInit      (exaHandle *h,exaCommExternal ce,const char *backend);
+int         exaInit      (exaHandle *h,exaCommExternal ce,exaSettings settings);
 int         exaFinalize  (exaHandle h);
 exaComm     exaGetComm   (exaHandle h);
 MPI_Comm    exaGetMPIComm(exaHandle h);
@@ -108,6 +110,8 @@ int         exaBcast     (exaHandle h,void *in,exaInt count,exaDataType type);
 void        exaBarrier   (exaHandle h);
 int         exaCrystalInit    (exaHandle h);
 int         exaCrystalFinalize(exaHandle h);
+const char *exaGetSetting(const char *settingName,exaHandle h);
+int         exaSetSetting(const char *settingName,const char *value,exaHandle h);
 // functions related to the backend
 int         exaHandleGetData(exaHandle h,void **data);
 int         exaHandleSetData(exaHandle h,void **data);
@@ -192,6 +196,13 @@ size_t exaArrayGetUnitSize(exaArray array);
 int    exaArrayAppend(exaArray arr,void *p);
 int    exaArrayBcast(exaComm c,exaInt source,exaArray arr);
 int    exaArrayFree(exaArray a);
+//
+// exaSettings
+//
+int exaSettingsInit(exaSettings *settings);
+int exaSettingsFree(exaSettings settings);
+const char *exaSettingsGetSetting(const char *settingName,exaSettings s);
+int exaSettingsSetSetting(const char *settingName,const char *value,exaSettings s);
 //
 // Debug routines
 //

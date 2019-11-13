@@ -6,8 +6,11 @@
 int main(int argc,char *argv){
   MPI_Init(NULL,NULL);
 
+  exaSettings s; exaSettingsInit(&s);
+  exaSettingsSetSetting("backend","/opencl/gpu",s);
+
   exaHandle h;
-  exaInit(&h,MPI_COMM_WORLD,"/opencl/gpu");
+  exaInit(&h,MPI_COMM_WORLD,s);
 
   exaVector input,output;
   exaVectorCreate(h,N,&input);

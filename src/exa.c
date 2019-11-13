@@ -58,10 +58,14 @@ int exaFree(void *p) {
 //
 // exaHandle: wraps exaComm, buffer and other options
 //
-int exaInit(exaHandle *h_,exaCommExternal ce,const char *backend) {
+int exaInit(exaHandle *h_,exaCommExternal ce,exaSettings settings) {
   exaMalloc(1,h_);
   exaHandle h=*h_;
 
+  // Point to user ettings array
+  h->settings=settings;
+  // get the backend
+  const char *backend=exaGetSetting("backend",h);
   // Create comm
   exaCommCreate(&h->comm,ce);
   // Init crystal router
@@ -297,4 +301,14 @@ int exaHandleGetData(exaHandle h,void **data){
 int exaHandleSetData(exaHandle h,void **data){
   h->data=*data;
   return 0;
+}
+//
+// exaSettings
+//
+const char *exaGetSetting(const char *settingName,exaHandle h){
+  return exaSettingsGetSetting(settingName,h->settings);
+}
+
+int exaSetSetting(const char *settingName,const char *value,exaHandle h){
+  return exaSettingsSetSetting(settingName,value,h->settings);
 }

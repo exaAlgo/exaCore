@@ -26,11 +26,24 @@ struct exaComm_private{
   struct crystal cr;
 };
 //
+// exaSettings
+//
+struct exaSetting_private{
+  char key[BUFSIZ];
+  char value[BUFSIZ];
+  exaLong hash;
+};
+struct exaSettings_private{
+  exaArray settings;
+};
+//
 // exaHandle
 //
 struct exaHandle_private{
   exaComm comm;
   exaBuffer buf;
+  exaSettings settings;
+
   void *data;
 
   int dbgLevel;
