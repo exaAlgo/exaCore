@@ -78,8 +78,20 @@
       break;\
   }\
 } while(0)
-
 #define exaOpenCLChk(err) exaOpenCLChk_(err,__FILE__,__LINE__);
+
+#define getProgramBuildLog_(oclp,file,line) do{\
+  exaHandle h;\
+  exaOpenCLHandle oclh;\
+  exaProgramGetHandle(oclp,&h);\
+  exaHandleGetData(h,(void**)&oclh);\
+  size_t len;\
+  char buffer[2048];\
+  clGetProgramBuildInfo(oclp->program,oclh->deviceId,CL_PROGRAM_BUILD_LOG,\
+    sizeof(buffer),buffer,&len);\
+  printf("%s:%d: %s\n",file,line,buffer);\
+} while(0)
+#define exaGetProgramBuildLog(oclp) exaGetProgramBuildLog(oclp,__FILE__,__LINE__)
 
 struct exaOpenCLHandle_private{
   cl_platform_id platformId;

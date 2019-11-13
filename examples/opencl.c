@@ -1,4 +1,3 @@
-#include "exa-opencl.h"
 #include "exa.h"
 #include "exa-memory.h"
 

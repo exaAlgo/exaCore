@@ -57,7 +57,6 @@ ifneq ($(OPENCL),0)
   OBJS           += $(OpenCL.o)
 endif
 
-
 ### Make targets ###
 .PHONY: all
 all: lib install examples

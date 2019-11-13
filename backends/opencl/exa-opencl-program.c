@@ -42,15 +42,6 @@ int exaOpenCLProgramCreate(exaProgram p,const char *fname){
 
   err=clBuildProgram(oclp->program,0,NULL,NULL,NULL,NULL);
   exaOpenCLChk(err);
-#if 0
-  if(err!=CL_SUCCESS){
-  size_t len;
-  char buffer[2048];
-  clGetProgramBuildInfo(oclp->program,oclh->deviceId,CL_PROGRAM_BUILD_LOG,
-    sizeof(buffer),buffer,&len);
-  printf("%s\n", buffer);
-  }
-#endif
 
   exaProgramSetData(p,(void**)&oclp);
 }
