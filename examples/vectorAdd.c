@@ -30,7 +30,7 @@ int main(int argc,char *argv){
     inA[i]=i+0.1;
 
   for(int i=0;i<M;i++)
-    inB[i]=1.0-i-0.1;
+    inB[i]=5.0-i-0.1;
 
   exaVectorWrite(inputA,inA);
   exaVectorWrite(inputB,inB);
