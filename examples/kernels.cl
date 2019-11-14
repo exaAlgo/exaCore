@@ -20,14 +20,14 @@ __kernel void vectorAdd(__global double* inA,__global double *inB,__global doubl
 __kernel void mxm(const unsigned int M,
                   const unsigned int N,
                   const unsigned int K,
-                  const __global float *A,
-                  const __global float *B,
-                  __global float *C)
+                  const __global double *A,
+                  const __global double *B,
+                  __global double *C)
 {
   const int gRow=get_global_id(0);
   const int gCol=get_global_id(1);
 
-  float acc=0.f;
+  double acc=0.f;
   for(int n=0;n<N;n++)
     acc+=A[gRow*N+n]*B[n*K+gCol];
 
