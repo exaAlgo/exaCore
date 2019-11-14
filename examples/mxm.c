@@ -1,6 +1,8 @@
 #include "exa.h"
 #include "exa-memory.h"
 
+#include <math.h>
+
 int main(int argc,char *argv){
   MPI_Init(NULL,NULL);
 
@@ -34,12 +36,10 @@ int main(int argc,char *argv){
   count=0;
   for(int i=0;i<N;i++)
     for(int j=0;j<K;j++)
-      inB[count++]=1.0;
+      inB[count++]=(i==j)?1.0:0.0;
 
   exaVectorWrite(inputA,inA);
   exaVectorWrite(inputB,inB);
-  exaFree(inA);
-  exaFree(inB);
 
   size_t global[2]={M,K};
   size_t local [2]={1,1};
@@ -50,7 +50,15 @@ int main(int argc,char *argv){
 
   exaScalar *out; exaCalloc(M*K,&out);
   exaVectorRead(output,out);
-  for(int i=0;i<M*K;i++) printf("%d: %lf\n",i,out[i]);
+  for(int i=0;i<M*K;i++)
+    if(fabs(out[i]-inA[i])>1e-8){
+      printf("mxm failed.\n");
+      exit(1);
+    }
+  printf("mxm passed.\n");
+
+  exaFree(inA);
+  exaFree(inB);
   exaFree(out);
 
   exaSettingsFree(s);

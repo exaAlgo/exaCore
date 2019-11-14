@@ -49,7 +49,7 @@ int exaOpenCLKernelRun(exaKernel k,exaDim dim,exaKernelArg args){
   //size_t remainder=oclk->global-multiple*oclk->local;
   //if(remainder) oclk->global=(multiple+1)*oclk->local;
 
-  for(int i=0; i<100; i++){
+  for(int i=0; i<1000; i++){
     cl_event event;
     err=clEnqueueNDRangeKernel(oclh->queue,oclk->kernel,dim->dim,NULL,
       (const size_t*)dim->global,(const size_t*)dim->local,0,NULL,&event);
