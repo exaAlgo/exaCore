@@ -74,6 +74,7 @@ typedef struct exaHandle_private *exaHandle;
 typedef struct exaVector_private *exaVector;
 typedef struct exaProgram_private *exaProgram;
 typedef struct exaKernelArg_private *exaKernelArg;
+typedef struct exaDim_private *exaDim;
 typedef struct exaKernel_private *exaKernel;
 typedef struct exaArray_private *exaArray;
 typedef struct exaBuffer_private *exaBuffer;
@@ -166,10 +167,15 @@ int exaProgramSetData(exaProgram p,void **data);
 int exaProgramGetData(exaProgram p,void **data);
 int exaProgramFree(exaProgram p);
 //
+// exaDim
+//
+int exaDimInit(exaDim *d,exaUInt dim,size_t *global,size_t *local);
+int exaDimFree(exaDim dim);
+//
 // exaKernel: wraps a kernel
 //
 int exaKernelCreate(exaProgram p,const char *kernelName,exaKernel *k,int nArgs,...);
-int exaKernelRun(exaKernel k,exaUInt nThreads,...);
+int exaKernelRun(exaKernel k,exaDim dim,...);
 int exaKernelGetHandle(exaKernel k,exaHandle *h);
 int exaKernelGetData(exaKernel k,void **data);
 int exaKernelSetData(exaKernel k,void **data);

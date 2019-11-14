@@ -35,7 +35,7 @@ int exaOpenCLProgramFree(exaProgram p);
 // Create an OpenCL kernel
 //
 int exaOpenCLKernelCreate(exaProgram p,const char *kernelName,exaKernel k);
-int exaOpenCLKernelRun(exaKernel k,exaUInt nThreads,exaKernelArg args);
+int exaOpenCLKernelRun(exaKernel k,exaDim dim,exaKernelArg args);
 int exaOpenCLKernelFree(exaKernel k);
 //
 // Barrier

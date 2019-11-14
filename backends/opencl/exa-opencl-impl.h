@@ -107,8 +107,6 @@ struct exaOpenCLProgram_private{
 
 struct exaOpenCLKernel_private{
   cl_kernel kernel;
-  size_t local;
-  size_t global;
 };
 
 struct exaOpenCLVector_private{

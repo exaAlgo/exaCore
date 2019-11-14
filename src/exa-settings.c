@@ -1,6 +1,18 @@
 #include <exa-impl.h>
 #include <exa-memory.h>
 
+int exaDimInit(exaDim *d_,exaUInt dim,size_t *global,size_t *local){
+  exaMalloc(1,d_);
+  exaDim d=*d_;
+  d->dim=dim;
+  memcpy(d->global,global,sizeof(size_t)*dim);
+  memcpy(d->local ,local ,sizeof(size_t)*dim);
+}
+
+int exaDimFree(exaDim dim){
+  exaFree(dim);
+}
+
 int exaSettingsInit(exaSettings *settings){
   exaMalloc(1,settings);
   exaArrayInit(&(*settings)->settings,sizeof(struct exaSetting_private),10);
@@ -18,9 +30,11 @@ const char *exaSettingsGetSetting(const char *settingName,exaSettings s){
   exaSetting ptr=exaArrayGetPointer(s->settings);
 
   exaInt i;
-  for(i=0;i<size;i++) if(strcmp(ptr[i].key,settingName)==0) break;
+  for(i=0;i<size;i++)
+    if(strcmp(ptr[i].key,settingName)==0) break;
+
   if(i<size) return ptr[i].value;
-  else return NULL;
+  else return "\0";
 }
 
 int exaSettingsSetSetting(const char *settingName,const char *value,exaSettings s){

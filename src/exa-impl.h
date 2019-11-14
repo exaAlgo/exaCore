@@ -88,6 +88,14 @@ struct exaProgram_private{
   void *data;
 };
 //
+// exaDim
+//
+struct exaDim_private{
+  size_t global[3];
+  size_t local[3];
+  exaUInt dim;
+};
+//
 // exaKernel
 //
 struct exaKernelArg_private{
@@ -99,7 +107,7 @@ struct exaKernel_private{
   exaHandle handle;
   int nArgs;
   exaDataType args[EXA_KERNEL_ARGS_MAX];
-  int (*runKernel)(exaKernel k,exaUInt nThreads,exaKernelArg args);
+  int (*runKernel)(exaKernel k,exaDim dim,exaKernelArg args);
   void *data;
 };
 //
