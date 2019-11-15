@@ -6,6 +6,8 @@
 int exaCommCreate(exaComm *c,exaCommExternal ce){
   exaMalloc(1,c);
   comm_init(&(*c)->gsComm,ce);
+
+  strcpy((*c)->info.name,"exaComm");
   return 0;
 }
 

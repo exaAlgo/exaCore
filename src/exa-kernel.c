@@ -25,6 +25,8 @@ int exaKernelCreate(exaProgram p,const char *kernelName,exaKernel *k,int nArgs,.
   (*k)->handle=h;
   h->kernelCreate(p,kernelName,*k);
 
+  strcpy((*k)->info.name,"exaKernel");
+
   return 0;
 }
 

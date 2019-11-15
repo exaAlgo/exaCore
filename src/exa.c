@@ -21,41 +21,6 @@ void exaRegister(int (*init)(exaHandle,const char*),const char *prefix){
   numBackends++;
 }
 //
-// exaMalloc, Realloc, Calloc and Free
-//
-int exaMallocArray(size_t n,size_t unit,void **p) {
-  int ierr=posix_memalign(p,EXA_ALIGN,n*unit);
-  if(ierr)
-    printf("exaMallocArray Failed: %s:%d\n",__FILE__,__LINE__);
-  return ierr;
-}
-
-int exaCallocArray(size_t n,size_t unit,void **p) {
-  int ierr = 0;
-  *p = calloc(n,unit);
-  if(n && unit && !*p) {
-    ierr = 1;
-    printf("exaCallocArray Failed: %s:%d\n", __FILE__, __LINE__);
-  }
-  return ierr;
-}
-
-int exaReallocArray(size_t n,size_t unit,void **p) {
-  int ierr = 0;
-  *p = realloc(*p,n*unit);
-  if(n && unit && !*p) {
-    ierr = 1;
-    printf("exaReallocArray Failed: %s:%d\n", __FILE__, __LINE__);
-  }
-  return ierr;
-}
-
-int exaFree(void *p) {
-  free(p);
-  p = NULL;
-  return 0;
-}
-//
 // exaHandle: wraps exaComm, buffer and other options
 //
 int exaInit(exaHandle *h_,exaCommExternal ce,exaSettings settings) {
@@ -284,7 +249,9 @@ void exaDataTypeGetMax(exaDataType t,void *out) {
       break;
   }
 }
-
+//
+// exaCrystal
+//
 int exaCrystalInit(exaHandle h){
   exaCommCrystalInit(exaGetComm(h));
 }
@@ -292,7 +259,9 @@ int exaCrystalInit(exaHandle h){
 int exaCrystalFinalize(exaHandle h){
   exaCommCrystalFinalize(exaGetComm(h));
 }
-
+//
+// exaHandle
+//
 int exaHandleGetData(exaHandle h,void **data){
   *data=h->data;
   return 0;

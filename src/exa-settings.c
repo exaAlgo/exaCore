@@ -7,15 +7,21 @@ int exaDimInit(exaDim *d_,exaUInt dim,size_t *global,size_t *local){
   d->dim=dim;
   memcpy(d->global,global,sizeof(size_t)*dim);
   memcpy(d->local ,local ,sizeof(size_t)*dim);
+
+  return 0;
 }
 
 int exaDimFree(exaDim dim){
   exaFree(dim);
+  return 0;
 }
 
 int exaSettingsInit(exaSettings *settings){
   exaMalloc(1,settings);
   exaArrayInit(&(*settings)->settings,sizeof(struct exaSetting_private),10);
+
+  strcpy((*settings)->info.name,"exaSettings");
+
   return 0;
 }
 

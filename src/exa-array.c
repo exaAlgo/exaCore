@@ -7,9 +7,12 @@ int exaArrayInit_(exaArray *array_,size_t unitSize,size_t nUnits,const char *fil
   const unsigned int line){
   exaMalloc(1,array_);
   exaArray array=*array_;
+
   array_init_(&(array->arr),nUnits,unitSize,file,line);
   array->arr.n=0;
   array->unitSize=unitSize;
+
+  strcpy(array->info.name,"exaArray");
 }
 //
 // exaArrayResize

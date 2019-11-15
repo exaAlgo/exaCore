@@ -19,6 +19,8 @@ int exaVectorCreate(exaHandle h,exaInt size,exaVector *x_){
 
   h->vectorCreate(x,size);
 
+  strcpy(h->info.name,"exaVector");
+
   return 0;
 }
 
@@ -62,28 +64,6 @@ int exaVectorFree(exaVector vec){
 }
 
 #if 0
-int exaVectorsEqual(exaVector x, exaVector y,
-                       exaScalar tol) {
-  /* Asserts:
-       - size of y == size of x
-  */
-  assert(x->size == y->size);
-
-  exaInt i;
-  for(i = 0; i < x->size; i++) {
-    assert(!isnan(x->data[i]) && !isnan(y->data[i]));
-  }
-
-  exaInt n = x->size;
-  for(i = 0; i < n; i++) {
-    if(fabs(x->data[i] - y->data[i]) > tol) {
-      return 0;
-    }
-  }
-
-  return 1;
-}
-
 int exaSetVector(exaVector x, exaScalar *array) {
   memcpy(x->data, array, sizeof(exaScalar) * (size_t)x->size);
   return 0;

@@ -13,6 +13,10 @@ int exaProgramCreate(exaHandle h,const char *fname,exaProgram *p_){
   strcpy(p->fname,fname);
 
   h->programCreate(p,fname);
+
+  strcpy(p->info.name,"exaProgram");
+
+  return 0;
 }
 
 int exaProgramGetHandle(exaProgram p,exaHandle *h){
