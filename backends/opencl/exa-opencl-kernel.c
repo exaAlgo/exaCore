@@ -49,7 +49,9 @@ int exaOpenCLKernelRun(exaKernel k,exaDim dim,exaKernelArg args){
   //size_t remainder=oclk->global-multiple*oclk->local;
   //if(remainder) oclk->global=(multiple+1)*oclk->local;
 
-  for(int i=0; i<1000; i++){
+  int Niter=100;
+  int M=128;
+  for(int i=0; i<Niter; i++){
     cl_event event;
     err=clEnqueueNDRangeKernel(oclh->queue,oclk->kernel,dim->dim,NULL,
       (const size_t*)dim->global,(const size_t*)dim->local,0,NULL,&event);
@@ -68,7 +70,9 @@ int exaOpenCLKernelRun(exaKernel k,exaDim dim,exaKernelArg args){
     kernelTime+=(time_end-time_start);
   }
 
-  printf("Kernel time: %lf ms.\n",kernelTime/(1.0*1e6));
+  double ns=kernelTime;
+  double gflops=(2*M*M*M*Niter)/ns;
+  printf("Kernel time: %lf us. %lf GFLOPS.\n",ns,gflops);
 
   exaOpenCLChk(err);
 
