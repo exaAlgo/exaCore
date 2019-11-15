@@ -24,6 +24,17 @@ void *exaArrayGetPointer(exaArray array){
   return array->arr.ptr;
 }
 //
+// exaArrayTransfer
+//
+int exaArrayTransfer(exaArray array,exaUInt destOffset,exaInt setSrc,exaComm c){
+  sarray_transfer_(&array->arr,exaArrayGetUnitSize(array),destOffset,setSrc,&c->cr);
+}
+
+int exaArrayTransferExt(exaArray array,exaUInt *dest,exaComm c){
+  sarray_transfer_ext_(&array->arr,exaArrayGetUnitSize(array),
+    dest,sizeof(exaUInt),&c->cr);
+}
+//
 // exaArrayGetSize
 //
 exaInt exaArrayGetSize(exaArray a){

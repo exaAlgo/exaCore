@@ -183,18 +183,18 @@ int exaKernelFree(exaKernel k);
 //
 // exaArray
 //
-int exaArrayInit_(exaArray *array_,size_t unitSize,size_t nUnits,const char *file,
-  const unsigned int line);
-#define exaArrayInit(array_,unitSize,nUnits) exaArrayInit_(array_,unitSize,nUnits,__FILE__,__LINE__)
+int exaArrayInit_(exaArray *array_,size_t unitSize,size_t nUnits,
+  const char *file,const unsigned int line);
+#define exaArrayInit(array_,unitSize,nUnits)\
+  exaArrayInit_(array_,unitSize,nUnits,__FILE__,__LINE__)
 
 exaInt exaArrayResize_(exaArray a,size_t max,const char *file,const unsigned int line);
 #define exaArrayResize(array_,max) exaArrayResize_(array_,max,__FILE__,__LINE__)
 
-void *exaArrayGetPointer(exaArray array);
+int exaArrayTransfer(exaArray array,exaUInt destOffset,exaInt setSrc,exaComm c);
+int exaArrayTransferExt(exaArray array,exaUInt *dest,exaComm c);
 
-#define exaArrayTransfer(T,array_,proc_field,cr) \
-  sarray_transfer(T,&(array_->arr),proc_field,1,cr)
-
+void  *exaArrayGetPointer(exaArray array);
 exaInt exaArrayGetSize(exaArray a);
 exaInt exaArrayGetMaxSize(exaArray a);
 exaInt exaArraySetSize(exaArray a,size_t n);
