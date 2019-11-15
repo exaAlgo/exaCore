@@ -79,6 +79,7 @@ typedef struct exaKernel_private *exaKernel;
 typedef struct exaArray_private *exaArray;
 typedef struct exaBuffer_private *exaBuffer;
 typedef struct exaTopology_private *exaTopology;
+typedef struct exaTypeInfo_private *exaTypeInfo;
 //
 // exaRegister
 //
@@ -90,6 +91,7 @@ int exaMallocArray (size_t n,size_t unit,void **p);
 int exaCallocArray (size_t n,size_t unit,void **p);
 int exaReallocArray(size_t n,size_t unit,void **p);
 int exaFree        (void *p);
+int exaDestroy     (void *p);
 //
 // exaHandle: wraps an exaComm, buffer and other options
 //

@@ -19,11 +19,11 @@
 #define EXA_PROC 2
 #define EXA_ORIGIN 3
 //
-// exaStructInfo: every exa data type should have this.
+// exaTypeInfo: every exa data type should have this.
 //
-typedef struct {
+struct exaTypeInfo_private {
   char name[32];
-} exaStructInfo;
+};
 //
 // exaSettings
 //
@@ -33,14 +33,14 @@ struct exaSetting_private{
   exaLong hash;
 };
 struct exaSettings_private{
-  exaStructInfo info;
+  struct exaTypeInfo_private info;
   exaArray settings;
 };
 //
 // exaComm
 //
 struct exaComm_private{
-  exaStructInfo info;
+  struct exaTypeInfo_private info;
   struct comm gsComm;
   struct crystal cr;
 };
@@ -48,7 +48,7 @@ struct exaComm_private{
 // exaHandle
 //
 struct exaHandle_private{
-  exaStructInfo info;
+  struct exaTypeInfo_private info;
 
   exaComm comm;
   exaBuffer buf;
@@ -81,7 +81,7 @@ int exaDestroyHandle(exaHandle h);
 // exaVector
 //
 struct exaVector_private{
-  exaStructInfo info;
+  struct exaTypeInfo_private info;
 
   exaHandle handle;
   exaInt size;
@@ -95,7 +95,7 @@ struct exaVector_private{
 // exaProgram
 //
 struct exaProgram_private{
-  exaStructInfo info;
+  struct exaTypeInfo_private info;
 
   exaHandle handle;
   char *fname;
@@ -118,7 +118,7 @@ struct exaKernelArg_private{
 };
 
 struct exaKernel_private{
-  exaStructInfo info;
+  struct exaTypeInfo_private info;
 
   exaHandle handle;
   int nArgs;
@@ -130,7 +130,7 @@ struct exaKernel_private{
 // exaArray
 //
 struct exaArray_private{
-  exaStructInfo info;
+  struct exaTypeInfo_private info;
 
   size_t unitSize;
   struct array arr;
@@ -139,7 +139,7 @@ struct exaArray_private{
 // exaBuffer
 //
 struct exaBuffer_private{
-  exaStructInfo info;
+  struct exaTypeInfo_private info;
 
   buffer buf;
 };
@@ -147,7 +147,7 @@ struct exaBuffer_private{
 // exaTopology
 //
 struct exaTopology_private{
-  exaStructInfo info;
+  struct exaTypeInfo_private info;
 
   struct gs_data *topology;
 };

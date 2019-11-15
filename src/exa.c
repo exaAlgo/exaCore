@@ -64,6 +64,22 @@ int exaFinalize(exaHandle h) {
   return 0;
 }
 
+int exaDestroy(void *p){
+  exaTypeInfo info=(exaTypeInfo)p;
+
+  if(strcmp(info->name,"exaComm"     )==0) exaCommDestroy(p);
+  if(strcmp(info->name,"exaSettings" )==0) exaSettingsFree(p);
+  if(strcmp(info->name,"exaVector"   )==0) exaVectorFree(p);
+  if(strcmp(info->name,"exaProgram"  )==0) exaProgramFree(p);
+  if(strcmp(info->name,"exaDim"      )==0) exaDimFree(p);
+  if(strcmp(info->name,"exaKernel"   )==0) exaKernelFree(p);
+  if(strcmp(info->name,"exaArray"    )==0) exaArrayFree(p);
+  if(strcmp(info->name,"exaBuffer"   )==0) exaBufferFree(p);
+  if(strcmp(info->name,"exaTopology" )==0) exaTopologyFree(p);
+
+  return 0;
+}
+
 exaComm exaGetComm(exaHandle h){
   return h->comm;
 }
