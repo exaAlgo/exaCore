@@ -21,7 +21,7 @@ int main(int argc,char *argv[]){
   exaInt size=exaSize(h);
 
   exaArray arr;
-  exaArrayInit(&arr,sizeof(Data),1);
+  exaArrayInit(&arr,Data,1);
 
   exaInt i;
   Data d;
@@ -45,4 +45,6 @@ int main(int argc,char *argv[]){
   exaFinalize(h);
 
   MPI_Finalize();
+
+  return 0;
 }

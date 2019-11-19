@@ -18,7 +18,7 @@ int exaDimFree(exaDim dim){
 
 int exaSettingsInit(exaSettings *settings){
   exaMalloc(1,settings);
-  exaArrayInit(&(*settings)->settings,sizeof(struct exaSetting_private),10);
+  exaArrayInit(&(*settings)->settings,struct exaSetting_private,10);
 
   strcpy((*settings)->info.name,"exaSettings");
 

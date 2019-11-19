@@ -134,6 +134,7 @@ struct exaArray_private{
 
   size_t unitSize;
   struct array arr;
+  size_t align;
 };
 //
 // exaBuffer

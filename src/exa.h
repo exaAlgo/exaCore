@@ -185,10 +185,12 @@ int exaKernelFree(exaKernel k);
 //
 // exaArray
 //
-int exaArrayInit_(exaArray *array_,size_t unitSize,size_t nUnits,
+int exaArrayInit__(exaArray *array_,size_t unitSize,size_t nUnits,size_t align,
   const char *file,const unsigned int line);
-#define exaArrayInit(array_,unitSize,nUnits)\
-  exaArrayInit_(array_,unitSize,nUnits,__FILE__,__LINE__)
+#define exaArrayInit_(array_,unitSize,nUnits,align)\
+  exaArrayInit__(array_,unitSize,nUnits,align,__FILE__,__LINE__)
+#define exaArrayInit(array_,T,nUnits)\
+  exaArrayInit__(array_,sizeof(T),nUnits,ALIGNOF(T),__FILE__,__LINE__)
 
 exaInt exaArrayResize_(exaArray a,size_t max,const char *file,const unsigned int line);
 #define exaArrayResize(array_,max) exaArrayResize_(array_,max,__FILE__,__LINE__)
