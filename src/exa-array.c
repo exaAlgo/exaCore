@@ -64,6 +64,12 @@ size_t exaArrayGetUnitSize(exaArray array){
   return array->unitSize;
 }
 //
+// exaArrayGetAlign
+//
+size_t exaArrayGetAlign(exaArray array){
+  return array->align;
+}
+//
 // exaArrayAppend
 //
 int exaArrayAppend(exaArray arr,void *p){

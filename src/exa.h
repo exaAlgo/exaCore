@@ -203,6 +203,7 @@ exaInt exaArrayGetSize(exaArray a);
 exaInt exaArrayGetMaxSize(exaArray a);
 exaInt exaArraySetSize(exaArray a,size_t n);
 size_t exaArrayGetUnitSize(exaArray array);
+size_t exaArrayGetAlign(exaArray array);
 int    exaArrayAppend(exaArray arr,void *p);
 int    exaArrayBcast(exaComm c,exaInt source,exaArray arr);
 int    exaArrayFree(exaArray a);
