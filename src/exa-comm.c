@@ -105,7 +105,6 @@ int exaCommBcast(exaComm c,void *in,exaInt count,exaDataType type,int root){
   return MPI_Bcast(in,count,exaDataTypeGetMPIType(type),root,c->gsComm.c);
 }
 
-
 void exaBarrier(exaHandle h) {
   h->barrier(h);
   exaCommBarrier(exaGetComm(h));
@@ -114,13 +113,19 @@ void exaCommBarrier(exaComm c) {
   comm_barrier(&(c->gsComm));
 }
 //
-// Crystal router functionality
+// exaCrystal: Crystal router functionality
 //
+int exaCrystalInit(exaHandle h){
+  exaCommCrystalInit(exaGetComm(h));
+}
 int exaCommCrystalInit(exaComm c) {
   crystal_init(&(c->cr),&(c->gsComm));
   return 0;
 }
 
+int exaCrystalFinalize(exaHandle h){
+  exaCommCrystalFinalize(exaGetComm(h));
+}
 int exaCommCrystalFinalize(exaComm c){
   crystal_free(&(c->cr));
   return 0;

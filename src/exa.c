@@ -79,6 +79,16 @@ int exaDestroy(void *p){
 
   return 0;
 }
+
+int exaHandleGetData(exaHandle h,void **data){
+  *data=h->data;
+  return 0;
+}
+
+int exaHandleSetData(exaHandle h,void **data){
+  h->data=*data;
+  return 0;
+}
 //
 // exaOp
 //
@@ -121,36 +131,4 @@ MPI_Op exaOpGetMPIOp(exaOp t)
       break;
   }
   return out;
-}
-//
-// exaCrystal
-//
-int exaCrystalInit(exaHandle h){
-  exaCommCrystalInit(exaGetComm(h));
-}
-
-int exaCrystalFinalize(exaHandle h){
-  exaCommCrystalFinalize(exaGetComm(h));
-}
-//
-// exaHandle
-//
-int exaHandleGetData(exaHandle h,void **data){
-  *data=h->data;
-  return 0;
-}
-
-int exaHandleSetData(exaHandle h,void **data){
-  h->data=*data;
-  return 0;
-}
-//
-// exaSettings
-//
-const char *exaGetSetting(const char *settingName,exaHandle h){
-  return exaSettingsGetSetting(settingName,h->settings);
-}
-
-int exaSetSetting(const char *settingName,const char *value,exaHandle h){
-  return exaSettingsSetSetting(settingName,value,h->settings);
 }
