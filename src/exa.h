@@ -58,7 +58,7 @@ typedef enum {
 
 void         exaDataTypeGetMin    (exaDataType t,void *out);
 void         exaDataTypeGetMax    (exaDataType t,void *out);
-size_t       exaDataTypGetSize    (exaDataType t);
+size_t       exaDataTypeGetSize   (exaDataType t);
 gs_dom       exaDataTypeGetGSType (exaDataType t);
 MPI_Datatype exaDataTypeGetMPIType(exaDataType t);
 //
@@ -88,13 +88,15 @@ typedef struct exaPointer_private *exaPointer;
 //
 void exaRegister(int (*init)(exaHandle,const char*),const char *prefix);
 //
-// exaMalloc, Realloc, Calloc and Free
+// exaMalloc, Realloc, Calloc, Free and size of
 //
-int exaMallocArray (size_t n,size_t unit,void **p);
-int exaCallocArray (size_t n,size_t unit,void **p);
-int exaReallocArray(size_t n,size_t unit,void **p);
-int exaFree        (void *p);
-int exaDestroy     (void *p);
+int    exaMallocArray (size_t n,size_t unit,void **p);
+int    exaCallocArray (size_t n,size_t unit,void **p);
+int    exaReallocArray(size_t n,size_t unit,void **p);
+int    exaFree        (void *p);
+int    exaDestroy     (void *p);
+size_t exaSizeOf      (void *p);
+//
 //
 // exaHandle: wraps an exaComm, buffer and other options
 //

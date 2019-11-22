@@ -2,7 +2,7 @@
 //
 // exaDataType
 //
-size_t exaDataTypGetSize(exaDataType t)
+size_t exaDataTypeGetSize(exaDataType t)
 {
   size_t size;
   switch(t){
