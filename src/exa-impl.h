@@ -21,14 +21,31 @@
 //
 // exaValue
 //
-typedef union{
-  exaInt    i;
-  exaUInt   ui;
-  exaLong   l;
-  exaULong  ul;
-  exaScalar s;
-  exaByte   b;
+typedef struct{
+  union{
+    exaInt    i;
+    exaUInt   ui;
+    exaLong   l;
+    exaULong  ul;
+    exaScalar s;
+    exaByte   b;
+  } value;
+  exaDataType t;
 } exaValue_private;
+//
+// exaValue
+//
+typedef struct{
+  union{
+    exaInt    *i;
+    exaUInt   *ui;
+    exaLong   *l;
+    exaULong  *ul;
+    exaScalar *s;
+    exaByte   *b;
+  } pointer;
+  exaDataType t;
+} exaPointer_private;
 //
 // exaTypeInfo: every exa data type should have this.
 //
