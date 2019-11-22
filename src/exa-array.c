@@ -4,7 +4,8 @@
 // exaArrayInit
 //
 int exaArrayInit__(exaArray *array_,size_t unitSize,size_t nUnits,size_t align,
-  const char *file,const unsigned int line){
+  const char *file,const unsigned int line)
+{
   exaMalloc(1,array_);
   exaArray array=*array_;
 

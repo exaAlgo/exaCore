@@ -40,8 +40,8 @@ endif
 CFLAGS   += -fPIC
 incflags  = -I$(SRCDIR) -I$(GSDIR)/include
 compile.c = $(CC) $(CFLAGS) $(CPPFLAGS) $(incflags)
-link.o    = $(CC) $(LDFLAGS) -shared -o
 LDFLAGS  += -L$(GSDIR)/lib -lgs -lm
+link.o    = $(CC) $(LDFLAGS) -shared -o
 EXT       = so
 LIBNAME   = libexa.$(EXT)
 
@@ -83,15 +83,15 @@ $(BUILDDIR)/%.o: $(SRCDIR)/%.c $(BUILDDIR)/%.deps
 $(BUILDDIR)/backends/opencl/%.o: $(OpenCL.srcdir)/%.c
 	$(compile.c) $(OpenCL.cflags) -c $< -o $@ $(OpenCL.ldflags)
 
-.PHONY: clean
-clean:
-	@rm -rf $(BUILDDIR) $(DEPDIR)
-
 .PHONY: examples
 examples: $(EXAMPLEOBJS)
 
 $(BUILDDIR)/examples/%.o: $(EXAMPLESDIR)/%.c
 	$(compile.c) $< -o $@ -I$(SRCDIR) -I$(OpenCL.srcdir) -L$(BUILDDIR) -lexa
+
+.PHONY: clean
+clean:
+	@rm -rf $(BUILDDIR) $(DEPDIR)
 
 .PHONY: print
 print :

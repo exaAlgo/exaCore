@@ -3,7 +3,8 @@
 
 int exaBufferCreate(exaBuffer *buf,size_t size){
   exaMalloc(1,buf);
-  buffer_init(&(*buf)->buf,size);
+  if(size>0) buffer_init(&(*buf)->buf,size);
+  else (*buf)->buf.ptr=0,(*buf)->buf.n=0,(*buf)->buf.max=0;
 
   strcpy((*buf)->info.name,"exaBuffer");
 }

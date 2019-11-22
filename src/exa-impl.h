@@ -19,6 +19,17 @@
 #define EXA_PROC 2
 #define EXA_ORIGIN 3
 //
+// exaValue
+//
+typedef union{
+  exaInt    i;
+  exaUInt   ui;
+  exaLong   l;
+  exaULong  ul;
+  exaScalar s;
+  exaByte   b;
+} exaValue_private;
+//
 // exaTypeInfo: every exa data type should have this.
 //
 struct exaTypeInfo_private {

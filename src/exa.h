@@ -80,6 +80,7 @@ typedef struct exaArray_private *exaArray;
 typedef struct exaBuffer_private *exaBuffer;
 typedef struct exaTopology_private *exaTopology;
 typedef struct exaTypeInfo_private *exaTypeInfo;
+typedef struct exaValue_private *exaValue;
 //
 // exaRegister
 //
