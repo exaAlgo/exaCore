@@ -80,60 +80,6 @@ int exaDestroy(void *p){
   return 0;
 }
 //
-// exaComm
-//
-exaComm exaGetComm(exaHandle h){
-  return h->comm;
-}
-
-MPI_Comm exaGetMPIComm(exaHandle h){
-  return exaCommGetMPIComm(exaGetComm(h));
-}
-
-struct comm exaGetGSComm(exaHandle h) {
-  return exaCommGetGSComm(exaGetComm(h));
-}
-
-int exaSetComm(exaHandle h,exaComm c){
-  // TODO: malloc and a copy
-  h->comm=c;
-}
-
-exaInt exaSize(exaHandle h){
-  return exaCommSize(exaGetComm(h));
-}
-
-exaInt exaRank(exaHandle h){
-  return exaCommRank(exaGetComm(h));
-}
-
-int exaScan(exaHandle h,void *out,void *in,void *buf,exaInt size,
-  exaDataType t,exaOp op){
-  return exaCommScan(exaGetComm(h),out,in,buf,size,t,op);
-}
-
-void exaSplit(exaHandle h,int bin){
-  //TODO: need to update stuff
-  exaCommSplit(exaGetComm(h),bin);
-}
-
-int exaGop(exaHandle h,void *v,exaInt size,exaDataType type,exaOp op){
-  return exaCommGop(exaGetComm(h),v,size,type,op);
-}
-
-int exaReduce(exaHandle h,void *out,void *in,exaInt size,exaDataType type,exaOp op){
-  return exaCommReduce(exaGetComm(h),out,in,size,type,op);
-}
-
-int exaBcast(exaHandle h,void *in,exaInt count,exaDataType type){
-  return exaCommBcast(exaGetComm(h),in,count,type,h->root);
-}
-
-void exaBarrier(exaHandle h) {
-  h->barrier(h);
-  exaCommBarrier(exaGetComm(h));
-}
-//
 // exaDataType
 //
 size_t exaDataTypGetSize    (exaDataType t){

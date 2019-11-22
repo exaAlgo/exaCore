@@ -3,6 +3,14 @@
 //
 // exaComm
 //
+int exaSetComm(exaHandle h,exaComm c){
+  // TODO: malloc and a copy
+  h->comm=c;
+}
+exaComm exaGetComm(exaHandle h){
+  return h->comm;
+}
+
 int exaCommCreate(exaComm *c,exaCommExternal ce){
   exaMalloc(1,c);
   comm_init(&(*c)->gsComm,ce);
@@ -17,27 +25,47 @@ int exaCommDestroy(exaComm c){
   return 0;
 }
 
+MPI_Comm exaGetMPIComm(exaHandle h){
+  return exaCommGetMPIComm(exaGetComm(h));
+}
 MPI_Comm exaCommGetMPIComm(exaComm c){
   return  c->gsComm.c;
 }
 
+struct comm exaGetGSComm(exaHandle h) {
+  return exaCommGetGSComm(exaGetComm(h));
+}
 struct comm exaCommGetGSComm(exaComm c){
   return c->gsComm;
 }
 
+exaInt exaSize(exaHandle h){
+  return exaCommSize(exaGetComm(h));
+}
 exaInt exaCommSize(exaComm c){
   return (exaInt) c->gsComm.np;
 }
 
+exaInt exaRank(exaHandle h){
+  return exaCommRank(exaGetComm(h));
+}
 exaInt exaCommRank(exaComm c){
   return (exaInt) c->gsComm.id;
 }
 
+int exaScan(exaHandle h,void *out,void *in,void *buf,exaInt size,
+  exaDataType t,exaOp op){
+  return exaCommScan(exaGetComm(h),out,in,buf,size,t,op);
+}
 int exaCommScan(exaComm c,void *out,void *in,void *buf,exaInt size,
   exaDataType t,exaOp op){
   comm_scan(out,&c->gsComm,exaDataTypeGetGSType(t),exaOpGetGSOp(op),in,size,buf);
 }
 
+void exaSplit(exaHandle h,int bin){
+  //TODO: need to update stuff
+  exaCommSplit(exaGetComm(h),bin);
+}
 void exaCommSplit(exaComm c,int bin){
   exaCommExternal local;
   exaInt id = exaCommRank(c);
@@ -49,11 +77,17 @@ void exaCommSplit(exaComm c,int bin){
   exaCommCrystalInit(c);
 }
 
+int exaGop(exaHandle h,void *v,exaInt size,exaDataType type,exaOp op){
+  return exaCommGop(exaGetComm(h),v,size,type,op);
+}
 int exaCommGop(exaComm c,void *v,exaInt size,exaDataType type,exaOp op){
   return MPI_Allreduce(MPI_IN_PLACE,v,size,exaDataTypeGetMPIType(type),
 		       exaOpGetMPIOp(op),c->gsComm.c);
 }
 
+int exaReduce(exaHandle h,void *out,void *in,exaInt size,exaDataType type,exaOp op){
+  return exaCommReduce(exaGetComm(h),out,in,size,type,op);
+}
 int exaCommReduce(exaComm c,void *out,void *in,exaInt size,exaDataType type,exaOp op){
   if(out==in && exaCommRank(c)==0){ // we should use MPI_IN_PLACE at root
     return MPI_Reduce(MPI_IN_PLACE,out,size,exaDataTypeGetMPIType(type),
@@ -64,10 +98,18 @@ int exaCommReduce(exaComm c,void *out,void *in,exaInt size,exaDataType type,exaO
   }
 }
 
+int exaBcast(exaHandle h,void *in,exaInt count,exaDataType type){
+  return exaCommBcast(exaGetComm(h),in,count,type,h->root);
+}
 int exaCommBcast(exaComm c,void *in,exaInt count,exaDataType type,int root){
   return MPI_Bcast(in,count,exaDataTypeGetMPIType(type),root,c->gsComm.c);
 }
 
+
+void exaBarrier(exaHandle h) {
+  h->barrier(h);
+  exaCommBarrier(exaGetComm(h));
+}
 void exaCommBarrier(exaComm c) {
   comm_barrier(&(c->gsComm));
 }
