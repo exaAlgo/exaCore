@@ -79,7 +79,9 @@ int exaDestroy(void *p){
 
   return 0;
 }
-
+//
+// exaComm
+//
 exaComm exaGetComm(exaHandle h){
   return h->comm;
 }
@@ -130,6 +132,34 @@ int exaBcast(exaHandle h,void *in,exaInt count,exaDataType type){
 void exaBarrier(exaHandle h) {
   h->barrier(h);
   exaCommBarrier(exaGetComm(h));
+}
+//
+// exaDataType
+//
+size_t exaDataTypGetSize    (exaDataType t){
+  size_t size;
+  switch(t){
+    case exaInt_t:
+      size=sizeof(exaInt);
+      break;
+    case exaUInt_t:
+      size=sizeof(exaUInt);
+      break;
+    case exaLong_t:
+      size=sizeof(exaLong);
+      break;
+    case exaULong_t:
+      size=sizeof(exaULong);
+      break;
+    case exaScalar_t:
+      size=sizeof(exaScalar);
+      break;
+    case exaByte_t:
+      size=sizeof(exaByte);
+      break;
+    default:
+      break;
+  }
 }
 
 gs_dom exaDataTypeGetGSType(exaDataType t) {

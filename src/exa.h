@@ -58,6 +58,7 @@ typedef enum {
 
 void         exaDataTypeGetMin    (exaDataType t,void *out);
 void         exaDataTypeGetMax    (exaDataType t,void *out);
+size_t       exaDataTypGetSize    (exaDataType t);
 gs_dom       exaDataTypeGetGSType (exaDataType t);
 MPI_Datatype exaDataTypeGetMPIType(exaDataType t);
 //
