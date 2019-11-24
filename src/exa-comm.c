@@ -62,19 +62,34 @@ int exaCommScan(exaComm c,void *out,void *in,void *buf,exaInt size,
   comm_scan(out,&c->gsComm,exaDataTypeGetGSType(t),exaOpGetGSOp(op),in,size,buf);
 }
 
-void exaSplit(exaHandle h,int bin){
-  //TODO: need to update stuff
-  exaCommSplit(exaGetComm(h),bin);
+int exaSplit(exaHandle h,int bin){
+  exaComm c=exaGetComm(h);
+  exaCommSplit(&c,bin);
+  exaSetComm(h,c);
 }
-void exaCommSplit(exaComm c,int bin){
-  exaCommExternal local;
+int exaCommSplit(exaComm *c_,int bin){
+  exaComm c=*c_;
+
+  MPI_Comm local;
   exaInt id = exaCommRank(c);
   MPI_Comm_split(c->gsComm.c,bin,id,&local);
+
   exaCommCrystalFinalize(c);
   exaCommDestroy(c);
-  exaCommCreate(&c,local);
+
+  exaCommCreate(c_,local);
+  // Do I need to do this?
   MPI_Comm_free(&local);
-  exaCommCrystalInit(c);
+  exaCommCrystalInit(*c_);
+}
+
+int exaCommDup(exaComm *newComm,exaComm oldComm){
+  MPI_Comm local;
+  MPI_Comm_dup(oldComm->gsComm.c,&local);
+
+  exaCommCreate(newComm,local);
+  //MPI_Comm_free(local);
+  exaCommCrystalInit(*newComm);
 }
 
 int exaGop(exaHandle h,void *v,exaInt size,exaDataType type,exaOp op){

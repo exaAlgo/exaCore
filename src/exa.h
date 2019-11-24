@@ -110,7 +110,7 @@ exaInt      exaSize      (exaHandle h);
 exaInt      exaRank      (exaHandle h);
 int         exaScan      (exaHandle h,void *out,void *in,void *buf,exaInt size,
                           exaDataType t,exaOp op);
-void        exaSplit     (exaHandle h,int bin);
+int         exaSplit     (exaHandle h,int bin);
 int         exaGop       (exaHandle h,void *v,exaInt size,exaDataType type,exaOp op);
 int         exaReduce    (exaHandle h,void *out,void *in,exaInt size,exaDataType type,
                           exaOp op);
@@ -134,7 +134,8 @@ exaInt      exaCommSize      (exaComm c);
 exaInt      exaCommRank      (exaComm c);
 int         exaCommScan      (exaComm c,void *out,void *in,void *buf,exaInt size,
                               exaDataType t,exaOp op);
-void        exaCommSplit     (exaComm c,int bin);
+int         exaCommSplit     (exaComm *c,int bin);
+int         exaCommDup       (exaComm *newComm,exaComm oldComm);
 int         exaCommGop       (exaComm c,void *v,exaInt size,exaDataType type,exaOp op);
 int         exaCommReduce    (exaComm c,void *out,void *in,exaInt size,exaDataType type,exaOp op);
 int         exaCommBcast     (exaComm c,void *in,exaInt count,exaDataType type,int root);
