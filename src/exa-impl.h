@@ -84,7 +84,7 @@ struct exaHandle_private{
 
   void *data;
 
-  int dbgLevel;
+  int debug;
   int root;
 
   int (*backendInit)(exaHandle h,const char *backend);

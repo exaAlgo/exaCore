@@ -120,6 +120,10 @@ int         exaCrystalInit    (exaHandle h);
 int         exaCrystalFinalize(exaHandle h);
 const char *exaGetSetting(const char *settingName,exaHandle h);
 int         exaSetSetting(const char *settingName,const char *value,exaHandle h);
+// debug
+int         exaDebug(exaHandle h,const char *format,...);
+int         exaGetDebug(exaHandle h);
+int         exaSetDebug(exaHandle h,int debug);
 // functions related to the backend
 int         exaHandleGetData(exaHandle h,void **data);
 int         exaHandleSetData(exaHandle h,void **data);

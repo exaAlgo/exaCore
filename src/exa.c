@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdarg.h>
 
 #include "exa-impl.h"
 #include "exa-memory.h"
@@ -39,14 +40,45 @@ int exaInit(exaHandle *h_,exaCommExternal ce,exaSettings settings) {
   exaBufferCreate(&h->buf,1024);
 
   // Default value for options
-  h->dbgLevel = 0;
-  h->root = 0;
+  char *debug=getenv("EXA_DEBUG");
+  if(debug==NULL){
+#if defined(EXA_DEBUG)
+    h->debug=1;
+#else
+    h->debug=0;
+#endif
+  } else h->debug=atoi(debug);
+
+  char *root=getenv("EXA_ROOT");
+  if(root==NULL) h->root = 0;
+  else h->root=atoi(root);
 
   int i;
   for(i=0;i<numBackends;i++)
     if(strcmp(backends[i].prefix,backend)==0) backends[i].init(h,backend);
 
   return 0;
+}
+
+int exaDebug(exaHandle h,const char *format,...)
+{
+  if(!exaGetDebug(h)) return 0;
+  va_list args;
+  va_start(args,format);
+  fflush(stdout);
+  vfprintf(stdout,format,args);
+  fflush(stdout);
+  va_end(args);
+}
+
+int exaGetDebug(exaHandle h)
+{
+  return h->debug;
+}
+
+int exaSetDebug(exaHandle h,int debug)
+{
+  h->debug=debug;
 }
 
 int exaFinalize(exaHandle h) {

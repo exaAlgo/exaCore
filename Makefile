@@ -34,7 +34,7 @@ EXAMPLEOBJS = $(patsubst $(EXAMPLESDIR)/%.c,$(BUILDDIR)/examples/%.o,$(EXAMPLESR
 
 ### Set various flags ###
 ifneq ($(DEBUG),0)
-  CFLAGS += -g
+  CFLAGS += -g -DEXA_DEBUG
 endif
 
 CFLAGS   += -fPIC
