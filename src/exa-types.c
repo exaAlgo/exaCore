@@ -37,13 +37,13 @@ gs_dom exaDataTypeGetGSType(exaDataType t)
       out=exaIntGSType;
       break;
     case exaUInt_t:
-      out=exaIntGSType;
+      out=exaUIntGSType;
       break;
     case exaLong_t:
       out=exaLongGSType;
       break;
     case exaULong_t:
-      out=exaLongGSType;
+      out=exaULongGSType;
       break;
     case exaScalar_t:
       out=exaScalarGSType;
@@ -62,13 +62,13 @@ MPI_Datatype exaDataTypeGetMPIType(exaDataType t)
       out=exaIntMPIType;
       break;
     case exaUInt_t:
-      out=exaIntMPIType;
+      out=exaUIntMPIType;
       break;
     case exaLong_t:
       out=exaLongMPIType;
       break;
     case exaULong_t:
-      out=exaLongMPIType;
+      out=exaULongMPIType;
       break;
     case exaScalar_t:
       out=exaScalarMPIType;

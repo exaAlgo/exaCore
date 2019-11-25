@@ -1,17 +1,17 @@
 #ifndef _EXA_H_
 #define _EXA_H_
 //
-// Header for exa types
+// Header for MPI
 //
-#include "exa-types.h"
+#include <mpi.h>
 //
 // Header for gslib
 //
 #include "exa-gslib.h"
 //
-// Header for MPI
+// Header for exa types
 //
-#include <mpi.h>
+#include "exa-types.h"
 //
 // exa max backends
 //

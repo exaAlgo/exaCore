@@ -31,7 +31,7 @@ typedef unsigned int exaUInt;
 #define exaUIntMAX UINT_MAX
 #define exaUIntMIN 0
 #define exaIntMPIType  MPI_INT
-#define exaUIntMPIType MPI_UNSIGNED_INT
+#define exaUIntMPIType MPI_UNSIGNED
 #define exaIntGSType gs_int
 #define exaUIntGSType gs_int
 #define exaIntGSSortType 0
