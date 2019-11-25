@@ -13,7 +13,6 @@ int exaOpenCLInit(exaHandle h,const char *backend){
   char *pch=strtok(in,"/");
   while(pch!=NULL){
     strcpy(config[i],pch);
-    printf("i=%d config[%d]=%s\n",i,i,config[i]);
     i++;
     pch=strtok(NULL,"/");
   }
