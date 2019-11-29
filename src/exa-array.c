@@ -32,7 +32,8 @@ void *exaArrayGetPointer(exaArray array){
 // exaArrayTransfer
 //
 int exaArrayTransfer(exaArray array,exaUInt destOffset,exaInt setSrc,exaComm c){
-  sarray_transfer_(&array->arr,exaArrayGetUnitSize(array),destOffset,setSrc,&c->cr);
+  sarray_transfer_(&array->arr,(unsigned)exaArrayGetUnitSize(array),
+    (unsigned)destOffset,setSrc,&c->cr);
 }
 
 int exaArrayTransferExt(exaArray array,exaUInt *dest,exaComm c){
