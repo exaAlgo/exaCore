@@ -25,12 +25,15 @@ SRCDIR   = src
 BUILDDIR = build
 DEPDIR   = .deps
 EXAMPLESDIR = examples
+TESTSDIR ?= tests
 
 SRCS = $(wildcard $(SRCDIR)/*.c)
 OBJS = $(patsubst $(SRCDIR)/%.c,$(BUILDDIR)/%.o,$(SRCS))
 DEPS = $(patsubst $(BUILDDIR)/%.o,$(DEPDIR)/%.d,$(OBJS))
 EXAMPLESRCS = $(wildcard $(EXAMPLESDIR)/*.c)
 EXAMPLEOBJS = $(patsubst $(EXAMPLESDIR)/%.c,$(BUILDDIR)/examples/%.o,$(EXAMPLESRCS))
+TESTSRCS = $(wildcard $(TESTSDIR)/*.c)
+TESTOBJS = $(patsubst $(TESTSDIR)/%.c,$(BUILDDIR)/tests/%,$(TESTSRCS))
 
 ### Set various flags ###
 ifneq ($(DEBUG),0)
@@ -51,15 +54,16 @@ ifneq ($(OPENCL),0)
   OpenCL.builddir = $(BUILDDIR)/backends/opencl
   OpenCL.c        = $(wildcard $(OpenCL.srcdir)/*.c)
   OpenCL.o        = $(patsubst $(OpenCL.srcdir)/%.c,$(BUILDDIR)/backends/opencl/%.o,$(OpenCL.c))
-  OpenCL.cflags  ?= -I$(OpenCL.srcdir) -I$(OPENCL_INCDIR)
-  OpenCL.ldflags ?= -L$(OPENCL_LIBDIR) -lOpenCL
-  LDFLAGS        += $(OpenCL.ldflags)
-  OBJS           += $(OpenCL.o)
+  OpenCL.incflags ?= -I$(OpenCL.srcdir) -I$(OPENCL_INCDIR)
+  OpenCL.ldflags  ?= -L$(OPENCL_LIBDIR) -lOpenCL
+  LDFLAGS         += $(OpenCL.ldflags)
+  incflags        += $(OpenCL.incflags)
+  OBJS            += $(OpenCL.o)
 endif
 
 ### Make targets ###
 .PHONY: all
-all: lib install examples
+all: lib install examples test
 
 .PHONY: lib
 lib: $(OBJS)
@@ -77,17 +81,17 @@ $(DEPDIR)/%.d: $(SRCDIR)/%.c
 
 -include $(DEPS)
 
-$(BUILDDIR)/%.o: $(SRCDIR)/%.c $(BUILDDIR)/%.deps
-	$(compile.c) -c $< -o $@
+$(BUILDDIR)/%.o: $(SRCDIR)/%.c
+	$(compile.c) -c $< -o $@ $(LDFLAGS)
 
 $(BUILDDIR)/backends/opencl/%.o: $(OpenCL.srcdir)/%.c
-	$(compile.c) $(OpenCL.cflags) -c $< -o $@ $(OpenCL.ldflags)
+	$(compile.c) -c $< -o $@ $(LDFLAGS)
 
 .PHONY: examples
-examples: $(EXAMPLEOBJS)
+examples: lib $(EXAMPLEOBJS)
 
-$(BUILDDIR)/examples/%.o: $(EXAMPLESDIR)/%.c
-	$(compile.c) $< -o $@ -I$(SRCDIR) -I$(OpenCL.srcdir) -L$(BUILDDIR) -lexa
+.PHONY: test
+test: lib $(TESTOBJS)
 
 .PHONY: clean
 clean:
@@ -97,7 +101,14 @@ clean:
 print :
 	@echo $(VAR)=$($(VAR))
 
+$(BUILDDIR)/examples/%.o: $(EXAMPLESDIR)/%.c
+	$(compile.c) $< -o $@ -L$(BUILDDIR) -lexa $(LDFLAGS)
+
+$(BUILDDIR)/tests/%: $(TESTSDIR)/%.c
+	$(compile.c) $< -o $@ -L$(BUILDDIR) -lexa $(LDFLAGS)
+
 $(shell mkdir -p $(BUILDDIR))
 $(shell mkdir -p $(BUILDDIR)/examples)
+$(shell mkdir -p $(BUILDDIR)/tests)
 $(shell mkdir -p $(OpenCL.builddir))
 $(shell mkdir -p $(DEPDIR))

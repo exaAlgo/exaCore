@@ -40,6 +40,15 @@ int main(int argc,char *argv[]){
     assert(ptr[i].data==rank);
   }
   
+  exaArrayTransfer(arr,offsetof(Data,proc),1,exaGetComm(h));
+
+  assert(exaArrayGetSize(arr)==N);
+  ptr=exaArrayGetPointer(arr);
+  int orig=(rank+1)%size;
+  for(int i=0;i<N;i++){
+    assert(ptr[i].data==orig);
+  }
+
   exaDestroy(s);
   exaDestroy(arr);
   exaFinalize(h);

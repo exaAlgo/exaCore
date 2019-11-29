@@ -75,7 +75,7 @@ size_t exaArrayGetAlign(exaArray array){
 //
 int exaArrayAppend(exaArray arr,void *p){
   size_t size=exaArrayGetSize(arr);
-  if(size==exaArrayGetMaxSize(arr)){ // array is full, so resize
+  if(size>=exaArrayGetMaxSize(arr)){ // array is full, so resize
     exaArrayResize(arr,size+size/2+1);
   }
   void *ptr=exaArrayGetPointer(arr);
