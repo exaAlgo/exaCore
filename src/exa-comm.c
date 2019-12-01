@@ -78,7 +78,6 @@ int exaCommSplit(exaComm *c_,int bin){
   exaCommDestroy(c);
 
   exaCommCreate(c_,local);
-  // Do I need to do this?
   MPI_Comm_free(&local);
   exaCommCrystalInit(*c_);
 }
@@ -88,7 +87,7 @@ int exaCommDup(exaComm *newComm,exaComm oldComm){
   MPI_Comm_dup(oldComm->gsComm.c,&local);
 
   exaCommCreate(newComm,local);
-  //MPI_Comm_free(local);
+  MPI_Comm_free(&local);
   exaCommCrystalInit(*newComm);
 }
 
