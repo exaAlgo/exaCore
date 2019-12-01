@@ -55,6 +55,26 @@ typedef enum {
   exaVector_t=6
 } exaDataType;
 #define exaTypeGetDataType(T) T##_t
+//
+// exaObjectType
+//
+typedef enum {
+  exaCommObj       =0,
+  exaSettingObj    =1,
+  exaSettingsObj   =2,
+  exaHandleObj     =3,
+  exaVectorObj     =4,
+  exaProgramObj    =5,
+  exaKernelArgObj  =6,
+  exaDimObj        =7,
+  exaKernelObj     =8,
+  exaArrayObj      =9,
+  exaBufferObj     =10,
+  exaTopologyObj   =11,
+  exaTypeInfoObj   =12,
+  exaValueObj      =13,
+  exaPointerObj    =14
+} exaObjectType;
 
 void         exaDataTypeGetMin    (exaDataType t,void *out);
 void         exaDataTypeGetMax    (exaDataType t,void *out);

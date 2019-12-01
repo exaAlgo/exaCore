@@ -10,6 +10,7 @@ int exaDimInit(exaDim *d_,exaUInt dim,size_t *global,size_t *local){
   memcpy(d->global,global,sizeof(size_t)*dim);
   memcpy(d->local ,local ,sizeof(size_t)*dim);
 
+  d->info.objectType=exaDimObj;
   return 0;
 }
 
@@ -24,7 +25,7 @@ int exaSettingsInit(exaSettings *settings){
   exaMalloc(1,settings);
   exaArrayInit(&(*settings)->settings,struct exaSetting_private,10);
 
-  strcpy((*settings)->info.name,"exaSettings");
+  (*settings)->info.objectType=exaSettingsObj;
 
   return 0;
 }

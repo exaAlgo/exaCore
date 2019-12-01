@@ -5,23 +5,20 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <math.h>
-
-#ifdef EXA_DEBUG
 #include <stdio.h>
-#endif
 
 #include "exa.h"
 //
-// Some commonly occuring fields
+// exaTypeInfo: every exa data type should have this.
 //
-#define EXA_FIEDLER 0
-#define EXA_GLOBALID 1
-#define EXA_PROC 2
-#define EXA_ORIGIN 3
+struct exaTypeInfo_private {
+  exaObjectType objectType;
+};
 //
 // exaValue
 //
 typedef struct{
+  struct exaTypeInfo_private info;
   union{
     exaInt    i;
     exaUInt   ui;
@@ -36,6 +33,7 @@ typedef struct{
 // exaValue
 //
 typedef struct{
+  struct exaTypeInfo_private info;
   union{
     exaInt    *i;
     exaUInt   *ui;
@@ -46,12 +44,6 @@ typedef struct{
   } pointer;
   exaDataType t;
 } exaPointer_private;
-//
-// exaTypeInfo: every exa data type should have this.
-//
-struct exaTypeInfo_private {
-  char name[32];
-};
 //
 // exaSettings
 //
@@ -133,6 +125,8 @@ struct exaProgram_private{
 // exaDim
 //
 struct exaDim_private{
+  struct exaTypeInfo_private info;
+
   size_t global[3];
   size_t local[3];
   exaUInt dim;

@@ -57,6 +57,8 @@ int exaInit(exaHandle *h_,exaCommExternal ce,exaSettings settings) {
   for(i=0;i<numBackends;i++)
     if(strcmp(backends[i].prefix,backend)==0) backends[i].init(h,backend);
 
+  h->info.objectType=exaHandleObj;
+
   return 0;
 }
 
@@ -99,15 +101,37 @@ int exaFinalize(exaHandle h) {
 int exaDestroy(void *p){
   exaTypeInfo info=(exaTypeInfo)p;
 
-  if(strcmp(info->name,"exaComm"     )==0) exaCommDestroy(p);
-  if(strcmp(info->name,"exaSettings" )==0) exaSettingsFree(p);
-  if(strcmp(info->name,"exaVector"   )==0) exaVectorFree(p);
-  if(strcmp(info->name,"exaProgram"  )==0) exaProgramFree(p);
-  if(strcmp(info->name,"exaDim"      )==0) exaDimFree(p);
-  if(strcmp(info->name,"exaKernel"   )==0) exaKernelFree(p);
-  if(strcmp(info->name,"exaArray"    )==0) exaArrayFree(p);
-  if(strcmp(info->name,"exaBuffer"   )==0) exaBufferFree(p);
-  if(strcmp(info->name,"exaTopology" )==0) exaTopologyFree(p);
+  switch(info->objectType){
+    case exaCommObj:
+      exaCommDestroy(p);
+      break;
+    case exaSettingsObj:
+      exaSettingsFree(p);
+      break;
+    case exaVectorObj:
+      exaVectorFree(p);
+      break;
+    case exaProgramObj:
+      exaProgramFree(p);
+      break;
+    case exaDimObj:
+      exaDimFree(p);
+      break;
+    case exaKernelObj:
+      exaKernelFree(p);
+      break;
+    case exaArrayObj:
+      exaArrayFree(p);
+      break;
+    case exaBufferObj:
+      exaBufferFree(p);
+      break;
+    case exaTopologyObj:
+      exaTopologyFree(p);
+      break;
+    default:
+      break;
+  }
 
   return 0;
 }

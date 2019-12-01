@@ -14,7 +14,7 @@ int exaArrayInit__(exaArray *array_,size_t unitSize,size_t nUnits,size_t align,
   array->unitSize=unitSize;
   array->align=align;
 
-  strcpy(array->info.name,"exaArray");
+  array->info.objectType=exaArrayObj;
 }
 //
 // exaArrayResize

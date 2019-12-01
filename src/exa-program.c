@@ -14,7 +14,7 @@ int exaProgramCreate(exaHandle h,const char *fname,exaProgram *p_){
 
   h->programCreate(p,fname);
 
-  strcpy(p->info.name,"exaProgram");
+  p->info.objectType=exaProgramObj;
 
   return 0;
 }

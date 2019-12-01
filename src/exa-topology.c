@@ -6,7 +6,7 @@
 int exaTopologySetup(exaLong *ids,exaUInt n,exaComm c,int unique,int verbose,exaTopology *t){
   exaMalloc(1,t);
   (*t)->topology=gs_setup(ids,n,&c->gsComm,unique,gs_auto,verbose);
-  strcpy((*t)->info.name,"exaTopology");
+  (*t)->info.objectType=exaTopologyObj;
   return 0;
 }
 
