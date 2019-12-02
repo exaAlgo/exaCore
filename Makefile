@@ -22,7 +22,6 @@ OPENCL_LIBDIR ?= /usr/lib/x86_64-linux-gnu
 
 ### Update variables ###
 LDFLAGS += -L$(GSDIR)/lib -lgs -lm
-incflags = -I$(GSDIR)/include
 libname  = exa
 
 ### Backends ###

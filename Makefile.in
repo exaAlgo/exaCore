@@ -7,23 +7,28 @@ TESTSDIR    = tests
 
 src.c = $(wildcard $(SRCDIR)/*.c)
 obj  += $(patsubst $(SRCDIR)/%.c,$(BUILDDIR)/%.c.o,$(src.c))
-deps  = $(patsubst $(BUILDDIR)/%.o,$(DEPDIR)/%.d,$(obj.c))
+deps  = $(patsubst $(BUILDDIR)/%.o,$(DEPDIR)/%.d,$(obj))
 
 example.src     = $(wildcard $(EXAMPLESDIR)/*.c)
 example.obj     = $(patsubst $(EXAMPLESDIR)/%.c,$(BUILDDIR)/examples/%,$(example.src))
-example.ldflags = -L$(BUILDDIR) -lexa $(LDFLAGS)
+example.ldflags = -L$(BUILDDIR) -l$(libname) $(LDFLAGS)
 
-test.src     = $(wildcard $(TESTSDIR)/*.c)
-test.obj     = $(patsubst $(TESTSDIR)/%.c,$(BUILDDIR)/tests/%,$(test.src))
-test.ldflags = -L$(BUILDDIR) -lexa $(LDFLAGS)
+test.src        = $(wildcard $(TESTSDIR)/*.c)
+test.obj        = $(patsubst $(TESTSDIR)/%.c,$(BUILDDIR)/tests/%,$(test.src))
 
 ### Set various flags ###
 ifneq ($(DEBUG),0)
   CFLAGS += -g -DEXA_DEBUG
 endif
-
 CFLAGS   += -fPIC
-incflags += -I$(SRCDIR)
+
+ifndef EXADIR
+  incflags  = -I$(GSDIR)/include
+else
+  incflags  = -I$(EXADIR)/include
+endif
+
+incflags +=  -I$(SRCDIR)
 compile.c = $(CC) $(CFLAGS) $(CPPFLAGS) $(incflags)
 link.c    = $(CC) -shared -o
 ext       = so
@@ -55,7 +60,7 @@ $(BUILDDIR)/examples/%: $(EXAMPLESDIR)/%.c
 tests: lib $(test.obj)
 
 $(BUILDDIR)/tests/%: $(TESTSDIR)/%.c
-	$(compile.c) $< -o $@ $(test.ldflags)
+	$(compile.c) $< -o $@ $(example.ldflags)
 
 .PHONY: clean
 clean:
