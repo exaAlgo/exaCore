@@ -1,0 +1,72 @@
+### Meta info about the package ###
+SRCDIR      = src
+BUILDDIR    = build
+DEPDIR      = .deps
+EXAMPLESDIR = examples
+TESTSDIR    = tests
+
+src.c = $(wildcard $(SRCDIR)/*.c)
+obj  += $(patsubst $(SRCDIR)/%.c,$(BUILDDIR)/%.c.o,$(src.c))
+deps  = $(patsubst $(BUILDDIR)/%.o,$(DEPDIR)/%.d,$(obj.c))
+
+example.src     = $(wildcard $(EXAMPLESDIR)/*.c)
+example.obj     = $(patsubst $(EXAMPLESDIR)/%.c,$(BUILDDIR)/examples/%,$(example.src))
+example.ldflags = -L$(BUILDDIR) -lexa $(LDFLAGS)
+
+test.src     = $(wildcard $(TESTSDIR)/*.c)
+test.obj     = $(patsubst $(TESTSDIR)/%.c,$(BUILDDIR)/tests/%,$(test.src))
+test.ldflags = -L$(BUILDDIR) -lexa $(LDFLAGS)
+
+### Set various flags ###
+ifneq ($(DEBUG),0)
+  CFLAGS += -g -DEXA_DEBUG
+endif
+
+CFLAGS   += -fPIC
+incflags += -I$(SRCDIR)
+compile.c = $(CC) $(CFLAGS) $(CPPFLAGS) $(incflags)
+link.c    = $(CC) -shared -o
+ext       = so
+prefix    = lib
+
+### Make targets ###
+.PHONY: all
+all: lib install examples tests
+
+.PHONY: lib
+lib: $(obj)
+	$(link.c) $(BUILDDIR)/lib$(libname).$(ext) $(obj) $(LDFLAGS)
+
+$(DEPDIR)/%.d: $(SRCDIR)/%.c
+	@$(CPP) $(CFLAGS) $(incflags) $< -MM -MT $(@:$(DEPDIR)/%.d=$(BUILDDIR)/%.deps) >$@
+
+-include $(deps)
+
+$(BUILDDIR)/%.c.o: $(SRCDIR)/%.c
+	$(compile.c) -c $< -o $@
+
+.PHONY: examples
+examples: lib $(example.obj)
+
+$(BUILDDIR)/examples/%: $(EXAMPLESDIR)/%.c
+	$(compile.c) $< -o $@ $(example.ldflags)
+
+.PHONY: tests
+tests: lib $(test.obj)
+
+$(BUILDDIR)/tests/%: $(TESTSDIR)/%.c
+	$(compile.c) $< -o $@ $(test.ldflags)
+
+.PHONY: clean
+clean:
+	@rm -rf $(BUILDDIR) $(DEPDIR)
+
+.PHONY: print
+print :
+	@echo $(VAR)=$($(VAR))
+
+$(shell mkdir -p $(DEPDIR))
+$(shell mkdir -p $(BUILDDIR))
+$(shell mkdir -p $(BUILDDIR)/examples)
+$(shell mkdir -p $(BUILDDIR)/tests)
+$(shell mkdir -p $(BUILDDIR)/$(OpenCL.dir))
