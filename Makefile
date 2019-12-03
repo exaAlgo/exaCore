@@ -46,13 +46,22 @@ $(BUILDDIR)/$(OpenCL.dir)/%.o: $(OpenCL.dir)/%.c
 	$(compile.c) $(OpenCL.incflags) -c $< -o $@
 
 ### Include template makefile ###
--include Makefile.in
+-include exa-base.mk
+
+.PHONY: lib
+lib: lib-base
+
+.PHONY: examples
+examples: examples-base
+
+.PHONY: tests
+tests: tests-base
 
 .PHONY: install
-install: lib
-	@mkdir -p $(DESTDIR)$(PREFIX)/include
-	@cp -u $(SRCDIR)/*.h $(GSDIR)/include/*.h $(DESTDIR)$(PREFIX)/include/
-	@mkdir -p $(DESTDIR)$(PREFIX)/lib
-	@cp -u $(BUILDDIR)/$(prefix)$(libname).$(ext) $(DESTDIR)$(PREFIX)/lib/
+install: install-base
+	@cp -u $(GSDIR)/include/*.h $(DESTDIR)$(PREFIX)/include/
 	@mkdir -p $(DESTDIR)$(PREFIX)/share
-	@cp -u Makefile.in $(DESTDIR)$(PREFIX)/share
+	@cp -u exa-base.mk $(DESTDIR)$(PREFIX)/share
+
+.PHONY: all
+all: lib examples tests install

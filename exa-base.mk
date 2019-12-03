@@ -24,12 +24,19 @@ compile.c = $(CC) $(CFLAGS) $(CPPFLAGS) $(incflags)
 link.c    = $(CC) -shared -o
 
 ### Make targets ###
-.PHONY: all
-all: lib install examples tests
+.PHONY: all-base
+all-base: lib-base install-base examples-base tests-base
 
-.PHONY: lib
-lib: $(obj)
+.PHONY: lib-base
+lib-base: $(obj)
 	$(link.c) $(BUILDDIR)/lib$(libname).$(ext) $(obj) $(LDFLAGS)
+
+.PHONY: install-base
+install-base: lib-base
+	@mkdir -p $(DESTDIR)$(PREFIX)/include
+	@cp -u $(SRCDIR)/*.h $(DESTDIR)$(PREFIX)/include/
+	@mkdir -p $(DESTDIR)$(PREFIX)/lib
+	@cp -u $(BUILDDIR)/$(prefix)$(libname).$(ext) $(DESTDIR)$(PREFIX)/lib/
 
 $(DEPDIR)/%.d: $(SRCDIR)/%.c
 	@$(CPP) $(CFLAGS) $(incflags) $< -MM -MT $(@:$(DEPDIR)/%.d=$(BUILDDIR)/%.deps) >$@
@@ -39,14 +46,14 @@ $(DEPDIR)/%.d: $(SRCDIR)/%.c
 $(BUILDDIR)/%.c.o: $(SRCDIR)/%.c
 	$(compile.c) -c $< -o $@
 
-.PHONY: examples
-examples: lib $(example.obj)
+.PHONY: examples-base
+examples-base: lib $(example.obj)
 
 $(BUILDDIR)/examples/%: $(EXAMPLESDIR)/%.c
 	$(compile.c) $< -o $@ $(example.ldflags)
 
-.PHONY: tests
-tests: lib $(test.obj)
+.PHONY: tests-base
+tests-base: lib $(test.obj)
 
 $(BUILDDIR)/tests/%: $(TESTSDIR)/%.c
 	$(compile.c) $< -o $@ $(example.ldflags)
