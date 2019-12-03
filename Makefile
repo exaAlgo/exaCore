@@ -28,6 +28,7 @@ EXAMPLESDIR = examples
 TESTSDIR    = tests
 
 LDFLAGS += -L$(GSDIR)/lib -lgs -lm
+incflags = -I$(GSDIR)/include
 libname  = exa
 obj      =
 
@@ -49,7 +50,9 @@ $(BUILDDIR)/$(OpenCL.dir)/%.o: $(OpenCL.dir)/%.c
 
 .PHONY: install
 install: lib
-	@mkdir -p $(DESTDIR)$(PREFIX)/lib
 	@mkdir -p $(DESTDIR)$(PREFIX)/include
 	@cp -u $(SRCDIR)/*.h $(GSDIR)/include/*.h $(DESTDIR)$(PREFIX)/include/
+	@mkdir -p $(DESTDIR)$(PREFIX)/lib
 	@cp -u $(BUILDDIR)/$(prefix)$(libname).$(ext) $(DESTDIR)$(PREFIX)/lib/
+	@mkdir -p $(DESTDIR)$(PREFIX)/share
+	@cp -u Makefile.in $(DESTDIR)$(PREFIX)/share

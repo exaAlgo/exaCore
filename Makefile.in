@@ -16,13 +16,7 @@ ifneq ($(DEBUG),0)
 endif
 CFLAGS += -fPIC
 
-ifdef EXADIR
-  incflags = -I$(EXADIR)/include
-endif
-ifdef GSDIR
-  incflags += -I$(GSDIR)/include
-endif
-incflags +=  -I$(SRCDIR)
+incflags += -I$(SRCDIR)
 ext       = so
 prefix    = lib
 
