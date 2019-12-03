@@ -20,9 +20,16 @@ OPENCL ?= 1
 OPENCL_INCDIR ?= /usr/include
 OPENCL_LIBDIR ?= /usr/lib/x86_64-linux-gnu
 
-### Update variables ###
+### Meta info about the package ###
+SRCDIR      = src
+BUILDDIR    = build
+DEPDIR      = .deps
+EXAMPLESDIR = examples
+TESTSDIR    = tests
+
 LDFLAGS += -L$(GSDIR)/lib -lgs -lm
 libname  = exa
+obj      =
 
 ### Backends ###
 OpenCL.dir       = backends/opencl
@@ -34,7 +41,7 @@ ifneq ($(OPENCL),0)
   obj     += $(OpenCL.obj)
 endif
 
-build/$(OpenCL.dir)/%.o: $(OpenCL.dir)/%.c
+$(BUILDDIR)/$(OpenCL.dir)/%.o: $(OpenCL.dir)/%.c
 	$(compile.c) $(OpenCL.incflags) -c $< -o $@
 
 ### Include template makefile ###

@@ -1,13 +1,7 @@
-### Meta info about the package ###
-SRCDIR      = src
-BUILDDIR    = build
-DEPDIR      = .deps
-EXAMPLESDIR = examples
-TESTSDIR    = tests
-
 src.c = $(wildcard $(SRCDIR)/*.c)
 obj  += $(patsubst $(SRCDIR)/%.c,$(BUILDDIR)/%.c.o,$(src.c))
-deps  = $(patsubst $(BUILDDIR)/%.o,$(DEPDIR)/%.d,$(obj))
+
+deps = $(patsubst $(BUILDDIR)/%.o,$(DEPDIR)/%.d,$(obj))
 
 example.src     = $(wildcard $(EXAMPLESDIR)/*.c)
 example.obj     = $(patsubst $(EXAMPLESDIR)/%.c,$(BUILDDIR)/examples/%,$(example.src))
@@ -20,19 +14,20 @@ test.obj        = $(patsubst $(TESTSDIR)/%.c,$(BUILDDIR)/tests/%,$(test.src))
 ifneq ($(DEBUG),0)
   CFLAGS += -g -DEXA_DEBUG
 endif
-CFLAGS   += -fPIC
+CFLAGS += -fPIC
 
-ifndef EXADIR
-  incflags  = -I$(GSDIR)/include
-else
-  incflags  = -I$(EXADIR)/include
+ifdef EXADIR
+  incflags = -I$(EXADIR)/include
 endif
-
+ifdef GSDIR
+  incflags += -I$(GSDIR)/include
+endif
 incflags +=  -I$(SRCDIR)
-compile.c = $(CC) $(CFLAGS) $(CPPFLAGS) $(incflags)
-link.c    = $(CC) -shared -o
 ext       = so
 prefix    = lib
+
+compile.c = $(CC) $(CFLAGS) $(CPPFLAGS) $(incflags)
+link.c    = $(CC) -shared -o
 
 ### Make targets ###
 .PHONY: all
