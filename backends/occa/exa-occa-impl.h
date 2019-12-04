@@ -12,6 +12,7 @@ struct exaOccaHandle_private{
 
 struct exaOccaProgram_private{
   occaProperties props;
+  char *fileName;
 };
 
 struct exaOccaKernel_private{

@@ -79,13 +79,15 @@ struct exaHandle_private{
   int debug;
   int root;
 
+  const char *(*backendExt)();
+
   int (*backendInit)(exaHandle h,const char *backend);
   int (*backendFinalize)(exaHandle h);
 
   int (*vectorCreate)(exaVector x,exaInt size);
   int (*vectorFree)(exaVector x);
 
-  int (*programCreate)(exaProgram p,const char *fname);
+  int (*programCreate)(exaProgram p,const char *fname,exaSettings settings);
   int (*programFree)(exaProgram p);
 
   int (*kernelCreate)(exaProgram p,const char *kernelName,exaKernel k);

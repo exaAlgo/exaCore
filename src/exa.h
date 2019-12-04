@@ -192,7 +192,7 @@ int exaVectorFree(exaVector vec);
 //
 // exaProgram: wraps a exaProgram
 //
-int exaProgramCreate(exaHandle h,const char *fname,exaProgram *p);
+int exaProgramCreate(exaHandle h,const char *fname,exaSettings settings,exaProgram *p);
 int exaProgramGetHandle(exaProgram p,exaHandle *h);
 int exaProgramSetData(exaProgram p,void **data);
 int exaProgramGetData(exaProgram p,void **data);

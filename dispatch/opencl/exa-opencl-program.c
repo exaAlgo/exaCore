@@ -3,7 +3,7 @@
 //
 // Create an OpenCL program
 //
-int exaOpenCLProgramCreate(exaProgram p,const char *fname){
+int exaOpenCLProgramCreate(exaProgram p,const char *fname,exaSettings kernelSettings){
   exaHandle h;
   exaOpenCLHandle oclh;
   exaProgramGetHandle(p,&h);
@@ -44,6 +44,8 @@ int exaOpenCLProgramCreate(exaProgram p,const char *fname){
   exaOpenCLChk(err);
 
   exaProgramSetData(p,(void**)&oclp);
+
+  return 0;
 }
 
 int exaOpenCLProgramFree(exaProgram p){

@@ -27,7 +27,7 @@ int exaOpenCLVectorWrite(exaVector x,exaScalar *in);
 //
 // Create an OpenCL program
 //
-int exaOpenCLProgramCreate(exaProgram p,const char *fname);
+int exaOpenCLProgramCreate(exaProgram p,const char *fname,exaSettings settings);
 int exaOpenCLProgramFree(exaProgram p);
 //
 // Create an OpenCL kernel

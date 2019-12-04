@@ -27,7 +27,7 @@ int exaOccaVectorWrite(exaVector x,exaScalar *in);
 //
 // Create an Occa program
 //
-int exaOccaProgramCreate(exaProgram p,const char *fname);
+int exaOccaProgramCreate(exaProgram p,const char *fname,exaSettings settings);
 int exaOccaProgramFree(exaProgram p);
 //
 // Create an Occa kernel

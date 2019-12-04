@@ -16,7 +16,6 @@ int main(int argc,char *argv[]){
   exaHandle h;
   exaInit(&h,MPI_COMM_WORLD,s);
 
-#if 0
   exaUInt M=10;
   exaVector inputA,inputB,output;
   exaVectorCreate(h,M,&inputA);
@@ -24,8 +23,9 @@ int main(int argc,char *argv[]){
   exaVectorCreate(h,M,&output);
 
   exaProgram p;
-  exaProgramCreate(h,"kernels.cl",&p);
+  exaProgramCreate(h,"kernels.cl",s,&p);
 
+#if 0
   exaKernel k;
   exaKernelCreate(p,"vectorAdd",&k,4,exaVector_t,exaVector_t,
     exaVector_t,exaUInt_t);
