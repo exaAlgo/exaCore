@@ -116,11 +116,15 @@ int    exaFree        (void *p);
 int    exaDestroy     (void *p);
 size_t exaSizeOf      (void *p);
 //
-//
 // exaHandle: wraps an exaComm, buffer and other options
 //
 int         exaInit      (exaHandle *h,exaCommExternal ce,exaSettings settings);
 int         exaFinalize  (exaHandle h);
+int         exaHandleGetData(exaHandle h,void **data);
+int         exaHandleSetData(exaHandle h,void **data);
+// functions to query the backend
+const char *exaGetBackendExtension(exaHandle h);
+// communication
 exaComm     exaGetComm   (exaHandle h);
 MPI_Comm    exaGetMPIComm(exaHandle h);
 struct comm exaGetGSComm (exaHandle h);
@@ -137,15 +141,13 @@ int         exaBcast     (exaHandle h,void *in,exaInt count,exaDataType type);
 void        exaBarrier   (exaHandle h);
 int         exaCrystalInit    (exaHandle h);
 int         exaCrystalFinalize(exaHandle h);
+// settings
 const char *exaGetSetting(const char *settingName,exaHandle h);
 int         exaSetSetting(const char *settingName,const char *value,exaHandle h);
 // debug
 int         exaDebug(exaHandle h,const char *format,...);
 int         exaGetDebug(exaHandle h);
 int         exaSetDebug(exaHandle h,int debug);
-// functions related to the backend
-int         exaHandleGetData(exaHandle h,void **data);
-int         exaHandleSetData(exaHandle h,void **data);
 //
 // exaComm: wraps gslib comm, gs_op and crystal router
 //

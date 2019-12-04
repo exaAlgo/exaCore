@@ -80,16 +80,6 @@ int exaDebug(exaHandle h,const char *format,...)
   va_end(args);
 }
 
-int exaGetDebug(exaHandle h)
-{
-  return h->debug;
-}
-
-int exaSetDebug(exaHandle h,int debug)
-{
-  h->debug=debug;
-}
-
 int exaFinalize(exaHandle h) {
   // Finalize the backend
   h->backendFinalize(h);
@@ -103,6 +93,17 @@ int exaFinalize(exaHandle h) {
   exaFree(h);
 
   return 0;
+}
+
+
+int exaGetDebug(exaHandle h)
+{
+  return h->debug;
+}
+
+int exaSetDebug(exaHandle h,int debug)
+{
+  h->debug=debug;
 }
 
 int exaDestroy(void *p){
@@ -153,7 +154,7 @@ int exaHandleSetData(exaHandle h,void **data){
   return 0;
 }
 
-const char *exaBackendExtension(exaHandle h)
+const char *exaGetBackendExtension(exaHandle h)
 {
   return h->backendExt();
 }

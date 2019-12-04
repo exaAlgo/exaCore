@@ -31,7 +31,7 @@ int main(int argc,char *argv){
   exaVectorCreate(h,M*K,&output);
 
   exaProgram p;
-  exaProgramCreate(h,"kernels.cl",&p);
+  exaProgramCreate(h,"kernels",s,&p);
 
   exaKernel k;
   exaKernelCreate(p,"mxm",&k,6,exaUInt_t,exaUInt_t,exaUInt_t,
