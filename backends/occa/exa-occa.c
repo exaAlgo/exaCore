@@ -60,9 +60,9 @@ int exaOccaInit(exaHandle h,const char *backend)
 
   // set call back functions for the backend
   h->backendFinalize=exaOccaFinalize;
-#if 0
   h->vectorCreate=exaOccaVectorCreate;
   h->vectorFree=exaOccaVectorFree;
+#if 0
   h->programCreate=exaOccaProgramCreate;
   h->programFree=exaOccaProgramFree;
   h->kernelCreate=exaOccaKernelCreate;
