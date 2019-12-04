@@ -1,5 +1,8 @@
 #include "exa-opencl-impl.h"
 
+static const char *exaOpenCLExt="cl";
+const char *exaOpenCLGetExt(){ return exaOpenCLExt; }
+
 int exaOpenCLInit(exaHandle h,const char *backend){
   exaOpenCLHandle oclh;
   exaMalloc(1,&oclh);
@@ -61,6 +64,7 @@ int exaOpenCLInit(exaHandle h,const char *backend){
 
   // set call back functions for the backend
   h->backendFinalize=exaOpenCLFinalize;
+  h->backendExt=exaOpenCLGetExt;
   h->vectorCreate=exaOpenCLVectorCreate;
   h->vectorFree=exaOpenCLVectorFree;
   h->programCreate=exaOpenCLProgramCreate;

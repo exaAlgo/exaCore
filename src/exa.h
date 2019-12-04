@@ -27,7 +27,6 @@
 //
 // exa tolerances
 //
-
 #define EXA_DP_TOL 1e-12
 #define EXA_TOL EXA_DP_TOL
 //

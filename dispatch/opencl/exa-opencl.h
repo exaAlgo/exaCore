@@ -8,6 +8,10 @@ typedef struct exaOpenCLProgram_private *exaOpenCLProgram;
 typedef struct exaOpenCLKernel_private *exaOpenCLKernel;
 typedef struct exaOpenCLVector_private *exaOpenCLVector;
 //
+// Meta info
+//
+const char *exaOpenCLGetExt();
+//
 // Init and finalize the backend
 //
 int exaOpenCLInit(exaHandle h,const char *backend);

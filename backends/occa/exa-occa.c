@@ -1,5 +1,8 @@
 #include "exa-occa-impl.h"
 
+static const char *exaOccaExt="okl";
+const char *exaOccaGetExt(){ return exaOccaExt; }
+
 static const char *occaSerial="mode: 'Serial'";
 static const char *occaCUDA  ="mode      : 'CUDA',"
                               "device_id : %d";
@@ -60,6 +63,7 @@ int exaOccaInit(exaHandle h,const char *backend)
 
   // set call back functions for the backend
   h->backendFinalize=exaOccaFinalize;
+  h->backendExt=exaOccaGetExt;
   h->vectorCreate=exaOccaVectorCreate;
   h->vectorFree=exaOccaVectorFree;
 #if 0

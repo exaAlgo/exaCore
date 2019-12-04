@@ -8,12 +8,16 @@ typedef struct exaOccaProgram_private *exaOccaProgram;
 typedef struct exaOccaKernel_private *exaOccaKernel;
 typedef struct exaOccaVector_private *exaOccaVector;
 //
+// Meta info
+//
+const char *exaOccaGetExt();
+//
 // Init and finalize the backend
 //
 int exaOccaInit(exaHandle h,const char *backend);
 int exaOccaFinalize(exaHandle h);
 //
-// Create an Opencl vector
+// Create an Occa vector
 //
 int exaOccaVectorCreate(exaVector x,exaInt size);
 int exaOccaVectorFree(exaVector x);
