@@ -20,8 +20,10 @@ incflags += -I$(SRCDIR)
 ext       = so
 prefix    = lib
 
-compile.c = $(CC) $(CFLAGS) $(CPPFLAGS) $(incflags)
-link.c    = $(CC) -shared -o
+compile.c   = $(CC) $(CFLAGS) $(CPPFLAGS) $(incflags)
+compile.cpp = $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(incflags)
+link.c   = $(CC) -shared -o
+link.cpp = $(CXX) -shared -o
 
 ### Make targets ###
 .PHONY: all-base
@@ -71,3 +73,4 @@ $(shell mkdir -p $(BUILDDIR))
 $(shell mkdir -p $(BUILDDIR)/examples)
 $(shell mkdir -p $(BUILDDIR)/tests)
 $(shell mkdir -p $(BUILDDIR)/$(OpenCL.dir))
+$(shell mkdir -p $(BUILDDIR)/$(occa.dir))

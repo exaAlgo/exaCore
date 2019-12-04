@@ -106,7 +106,7 @@ typedef struct exaPointer_private *exaPointer;
 //
 // exaRegister
 //
-void exaRegister(int (*init)(exaHandle,const char*),const char *prefix);
+void exaRegister(int (*init)(exaHandle,const char*),const char *prefix,int priority);
 //
 // exaMalloc, Realloc, Calloc, Free and size of
 //

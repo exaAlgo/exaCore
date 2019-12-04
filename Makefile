@@ -1,7 +1,9 @@
-## User configurations ###
+### User configurations ###
 # Compilers and flags
 CC ?= mpicc
+CXX ?= mpic++
 CFLAGS ?= -O0
+CXXFLAGS ?= -O0
 CPP ?= cpp
 CPPFLAGS ?=
 LDFLAGS ?=
@@ -15,10 +17,14 @@ PREFIX ?= $(HOME)/local/exa
 # Dependency locations
 GSDIR ?=
 
-# OpenCL options
+# OpenCL dispatch
 OPENCL ?= 1
 OPENCL_INCDIR ?= /usr/include
 OPENCL_LIBDIR ?= /usr/lib/x86_64-linux-gnu
+
+# OCCA Backend
+OCCA ?= 1
+OCCA_DIR ?= $(HOME)/local/occa
 
 ### Meta info about the package ###
 SRCDIR      = src
@@ -32,8 +38,14 @@ incflags = -I$(GSDIR)/include
 libname  = exa
 obj      =
 
-### Backends ###
-OpenCL.dir       = backends/opencl
+### Codegen ###
+# TODO: loopy
+
+### Tuning ###
+# TODO: loopy based tuning
+
+### Dispatch ###
+OpenCL.dir       = dispatch/opencl
 OpenCL.src       = $(wildcard $(OpenCL.dir)/*.c)
 OpenCL.obj       = $(patsubst $(OpenCL.dir)/%.c,$(BUILDDIR)/$(OpenCL.dir)/%.o,$(OpenCL.src))
 OpenCL.incflags += -I$(OpenCL.dir) -I$(OPENCL_INCDIR)
@@ -44,6 +56,23 @@ endif
 
 $(BUILDDIR)/$(OpenCL.dir)/%.o: $(OpenCL.dir)/%.c
 	$(compile.c) $(OpenCL.incflags) -c $< -o $@
+
+### Backends ###
+# Backend = codegen+tuning+dispatch
+# TODO: 1. exa backend based on loopy
+
+# 2. occa backend (third party)
+occa.dir       = backends/occa
+occa.src       = $(wildcard $(occa.dir)/*.c)
+occa.obj       = $(patsubst $(occa.dir)/%.c,$(BUILDDIR)/$(occa.dir)/%.o,$(occa.src))
+occa.incflags += -I$(occa.dir) -I$(OCCA_DIR)/include
+ifneq ($(OCCA),0)
+  LDFLAGS += -L$(OCCA_DIR)/lib -locca
+  obj     += $(occa.obj)
+endif
+
+$(BUILDDIR)/$(occa.dir)/%.o: $(occa.dir)/%.c
+	$(compile.c) $(occa.incflags) -c $< -o $@
 
 ### Include template makefile ###
 -include exa-base.mk

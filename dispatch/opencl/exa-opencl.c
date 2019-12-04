@@ -1,5 +1,4 @@
 #include "exa-opencl-impl.h"
-#include "exa-memory.h"
 
 int exaOpenCLInit(exaHandle h,const char *backend){
   exaOpenCLHandle oclh;
@@ -12,8 +11,7 @@ int exaOpenCLInit(exaHandle h,const char *backend){
   int i=0;
   char *pch=strtok(in,"/");
   while(pch!=NULL){
-    strcpy(config[i],pch);
-    i++;
+    strcpy(config[i++],pch);
     pch=strtok(NULL,"/");
   }
   exaFree(in);
@@ -72,6 +70,15 @@ int exaOpenCLInit(exaHandle h,const char *backend){
   h->barrier=exaOpenCLBarrier;
 }
 
+int exaOpenCLBarrier(exaHandle h){
+  exaOpenCLHandle oclh;
+  exaHandleGetData(h,(void**)&oclh);
+
+  clFinish(oclh->queue);
+
+  return 0;
+}
+
 int exaOpenCLFinalize(exaHandle h){
   exaOpenCLHandle oclh;
   exaHandleGetData(h,(void **)&oclh);
@@ -85,17 +92,9 @@ int exaOpenCLFinalize(exaHandle h){
 
   return 0;
 }
-int exaOpenCLBarrier(exaHandle h){
-  exaOpenCLHandle oclh;
-  exaHandleGetData(h,(void**)&oclh);
-
-  clFinish(oclh->queue);
-
-  return 0;
-}
 
 __attribute__((constructor))
 static void Register(void){
-  exaRegister(exaOpenCLInit,"/opencl/gpu");
-  exaRegister(exaOpenCLInit,"/opencl/cpu");
+  exaRegister(exaOpenCLInit,"/opencl/gpu",10);
+  exaRegister(exaOpenCLInit,"/opencl/cpu",10);
 }

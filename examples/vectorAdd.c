@@ -1,16 +1,22 @@
 #include "exa.h"
 #include "exa-memory.h"
 
-int main(int argc,char *argv){
+int main(int argc,char *argv[]){
   MPI_Init(NULL,NULL);
 
+  if(argc!=2){
+    printf("usage: ./vectorAdd <backend>\n");
+    exit(0);
+  }
+
   exaSettings s; exaSettingsInit(&s);
-  exaSettingsSetSetting("backend","/opencl/gpu",s);
+  exaSettingsSetSetting("backend",argv[1],s);
   exaSettingsSetSetting("debug","on",s);
 
   exaHandle h;
   exaInit(&h,MPI_COMM_WORLD,s);
 
+#if 0
   exaUInt M=10;
   exaVector inputA,inputB,output;
   exaVectorCreate(h,M,&inputA);
@@ -53,6 +59,7 @@ int main(int argc,char *argv){
   exaSettingsFree(s);
   exaKernelFree(k);
   exaProgramFree(p);
+#endif
   exaFinalize(h);
 
   MPI_Finalize();

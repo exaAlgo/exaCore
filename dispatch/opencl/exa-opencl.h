@@ -3,12 +3,6 @@
 
 #include "exa-impl.h"
 
-#ifdef __APPLE__
-#include <OpenCL/opencl.h>
-#else
-#include <CL/cl.h>
-#endif
-
 typedef struct exaOpenCLHandle_private *exaOpenCLHandle;
 typedef struct exaOpenCLProgram_private *exaOpenCLProgram;
 typedef struct exaOpenCLKernel_private *exaOpenCLKernel;

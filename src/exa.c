@@ -5,21 +5,25 @@
 #include "exa-impl.h"
 #include "exa-memory.h"
 
-static int numBackends=0;
-
 typedef struct{
-  char *prefix;
+  exaInt priority;
   int (*init)(exaHandle h,const char *backend);
+  char prefix[BUFSIZ];
 } exaBackend;
+
+static int numBackends=0;
 static exaBackend backends[EXA_MAX_BACKENDS];
 //
 // exaRegister
 //
-void exaRegister(int (*init)(exaHandle,const char*),const char *prefix){
-  backends[numBackends].init=init;
-  exaMalloc(strlen(prefix)+1,&backends[numBackends].prefix);
-  strcpy(backends[numBackends].prefix,prefix);
-  numBackends++;
+void exaRegister(int (*init)(exaHandle,const char*),const char *prefix,int priority){
+  exaBackend bend;
+
+  bend.init=init;
+  strcpy(bend.prefix,prefix);
+  bend.priority=priority;
+
+  backends[numBackends++]=bend;
 }
 //
 // exaHandle: wraps exaComm, buffer and other options
@@ -53,6 +57,9 @@ int exaInit(exaHandle *h_,exaCommExternal ce,exaSettings settings) {
   if(root==NULL) h->root = 0;
   else h->root=atoi(root);
 
+  exaDebug(h,"numBackends: %d\n",numBackends);
+
+  //TODO: sort backends based on priority
   int i;
   for(i=0;i<numBackends;i++)
     if(strcmp(backends[i].prefix,backend)==0) backends[i].init(h,backend);
