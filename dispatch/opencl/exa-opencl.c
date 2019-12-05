@@ -99,9 +99,3 @@ int exaOpenCLFinalize(exaHandle h){
 
   return 0;
 }
-
-__attribute__((constructor))
-static void Register(void){
-  exaRegister(exaOpenCLInit,"/opencl/gpu",10);
-  exaRegister(exaOpenCLInit,"/opencl/cpu",10);
-}

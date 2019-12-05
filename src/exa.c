@@ -110,20 +110,17 @@ int exaDestroy(void *p){
   exaTypeInfo info=(exaTypeInfo)p;
 
   switch(info->objectType){
-    case exaCommObj:
-      exaCommDestroy(p);
-      break;
     case exaSettingsObj:
       exaSettingsFree(p);
+      break;
+    case exaCommObj:
+      exaCommDestroy(p);
       break;
     case exaVectorObj:
       exaVectorFree(p);
       break;
     case exaProgramObj:
       exaProgramFree(p);
-      break;
-    case exaDimObj:
-      exaDimFree(p);
       break;
     case exaKernelObj:
       exaKernelFree(p);

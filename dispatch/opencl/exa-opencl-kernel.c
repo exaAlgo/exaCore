@@ -23,8 +23,7 @@ int exaOpenCLKernelCreate(exaProgram p,const char *kernelName,exaKernel k){
   return 0;
 }
 
-static cl_ulong kernelTime=0;
-int exaOpenCLKernelRun(exaKernel k,exaDim dim,exaKernelArg args){
+int exaOpenCLKernelRun(exaKernel k,const int nArgs,...){
   exaHandle h;
   exaKernelGetHandle(k,&h);
   exaOpenCLHandle oclh;
@@ -33,53 +32,28 @@ int exaOpenCLKernelRun(exaKernel k,exaDim dim,exaKernelArg args){
   exaOpenCLKernel oclk;
   exaKernelGetData(k,(void**)&oclk);
 
+#if 0
   cl_int err;
-  for(int i=0;i<k->nArgs;i++){
+  for(int i=0;i<nArgs;i++){
     err=clSetKernelArg(oclk->kernel,i,args[i].size,args[i].arg);
     exaOpenCLChk(err);
   }
 
-  //TODO: This should be part of tuning phase
-  //oclk->global=nThreads;
-  //err=clGetKernelWorkGroupInfo(oclk->kernel,oclh->deviceId,CL_KERNEL_WORK_GROUP_SIZE,
-  //  sizeof(oclk->local),&oclk->local,NULL);
-  //exaOpenCLChk(err);
+  cl_event event;
+  err=clEnqueueNDRangeKernel(oclh->queue,oclk->kernel,dim->dim,NULL,
+    (const size_t*)dim->global,(const size_t*)dim->local,0,NULL,&event);
 
-  //size_t multiple=oclk->global/oclk->local;
-  //size_t remainder=oclk->global-multiple*oclk->local;
-  //if(remainder) oclk->global=(multiple+1)*oclk->local;
-
-  int Niter=100;
-  int M=128;
-  for(int i=0; i<Niter; i++){
-    cl_event event;
-    err=clEnqueueNDRangeKernel(oclh->queue,oclk->kernel,dim->dim,NULL,
-      (const size_t*)dim->global,(const size_t*)dim->local,0,NULL,&event);
-
-    //TODO: Provide an API for the user to collect statistics.
-    // This is a temporary fix.
-    clWaitForEvents(1,&event);
-    clFinish(oclh->queue);
-
-    cl_ulong time_start;
-    cl_ulong time_end;
-    clGetEventProfilingInfo(event,CL_PROFILING_COMMAND_START,sizeof(time_start),
-      &time_start, NULL);
-    clGetEventProfilingInfo(event,CL_PROFILING_COMMAND_END,sizeof(time_end),
-      &time_end, NULL);
-    kernelTime+=(time_end-time_start);
-  }
-
-  double ns=kernelTime;
-  double gflops=(2*M*M*M*Niter)/ns;
-  printf("Kernel time: %lf us. %lf GFLOPS.\n",ns,gflops);
+  clWaitForEvents(1,&event);
+  clFinish(oclh->queue);
 
   exaOpenCLChk(err);
+#endif
 
   return 0;
 }
 
-int exaOpenCLKernelFree(exaKernel k){
+int exaOpenCLKernelFree(exaKernel k)
+{
   exaOpenCLKernel oclk;
   exaKernelGetData(k,(void**)&oclk);
 

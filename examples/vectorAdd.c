@@ -23,13 +23,12 @@ int main(int argc,char *argv[]){
   exaVectorCreate(h,M,&output);
 
   exaProgram p;
-  exaProgramCreate(h,"kernels.cl",s,&p);
+  exaProgramCreate(h,"kernels",s,&p);
+
+  exaKernel k;
+  exaKernelCreate(p,"vectorAdd",&k);
 
 #if 0
-  exaKernel k;
-  exaKernelCreate(p,"vectorAdd",&k,4,exaVector_t,exaVector_t,
-    exaVector_t,exaUInt_t);
-
   exaScalar *inA; exaCalloc(M,&inA);
   exaScalar *inB; exaCalloc(M,&inB);
   for(int i=0;i<M;i++)

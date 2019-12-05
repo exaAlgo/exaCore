@@ -51,7 +51,6 @@ typedef enum {
   exaULong_t =3,
   exaScalar_t=4,
   exaByte_t  =5,
-  exaVector_t=6
 } exaDataType;
 #define exaTypeGetDataType(T) T##_t
 //
@@ -59,20 +58,15 @@ typedef enum {
 //
 typedef enum {
   exaCommObj       =0,
-  exaSettingObj    =1,
-  exaSettingsObj   =2,
-  exaHandleObj     =3,
-  exaVectorObj     =4,
-  exaProgramObj    =5,
-  exaKernelArgObj  =6,
-  exaDimObj        =7,
-  exaKernelObj     =8,
-  exaArrayObj      =9,
-  exaBufferObj     =10,
-  exaTopologyObj   =11,
-  exaTypeInfoObj   =12,
-  exaValueObj      =13,
-  exaPointerObj    =14
+  exaSettingsObj   =1,
+  exaHandleObj     =2,
+  exaVectorObj     =3,
+  exaProgramObj    =4,
+  exaKernelObj     =5,
+  exaArrayObj      =6,
+  exaBufferObj     =7,
+  exaTopologyObj   =8,
+  exaTypeInfoObj   =9,
 } exaObjectType;
 
 void         exaDataTypeGetMin    (exaDataType t,void *out);
@@ -88,20 +82,15 @@ typedef MPI_Comm exaCommExternal;
 // exa Pointer types
 //
 typedef struct exaComm_private *exaComm;
-typedef struct exaSetting_private *exaSetting;
 typedef struct exaSettings_private *exaSettings;
 typedef struct exaHandle_private *exaHandle;
 typedef struct exaVector_private *exaVector;
 typedef struct exaProgram_private *exaProgram;
-typedef struct exaKernelArg_private *exaKernelArg;
-typedef struct exaDim_private *exaDim;
 typedef struct exaKernel_private *exaKernel;
 typedef struct exaArray_private *exaArray;
 typedef struct exaBuffer_private *exaBuffer;
 typedef struct exaTopology_private *exaTopology;
 typedef struct exaTypeInfo_private *exaTypeInfo;
-typedef struct exaValue_private *exaValue;
-typedef struct exaPointer_private *exaPointer;
 //
 // exaRegister
 //
@@ -118,8 +107,8 @@ size_t exaSizeOf      (void *p);
 //
 // exaHandle: wraps an exaComm, buffer and other options
 //
-int         exaInit      (exaHandle *h,exaCommExternal ce,exaSettings settings);
-int         exaFinalize  (exaHandle h);
+int         exaInit         (exaHandle *h,exaCommExternal ce,exaSettings settings);
+int         exaFinalize     (exaHandle h);
 int         exaHandleGetData(exaHandle h,void **data);
 int         exaHandleSetData(exaHandle h,void **data);
 // functions to query the backend
@@ -200,15 +189,10 @@ int exaProgramSetData(exaProgram p,void **data);
 int exaProgramGetData(exaProgram p,void **data);
 int exaProgramFree(exaProgram p);
 //
-// exaDim
-//
-int exaDimInit(exaDim *d,exaUInt dim,size_t *global,size_t *local);
-int exaDimFree(exaDim dim);
-//
 // exaKernel: wraps a kernel
 //
-int exaKernelCreate(exaProgram p,const char *kernelName,exaKernel *k,int nArgs,...);
-int exaKernelRun(exaKernel k,exaDim dim,...);
+int exaKernelCreate(exaProgram p,const char *kernelName,exaKernel *k);
+int exaKernelRunN(exaKernel k,const int nArgs,...);
 int exaKernelGetHandle(exaKernel k,exaHandle *h);
 int exaKernelGetData(exaKernel k,void **data);
 int exaKernelSetData(exaKernel k,void **data);

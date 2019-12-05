@@ -33,6 +33,7 @@ int main(int argc,char *argv){
   exaProgram p;
   exaProgramCreate(h,"kernels",s,&p);
 
+#if 0
   exaKernel k;
   exaKernelCreate(p,"mxm",&k,6,exaUInt_t,exaUInt_t,exaUInt_t,
     exaVector_t,exaVector_t,exaVector_t);
@@ -78,6 +79,7 @@ int main(int argc,char *argv){
 
   exaSettingsFree(s);
   exaKernelFree(k);
+#endif
   exaProgramFree(p);
   exaFinalize(h);
 

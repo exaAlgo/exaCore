@@ -35,7 +35,7 @@ int exaOccaProgramFree(exaProgram p);
 //
 int exaOccaKernelCreate(exaProgram p,const char *kernelName,
   exaKernel k);
-int exaOccaKernelRun(exaKernel k,exaDim dim,exaKernelArg args);
+int exaOccaKernelRun(exaKernel k,const int nArgs,...);
 int exaOccaKernelFree(exaKernel k);
 //
 // Barrier

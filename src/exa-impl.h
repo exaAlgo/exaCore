@@ -15,43 +15,14 @@ struct exaTypeInfo_private {
   exaObjectType objectType;
 };
 //
-// exaValue
-//
-typedef struct{
-  struct exaTypeInfo_private info;
-  union{
-    exaInt    i;
-    exaUInt   ui;
-    exaLong   l;
-    exaULong  ul;
-    exaScalar s;
-    exaByte   b;
-  } value;
-  exaDataType t;
-} exaValue_private;
-//
-// exaValue
-//
-typedef struct{
-  struct exaTypeInfo_private info;
-  union{
-    exaInt    *i;
-    exaUInt   *ui;
-    exaLong   *l;
-    exaULong  *ul;
-    exaScalar *s;
-    exaByte   *b;
-  } pointer;
-  exaDataType t;
-} exaPointer_private;
-//
 // exaSettings
 //
-struct exaSetting_private{
+typedef struct{
   char key[BUFSIZ];
   char value[BUFSIZ];
   exaLong hash;
-};
+} exaSetting;
+
 struct exaSettings_private{
   struct exaTypeInfo_private info;
   exaArray settings;
@@ -124,30 +95,15 @@ struct exaProgram_private{
   void *data;
 };
 //
-// exaDim
-//
-struct exaDim_private{
-  struct exaTypeInfo_private info;
-
-  size_t global[3];
-  size_t local[3];
-  exaUInt dim;
-};
-//
 // exaKernel
 //
-struct exaKernelArg_private{
-  void *arg;
-  size_t size;
-};
-
 struct exaKernel_private{
   struct exaTypeInfo_private info;
 
   exaHandle handle;
   int nArgs;
   exaDataType args[EXA_KERNEL_ARGS_MAX];
-  int (*runKernel)(exaKernel k,exaDim dim,exaKernelArg args);
+  int (*runKernel)(exaKernel k,const int nArgs,...);
   void *data;
 };
 //
