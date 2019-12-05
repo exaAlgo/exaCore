@@ -110,6 +110,8 @@ struct exaOpenCLHandle_private{
 
 struct exaOpenCLProgram_private{
   cl_program program;
+  char *fileName;
+  char *source;
 };
 
 struct exaOpenCLKernel_private{

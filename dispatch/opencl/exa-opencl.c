@@ -11,10 +11,10 @@ int exaOpenCLInit(exaHandle h,const char *backend){
   exaCalloc(strlen(backend)+1,&in);
   strcpy(in,backend);
 
-  int i=0;
+  int nArgs=0;
   char *pch=strtok(in,"/");
   while(pch!=NULL){
-    strcpy(config[i++],pch);
+    strcpy(config[nArgs++],pch);
     pch=strtok(NULL,"/");
   }
   exaFree(in);
@@ -23,9 +23,10 @@ int exaOpenCLInit(exaHandle h,const char *backend){
   if(strcmp(config[1],"cpu")==0)
     oclh->deviceType=CL_DEVICE_TYPE_CPU;
 
-  int platformId;//=atoi(config[2]);
-  int deviceId;//=atoi(config[3]);
+  int platformId,deviceId;
   platformId=deviceId=0;
+  if(nArgs>2) platformId=atoi(config[2]);
+  if(nArgs>3) platformId=atoi(config[3]);
 
   cl_uint platformCount;
   clGetPlatformIDs(0,NULL,&platformCount);
@@ -37,11 +38,13 @@ int exaOpenCLInit(exaHandle h,const char *backend){
   exaFree(platforms);
 
   cl_uint deviceCount;
-  clGetDeviceIDs(oclh->platformId,oclh->deviceType,0,NULL,&deviceCount);
+  clGetDeviceIDs(oclh->platformId,oclh->deviceType,0,NULL,
+    &deviceCount);
 
   cl_device_id *devices;
   exaMalloc(deviceCount,&devices);
-  clGetDeviceIDs(oclh->platformId,oclh->deviceType,deviceCount,devices,NULL);
+  clGetDeviceIDs(oclh->platformId,oclh->deviceType,deviceCount,
+    devices,NULL);
   oclh->deviceId=devices[deviceId];
   exaFree(devices);
 

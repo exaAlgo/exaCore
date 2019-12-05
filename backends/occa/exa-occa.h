@@ -27,12 +27,14 @@ int exaOccaVectorWrite(exaVector x,exaScalar *in);
 //
 // Create an Occa program
 //
-int exaOccaProgramCreate(exaProgram p,const char *fname,exaSettings settings);
+int exaOccaProgramCreate(exaProgram p,const char *fname,
+  exaSettings settings);
 int exaOccaProgramFree(exaProgram p);
 //
 // Create an Occa kernel
 //
-int exaOccaKernelCreate(exaProgram p,const char *kernelName,exaKernel k);
+int exaOccaKernelCreate(exaProgram p,const char *kernelName,
+  exaKernel k);
 int exaOccaKernelRun(exaKernel k,exaDim dim,exaKernelArg args);
 int exaOccaKernelFree(exaKernel k);
 //
