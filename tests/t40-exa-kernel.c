@@ -23,9 +23,11 @@ int main(int argc,char *argv[])
   exaKernel k;
   exaKernelCreate(p,"vectorAdd",&k);
 
+  exaDestroy(k);
   exaDestroy(p);
-  exaDestroy(s);
   exaFinalize(h);
+
+  exaDestroy(s);
 
   MPI_Finalize();
 

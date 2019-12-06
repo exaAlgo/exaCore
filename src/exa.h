@@ -193,6 +193,7 @@ int exaProgramFree(exaProgram p);
 //
 int exaKernelCreate(exaProgram p,const char *kernelName,exaKernel *k);
 int exaKernelRunN(exaKernel k,const int nArgs,...);
+#define exaKernelRun(...) EXA_KERNEL_RUN1(EXA_ARG_COUNT(__VA_ARGS__),__VA_ARGS__)
 int exaKernelGetHandle(exaKernel k,exaHandle *h);
 int exaKernelGetData(exaKernel k,void **data);
 int exaKernelSetData(exaKernel k,void **data);
