@@ -50,24 +50,35 @@ typedef enum {
   exaLong_t  =2,
   exaULong_t =3,
   exaScalar_t=4,
-  exaByte_t  =5,
+  exaByte_t  =5
 } exaDataType;
-#define exaTypeGetDataType(T) T##_t
 //
-// exaObjectType
+// exaType
 //
 typedef enum {
-  exaCommObj       =0,
-  exaSettingsObj   =1,
-  exaHandleObj     =2,
-  exaVectorObj     =3,
-  exaProgramObj    =4,
-  exaKernelObj     =5,
-  exaArrayObj      =6,
-  exaBufferObj     =7,
-  exaTopologyObj   =8,
-  exaTypeInfoObj   =9,
-} exaObjectType;
+  exaValueType    = 1,
+  exaCommType     = 2,
+  exaSettingsType = 3,
+  exaHandleType   = 4,
+  exaVectorType   = 5,
+  exaProgramType  = 6,
+  exaKernelType   = 7,
+  exaArrayType    = 8,
+  exaBufferType   = 9,
+  exaTopologyType =10
+} exaType;
+
+typedef struct exaTypeInfo_private *exaTypeInfo;
+typedef struct exaValue_private *exaValue;
+typedef struct exaComm_private *exaComm;
+typedef struct exaSettings_private *exaSettings;
+typedef struct exaHandle_private *exaHandle;
+typedef struct exaVector_private *exaVector;
+typedef struct exaProgram_private *exaProgram;
+typedef struct exaKernel_private *exaKernel;
+typedef struct exaArray_private *exaArray;
+typedef struct exaBuffer_private *exaBuffer;
+typedef struct exaTopology_private *exaTopology;
 
 void         exaDataTypeGetMin    (exaDataType t,void *out);
 void         exaDataTypeGetMax    (exaDataType t,void *out);
@@ -78,19 +89,6 @@ MPI_Datatype exaDataTypeGetMPIType(exaDataType t);
 // exaCommExternal
 //
 typedef MPI_Comm exaCommExternal;
-//
-// exa Pointer types
-//
-typedef struct exaComm_private *exaComm;
-typedef struct exaSettings_private *exaSettings;
-typedef struct exaHandle_private *exaHandle;
-typedef struct exaVector_private *exaVector;
-typedef struct exaProgram_private *exaProgram;
-typedef struct exaKernel_private *exaKernel;
-typedef struct exaArray_private *exaArray;
-typedef struct exaBuffer_private *exaBuffer;
-typedef struct exaTopology_private *exaTopology;
-typedef struct exaTypeInfo_private *exaTypeInfo;
 //
 // exaRegister
 //

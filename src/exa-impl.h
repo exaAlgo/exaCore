@@ -11,8 +11,23 @@
 //
 // exaTypeInfo: every exa data type should have this.
 //
-struct exaTypeInfo_private {
-  exaObjectType objectType;
+struct exaTypeInfo_private{
+  exaType type;
+};
+//
+// exaValueType
+//
+struct exaValue_private{
+  struct exaTypeInfo_private info;
+  exaDataType t;
+  union{
+    exaInt i;
+    exaUInt ui;
+    exaLong l;
+    exaULong ul;
+    exaScalar s;
+    exaByte b;
+  } value;
 };
 //
 // exaSettings

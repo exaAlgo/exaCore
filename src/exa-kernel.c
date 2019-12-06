@@ -16,7 +16,7 @@ int exaKernelCreate(exaProgram p,const char *kernelName,exaKernel *k_)
   k->handle=h;
   h->kernelCreate(p,kernelName,k);
 
-  k->info.objectType=exaKernelObj;
+  k->info.type=exaKernelType;
 
   return 0;
 }

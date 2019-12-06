@@ -64,7 +64,7 @@ int exaInit(exaHandle *h_,exaCommExternal ce,exaSettings settings) {
   for(i=0;i<numBackends;i++)
     if(strcmp(backends[i].prefix,backend)==0) backends[i].init(h,backend);
 
-  h->info.objectType=exaHandleObj;
+  h->info.type=exaHandleType;
 
   return 0;
 }
@@ -109,29 +109,29 @@ int exaSetDebug(exaHandle h,int debug)
 int exaDestroy(void *p){
   exaTypeInfo info=(exaTypeInfo)p;
 
-  switch(info->objectType){
-    case exaSettingsObj:
+  switch(info->type){
+    case exaSettingsType:
       exaSettingsFree(p);
       break;
-    case exaCommObj:
+    case exaCommType:
       exaCommDestroy(p);
       break;
-    case exaVectorObj:
+    case exaVectorType:
       exaVectorFree(p);
       break;
-    case exaProgramObj:
+    case exaProgramType:
       exaProgramFree(p);
       break;
-    case exaKernelObj:
+    case exaKernelType:
       exaKernelFree(p);
       break;
-    case exaArrayObj:
+    case exaArrayType:
       exaArrayFree(p);
       break;
-    case exaBufferObj:
+    case exaBufferType:
       exaBufferFree(p);
       break;
-    case exaTopologyObj:
+    case exaTopologyType:
       exaTopologyFree(p);
       break;
     default:

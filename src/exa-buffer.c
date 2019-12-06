@@ -6,7 +6,7 @@ int exaBufferCreate(exaBuffer *buf,size_t size){
   if(size>0) buffer_init(&(*buf)->buf,size);
   else (*buf)->buf.ptr=0,(*buf)->buf.n=0,(*buf)->buf.max=0;
 
-  (*buf)->info.objectType=exaBufferObj;
+  (*buf)->info.type=exaBufferType;
 }
 
 int exaBufferFree(exaBuffer buf){

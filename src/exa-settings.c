@@ -7,7 +7,7 @@ int exaSettingsInit(exaSettings *settings){
   exaMalloc(1,settings);
   exaArrayInit(&(*settings)->settings,exaSetting,10);
 
-  (*settings)->info.objectType=exaSettingsObj;
+  (*settings)->info.type=exaSettingsType;
 
   return 0;
 }
