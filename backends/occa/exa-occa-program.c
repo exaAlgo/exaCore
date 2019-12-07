@@ -15,6 +15,7 @@ int exaOccaProgramCreate(exaProgram p,const char *fname,
   exaCalloc(1,&op);
 
   op->props=occaCreateProperties();
+  occaPropertiesSet(op->props,"defines/TILE_SIZE",occaInt(10));
 
   const char *ext=exaOccaGetExt();
   exaMalloc(strlen(fname)+1+strlen(ext),&op->fileName);
@@ -33,6 +34,7 @@ int exaOccaProgramFree(exaProgram p){
   exaProgramGetData(p,(void**)&op);
 
   exaFree(op->fileName);
+  occaFree(op->props);
 
   exaFree(op);
   op=NULL;

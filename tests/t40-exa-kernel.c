@@ -25,7 +25,8 @@ int main(int argc,char *argv[])
   exaProgramCreate(h,argv[0],s,&p);
 
   exaKernel k;
-  exaKernelCreate(p,"scaleVector",&k);
+  //exaKernelCreate(p,"scaleVector",&k);
+  exaKernelCreate(p,"setVector",&k);
 
   exaVector vecIn,vecOut;
   exaVectorCreate(h,M,&vecIn);
@@ -38,11 +39,13 @@ int main(int argc,char *argv[])
     in[i]=i+0.1;
   exaVectorWrite(vecIn,in);
 
-  exaKernelRun(k,getExaInt(M),getExaScalar(0.5),vecIn,vecOut);
+  //exaKernelRun(k,getExaInt(M),getExaScalar(0.5),vecIn,vecOut);
+  exaKernelRun(k,getExaInt(M),getExaScalar(0.5),vecOut);
 
   exaVectorRead(vecOut,out);
   for(i=0;i<M;i++){
-    exaScalar ans=0.5*(i+0.1);
+    //exaScalar ans=0.5*(i+0.1);
+    exaScalar ans=0.5;
     if(fabs(ans-out[i])>EXA_TOL)
       fprintf(stderr,"Error %lf != %lf\n",ans,out[i]);
   }

@@ -3,7 +3,9 @@
 //
 // Create an Occa kernel
 //
-int exaOccaKernelCreate(exaProgram p,const char *kernelName,exaKernel k){
+int exaOccaKernelCreate(exaProgram p,const char *kernelName,
+  exaKernel k)
+{
   exaHandle h;
   exaKernelGetHandle(k,&h);
   exaOccaHandle oh;
@@ -14,7 +16,8 @@ int exaOccaKernelCreate(exaProgram p,const char *kernelName,exaKernel k){
 
   exaOccaKernel ok;
   exaMalloc(1,&ok);
-  ok->kernel=occaDeviceBuildKernel(oh->device,op->fileName,kernelName,op->props);
+  ok->kernel=occaDeviceBuildKernel(oh->device,op->fileName,
+    kernelName,op->props);
 
   exaKernelSetData(k,(void**)&ok);
   k->runKernel=exaOccaKernelRun;
@@ -72,19 +75,22 @@ int exaOccaKernelRun(exaKernel k,const int nArgs_,va_list args){
     switch(info->type){
       case exaValueType:
         val=(exaValue)info;
-        exaDebug(h,"arg: %d/%d type=exaValue  pointer=%p\n",i+1,nArgs,val);
+        exaDebug(h,"arg: %d/%d type=exaValue  pointer=%p\n",i+1,
+          nArgs,val);
         occaArgs[i]=exaValueToOccaType(val);
         break;
       case exaVectorType:
         vec=(exaVector)info;
-        exaDebug(h,"arg: %d/%d type=exaVector pointer=%p\n",i+1,nArgs,vec);
+        exaDebug(h,"arg: %d/%d type=exaVector pointer=%p\n",i+1,
+          nArgs,vec);
         exaOccaVector ovec;
         exaVectorGetData(vec,(void**)&ovec);
         occaArgs[i]=ovec->vector;
         break;
       default:
-        exaDebug(h,"arg: %d/%d type=N/A       pointer=%p\n",i+1,nArgs,vec);
-        exit(0);
+        exaDebug(h,"arg: %d/%d type=N/A       pointer=%p\n",i+1,
+          nArgs,vec);
+        exit(1);
         break;
     }
   }
@@ -100,7 +106,8 @@ int exaOccaKernelRun(exaKernel k,const int nArgs_,va_list args){
       occaKernelRun(ok->kernel,occaArgs[0],occaArgs[1],occaArgs[2]);
       break;
     case 4:
-      occaKernelRun(ok->kernel,occaArgs[0],occaArgs[1],occaArgs[2],occaArgs[3]);
+      occaKernelRun(ok->kernel,occaArgs[0],occaArgs[1],occaArgs[2],
+        occaArgs[3]);
       break;
     default:
       break;
@@ -113,6 +120,8 @@ int exaOccaKernelFree(exaKernel k)
 {
   exaOccaKernel ok;
   exaKernelGetData(k,(void**)&ok);
+
+  occaFree(ok->kernel);
 
   exaFree(ok);
   ok=NULL;

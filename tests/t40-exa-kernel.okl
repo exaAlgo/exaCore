@@ -3,6 +3,12 @@
   }
 }
 
+@kernel void setVector(const int n,const double scale,double *a){
+  for(int i=0; i<n; ++i; @tile(16,@outer,@inner)){
+    a[i]=scale;
+  }
+}
+
 @kernel void scaleVector(const int n,const double scale,const double *a,double *b){
   for(int i=0; i<n; ++i; @tile(16,@outer,@inner)){
     b[i]=scale*a[i];
