@@ -17,8 +17,9 @@ PREFIX ?= $(HOME)/local/exa
 # Dependency locations
 GSDIR ?=
 
-# OpenCL dispatch
-OPENCL ?= 1
+### Backends ###
+# exa native backend based on loopy and OpenCl
+NATIVE ?= 1
 OPENCL_INCDIR ?= /usr/include
 OPENCL_LIBDIR ?= /usr/lib/x86_64-linux-gnu
 
@@ -38,28 +39,22 @@ incflags = -I$(GSDIR)/include
 libname  = exa
 obj      =
 
-### Codegen ###
-# TODO: loopy
+### Backends ###
+# Backend = codegen + tuning + dispatch
+# TODO:
+# 1. exa backend based on loopy + opencl
+native.dir       = backends/native
+native.src       = $(wildcard $(native.dir)/*.c)
+native.obj       = $(patsubst $(native.dir)/%.c,$(BUILDDIR)/$(native.dir)/%.o,$(native.src))
+native.incflags += -I$(native.dir) -I$(OPENCL_INCDIR)
 
-### Tuning ###
-# TODO: loopy based tuning
-
-### Dispatch ###
-OpenCL.dir       = dispatch/opencl
-OpenCL.src       = $(wildcard $(OpenCL.dir)/*.c)
-OpenCL.obj       = $(patsubst $(OpenCL.dir)/%.c,$(BUILDDIR)/$(OpenCL.dir)/%.o,$(OpenCL.src))
-OpenCL.incflags += -I$(OpenCL.dir) -I$(OPENCL_INCDIR)
-ifneq ($(OPENCL),0)
+ifneq ($(NATIVE),0)
   LDFLAGS += -L$(OPENCL_LIBDIR) -lOpenCL
-  obj     += $(OpenCL.obj)
+  obj     += $(native.obj)
 endif
 
-$(BUILDDIR)/$(OpenCL.dir)/%.o: $(OpenCL.dir)/%.c
-	$(compile.c) $(OpenCL.incflags) -c $< -o $@
-
-### Backends ###
-# Backend = codegen+tuning+dispatch
-# TODO: 1. exa backend based on loopy
+$(BUILDDIR)/$(native.dir)/%.o: $(native.dir)/%.c
+	$(compile.c) $(native.incflags) -c $< -o $@
 
 # 2. occa backend (third party)
 occa.dir       = backends/occa
