@@ -19,7 +19,7 @@ int exaVectorCreate(exaHandle h,exaInt size,exaVector *x_){
 
   h->vectorCreate(x,size);
 
-  h->info.type=exaVectorType;
+  x->info.type=exaVectorType;
 
   return 0;
 }
