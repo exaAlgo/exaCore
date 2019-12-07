@@ -187,6 +187,17 @@ int exaProgramSetData(exaProgram p,void **data);
 int exaProgramGetData(exaProgram p,void **data);
 int exaProgramFree(exaProgram p);
 //
+// exaValue
+//
+int      exaValueCreate(exaDataType t,void *value,exaValue *v);
+exaValue getExaInt   (exaInt    i);
+exaValue getExaUInt  (exaUInt   i);
+exaValue getExaLong  (exaLong   i);
+exaValue getExaULong (exaULong  i);
+exaValue getExaScalar(exaScalar i);
+exaValue getExaByte  (exaByte   i);
+int exaValueFree(exaValue v);
+//
 // exaKernel: wraps a kernel
 //
 int exaKernelCreate(exaProgram p,const char *kernelName,exaKernel *k);

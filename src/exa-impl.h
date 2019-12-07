@@ -19,7 +19,7 @@ struct exaTypeInfo_private{
 //
 struct exaValue_private{
   struct exaTypeInfo_private info;
-  exaDataType t;
+  exaDataType type;
   union{
     exaInt i;
     exaUInt ui;
