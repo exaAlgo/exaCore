@@ -1,5 +1,4 @@
 #include "exa-opencl-impl.h"
-#include "exa-memory.h"
 //
 // Create an Opencl vector
 //

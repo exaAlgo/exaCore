@@ -1,7 +1,14 @@
 #ifndef _EXA_OPENCL_IMPL_H_
 #define _EXA_OPENCL_IMPL_H_
 
+#ifdef __APPLE__
+#include <OpenCL/opencl.h>
+#else
+#include <CL/cl.h>
+#endif
+
 #include "exa-opencl.h"
+#include "exa-memory.h"
 
 #define exaOpenCLChk_(err,file,line) do{\
   switch(err){\
@@ -103,6 +110,8 @@ struct exaOpenCLHandle_private{
 
 struct exaOpenCLProgram_private{
   cl_program program;
+  char *fileName;
+  char *source;
 };
 
 struct exaOpenCLKernel_private{

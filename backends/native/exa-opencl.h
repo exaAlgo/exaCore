@@ -3,16 +3,14 @@
 
 #include "exa-impl.h"
 
-#ifdef __APPLE__
-#include <OpenCL/opencl.h>
-#else
-#include <CL/cl.h>
-#endif
-
 typedef struct exaOpenCLHandle_private *exaOpenCLHandle;
 typedef struct exaOpenCLProgram_private *exaOpenCLProgram;
 typedef struct exaOpenCLKernel_private *exaOpenCLKernel;
 typedef struct exaOpenCLVector_private *exaOpenCLVector;
+//
+// Meta info
+//
+const char *exaOpenCLGetExt();
 //
 // Init and finalize the backend
 //
@@ -23,22 +21,26 @@ int exaOpenCLFinalize(exaHandle h);
 //
 int exaOpenCLVectorCreate(exaVector x,exaInt size);
 int exaOpenCLVectorFree(exaVector x);
-int exaOpenCLVectorGetDevicePointer(exaVector x,void **ptr,size_t *size);
+int exaOpenCLVectorGetDevicePointer(exaVector x,void **ptr,
+  size_t *size);
 int exaOpenCLVectorRead(exaVector x ,exaScalar *out);
 int exaOpenCLVectorWrite(exaVector x,exaScalar *in);
 //
 // Create an OpenCL program
 //
-int exaOpenCLProgramCreate(exaProgram p,const char *fname);
+int exaOpenCLProgramCreate(exaProgram p,const char *fname,
+  exaSettings settings);
 int exaOpenCLProgramFree(exaProgram p);
 //
 // Create an OpenCL kernel
 //
-int exaOpenCLKernelCreate(exaProgram p,const char *kernelName,exaKernel k);
-int exaOpenCLKernelRun(exaKernel k,exaDim dim,exaKernelArg args);
+int exaOpenCLKernelCreate(exaProgram p,const char *kernelName,
+  exaKernel k);
+int exaOpenCLKernelRun(exaKernel k,const int nArgs,va_list args);
 int exaOpenCLKernelFree(exaKernel k);
 //
 // Barrier
 //
 int exaOpenCLBarrier(exaHandle h);
+
 #endif

@@ -5,21 +5,25 @@
 #include "exa-impl.h"
 #include "exa-memory.h"
 
-static int numBackends=0;
-
 typedef struct{
-  char *prefix;
+  exaInt priority;
   int (*init)(exaHandle h,const char *backend);
+  char prefix[BUFSIZ];
 } exaBackend;
+
+static int numBackends=0;
 static exaBackend backends[EXA_MAX_BACKENDS];
 //
 // exaRegister
 //
-void exaRegister(int (*init)(exaHandle,const char*),const char *prefix){
-  backends[numBackends].init=init;
-  exaMalloc(strlen(prefix)+1,&backends[numBackends].prefix);
-  strcpy(backends[numBackends].prefix,prefix);
-  numBackends++;
+void exaRegister(int (*init)(exaHandle,const char*),const char *prefix,int priority){
+  exaBackend bend;
+
+  bend.init=init;
+  strcpy(bend.prefix,prefix);
+  bend.priority=priority;
+
+  backends[numBackends++]=bend;
 }
 //
 // exaHandle: wraps exaComm, buffer and other options
@@ -53,11 +57,14 @@ int exaInit(exaHandle *h_,exaCommExternal ce,exaSettings settings) {
   if(root==NULL) h->root = 0;
   else h->root=atoi(root);
 
+  exaDebug(h,"numBackends: %d\n",numBackends);
+
+  //TODO: sort backends based on priority
   int i;
   for(i=0;i<numBackends;i++)
     if(strcmp(backends[i].prefix,backend)==0) backends[i].init(h,backend);
 
-  h->info.objectType=exaHandleObj;
+  h->info.type=exaHandleType;
 
   return 0;
 }
@@ -71,16 +78,6 @@ int exaDebug(exaHandle h,const char *format,...)
   vfprintf(stdout,format,args);
   fflush(stdout);
   va_end(args);
-}
-
-int exaGetDebug(exaHandle h)
-{
-  return h->debug;
-}
-
-int exaSetDebug(exaHandle h,int debug)
-{
-  h->debug=debug;
 }
 
 int exaFinalize(exaHandle h) {
@@ -98,35 +95,43 @@ int exaFinalize(exaHandle h) {
   return 0;
 }
 
+
+int exaGetDebug(exaHandle h)
+{
+  return h->debug;
+}
+
+int exaSetDebug(exaHandle h,int debug)
+{
+  h->debug=debug;
+}
+
 int exaDestroy(void *p){
   exaTypeInfo info=(exaTypeInfo)p;
 
-  switch(info->objectType){
-    case exaCommObj:
-      exaCommDestroy(p);
-      break;
-    case exaSettingsObj:
+  switch(info->type){
+    case exaSettingsType:
       exaSettingsFree(p);
       break;
-    case exaVectorObj:
+    case exaCommType:
+      exaCommDestroy(p);
+      break;
+    case exaVectorType:
       exaVectorFree(p);
       break;
-    case exaProgramObj:
+    case exaProgramType:
       exaProgramFree(p);
       break;
-    case exaDimObj:
-      exaDimFree(p);
-      break;
-    case exaKernelObj:
+    case exaKernelType:
       exaKernelFree(p);
       break;
-    case exaArrayObj:
+    case exaArrayType:
       exaArrayFree(p);
       break;
-    case exaBufferObj:
+    case exaBufferType:
       exaBufferFree(p);
       break;
-    case exaTopologyObj:
+    case exaTopologyType:
       exaTopologyFree(p);
       break;
     default:
@@ -144,6 +149,11 @@ int exaHandleGetData(exaHandle h,void **data){
 int exaHandleSetData(exaHandle h,void **data){
   h->data=*data;
   return 0;
+}
+
+const char *exaGetBackendExtension(exaHandle h)
+{
+  return h->backendExt();
 }
 //
 // exaOp

@@ -2,7 +2,7 @@
 #include "exa-memory.h"
 #include <stdio.h>
 
-int exaProgramCreate(exaHandle h,const char *fname,exaProgram *p_){
+int exaProgramCreate(exaHandle h,const char *fname,exaSettings settings,exaProgram *p_){
   exaMalloc(1,p_);
   exaProgram p=*p_;
 
@@ -12,9 +12,9 @@ int exaProgramCreate(exaHandle h,const char *fname,exaProgram *p_){
   exaMalloc(length+1,&p->fname);
   strcpy(p->fname,fname);
 
-  h->programCreate(p,fname);
+  h->programCreate(p,fname,settings);
 
-  p->info.objectType=exaProgramObj;
+  p->info.type=exaProgramType;
 
   return 0;
 }

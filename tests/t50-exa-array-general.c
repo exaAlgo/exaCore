@@ -8,15 +8,17 @@ typedef struct{
 
 #define N 5
 
-int main(int argc,char *argv[]){
-  MPI_Init(&argc,&argv);
+int main(int argc,char *argv[])
+{
+  MPI_Init(NULL,NULL);
 
-  exaSettings s; exaSettingsInit(&s);
-  exaSettingsSetSetting("backend","/opencl/gpu",s);
-  exaSettingsSetSetting("debug","on",s);
+  exaSettings s;
+  exaSettingsInit(&s);
+  exaSettingsSetSetting("backend",argv[1],s);
 
   exaHandle h;
   exaInit(&h,MPI_COMM_WORLD,s);
+
   exaInt rank=exaRank(h);
   exaInt size=exaSize(h);
 

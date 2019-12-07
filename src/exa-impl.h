@@ -11,47 +11,33 @@
 //
 // exaTypeInfo: every exa data type should have this.
 //
-struct exaTypeInfo_private {
-  exaObjectType objectType;
+struct exaTypeInfo_private{
+  exaType type;
 };
 //
-// exaValue
+// exaValueType
 //
-typedef struct{
+struct exaValue_private{
   struct exaTypeInfo_private info;
+  exaDataType type;
   union{
-    exaInt    i;
-    exaUInt   ui;
-    exaLong   l;
-    exaULong  ul;
+    exaInt i;
+    exaUInt ui;
+    exaLong l;
+    exaULong ul;
     exaScalar s;
-    exaByte   b;
+    exaByte b;
   } value;
-  exaDataType t;
-} exaValue_private;
-//
-// exaValue
-//
-typedef struct{
-  struct exaTypeInfo_private info;
-  union{
-    exaInt    *i;
-    exaUInt   *ui;
-    exaLong   *l;
-    exaULong  *ul;
-    exaScalar *s;
-    exaByte   *b;
-  } pointer;
-  exaDataType t;
-} exaPointer_private;
+};
 //
 // exaSettings
 //
-struct exaSetting_private{
+typedef struct{
   char key[BUFSIZ];
   char value[BUFSIZ];
   exaLong hash;
-};
+} exaSetting;
+
 struct exaSettings_private{
   struct exaTypeInfo_private info;
   exaArray settings;
@@ -79,17 +65,20 @@ struct exaHandle_private{
   int debug;
   int root;
 
+  const char *(*backendExt)();
+
   int (*backendInit)(exaHandle h,const char *backend);
   int (*backendFinalize)(exaHandle h);
 
   int (*vectorCreate)(exaVector x,exaInt size);
   int (*vectorFree)(exaVector x);
 
-  int (*programCreate)(exaProgram p,const char *fname);
+  int (*programCreate)(exaProgram p,const char *fname,exaSettings settings);
   int (*programFree)(exaProgram p);
 
   int (*kernelCreate)(exaProgram p,const char *kernelName,exaKernel k);
   int (*kernelFree)(exaKernel k);
+
   int (*barrier)(exaHandle h);
 };
 //
@@ -122,32 +111,18 @@ struct exaProgram_private{
   void *data;
 };
 //
-// exaDim
-//
-struct exaDim_private{
-  struct exaTypeInfo_private info;
-
-  size_t global[3];
-  size_t local[3];
-  exaUInt dim;
-};
-//
 // exaKernel
 //
-struct exaKernelArg_private{
-  void *arg;
-  size_t size;
-};
-
 struct exaKernel_private{
   struct exaTypeInfo_private info;
 
   exaHandle handle;
   int nArgs;
   exaDataType args[EXA_KERNEL_ARGS_MAX];
-  int (*runKernel)(exaKernel k,exaDim dim,exaKernelArg args);
+  int (*runKernel)(exaKernel k,const int nArgs,va_list args);
   void *data;
 };
+
 //
 // exaArray
 //
