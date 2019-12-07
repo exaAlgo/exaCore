@@ -88,7 +88,7 @@ tests: tests-base
 install: install-base
 	@cp -u $(GSDIR)/include/*.h $(DESTDIR)$(PREFIX)/include/
 	@mkdir -p $(DESTDIR)$(PREFIX)/share
-	@cp -u exa-base.mk $(DESTDIR)$(PREFIX)/share
+	@cp -u exa-base.mk tests/run-tests.sh $(DESTDIR)$(PREFIX)/share
 
 .PHONY: all
 all: lib examples tests install

@@ -70,9 +70,7 @@ int exaOccaInit(exaHandle h,const char *backend)
   h->programFree=exaOccaProgramFree;
   h->kernelCreate=exaOccaKernelCreate;
   h->kernelFree=exaOccaKernelFree;
-#if 0
   h->barrier=exaOccaBarrier;
-#endif
 
   return 0;
 }

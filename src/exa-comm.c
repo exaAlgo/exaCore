@@ -120,7 +120,8 @@ int exaCommBcast(exaComm c,void *in,exaInt count,exaDataType type,int root){
 }
 
 void exaBarrier(exaHandle h) {
-  h->barrier(h);
+  // TODO: uncomment this once we have a serial backend
+  //h->barrier(h);
   exaCommBarrier(exaGetComm(h));
 }
 void exaCommBarrier(exaComm c) {
