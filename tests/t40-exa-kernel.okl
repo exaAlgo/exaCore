@@ -1,8 +1,3 @@
-@kernel void test01(const int a){
-  for(int i=0; i<a; ++i; @tile(16,@outer,@inner)){
-  }
-}
-
 @kernel void setVector(const int n,const double scale,double *a){
   for(int i=0; i<n; ++i; @tile(16,@outer,@inner)){
     a[i]=scale;

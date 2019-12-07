@@ -15,7 +15,6 @@ int exaOccaProgramCreate(exaProgram p,const char *fname,
   exaCalloc(1,&op);
 
   op->props=occaCreateProperties();
-  occaPropertiesSet(op->props,"defines/TILE_SIZE",occaInt(10));
 
   const char *ext=exaOccaGetExt();
   exaMalloc(strlen(fname)+1+strlen(ext),&op->fileName);

@@ -25,23 +25,35 @@ int main(int argc,char *argv[])
   exaProgramCreate(h,argv[0],s,&p);
 
   exaKernel k;
-  exaKernelCreate(p,"setVector",&k);
+  exaKernelCreate(p,"addVectors",&k);
 
-  exaVector vec; exaVectorCreate(h,M,&vec);
-  exaKernelRun(k,getExaInt(M),getExaScalar(0.5),vec);
+  exaVector vecIn1,vecIn2,vecOut;
+  exaVectorCreate(h,M,&vecIn1);
+  exaVectorCreate(h,M,&vecIn2);
+  exaVectorCreate(h,M,&vecOut);
 
-  exaScalar *out; exaCalloc(M,&out);
-  exaVectorRead(vec,out);
+  exaScalar *in1,*in2,*out;
+  exaCalloc(M,&in1); exaCalloc(M,&in2); exaCalloc(M,&out);
   int i;
   for(i=0;i<M;i++){
-    exaScalar ans=0.5;
+    in1[i]=i+0.1;
+    in2[i]=1.0-(i+0.1);
+  }
+  exaVectorWrite(vecIn1,in1);
+  exaVectorWrite(vecIn2,in2);
+
+  exaKernelRun(k,getExaInt(M),vecIn1,vecIn2,vecOut);
+
+  exaVectorRead(vecOut,out);
+  for(i=0;i<M;i++){
+    exaScalar ans=1.0;
     if(fabs(ans-out[i])>EXA_TOL)
       fprintf(stderr,"Error %lf != %lf\n",ans,out[i]);
   }
 
-  exaFree(out);
+  exaFree(in1); exaFree(in2); exaFree(out);
 
-  exaDestroy(vec);
+  exaDestroy(vecIn1); exaDestroy(vecIn2); exaDestroy(vecOut);
   exaDestroy(k);
   exaDestroy(p);
   exaDestroy(s);
