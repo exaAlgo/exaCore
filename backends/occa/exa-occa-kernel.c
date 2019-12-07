@@ -95,23 +95,23 @@ int exaOccaKernelRun(exaKernel k,const int nArgs_,va_list args){
     }
   }
 
-  switch(nArgs){
-    case 1:
-      occaKernelRun(ok->kernel,occaArgs[0]);
-      break;
-    case 2:
-      occaKernelRun(ok->kernel,occaArgs[0],occaArgs[1]);
-      break;
-    case 3:
-      occaKernelRun(ok->kernel,occaArgs[0],occaArgs[1],occaArgs[2]);
-      break;
-    case 4:
-      occaKernelRun(ok->kernel,occaArgs[0],occaArgs[1],occaArgs[2],
-        occaArgs[3]);
-      break;
-    default:
-      break;
-  }
+#define expand01(arr,offset) arr[offset]
+#define expand02(arr,offset) expand01(arr,(offset)+0),expand01(arr,(offset)+ 1)
+#define expand04(arr,offset) expand02(arr,(offset)+0),expand02(arr,(offset)+ 2)
+#define expand08(arr,offset) expand04(arr,(offset)+0),expand04(arr,(offset)+ 4)
+#define expand16(arr,offset) expand08(arr,(offset)+0),expand08(arr,(offset)+ 8)
+#define expand32(arr,offset) expand16(arr,(offset)+0),expand16(arr,(offset)+16)
+#define expand64(arr,offset) expand32(arr,(offset)+0),expand32(arr,(offset)+32)
+
+  occaKernelRunN(ok->kernel,nArgs,expand64(occaArgs,0));
+
+#undef expand01
+#undef expand02
+#undef expand04
+#undef expand08
+#undef expand16
+#undef expand32
+#undef expand64
 
   return 0;
 }
