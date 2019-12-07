@@ -20,7 +20,7 @@ int exaOccaKernelCreate(exaProgram p,const char *kernelName,exaKernel k){
   return 0;
 }
 
-int exaOccaKernelRun(exaKernel k,const int nArgs,...){
+int exaOccaKernelRun(exaKernel k,const int nArgs,va_list args){
   exaHandle h;
   exaKernelGetHandle(k,&h);
   exaOccaHandle oh;
@@ -28,6 +28,28 @@ int exaOccaKernelRun(exaKernel k,const int nArgs,...){
 
   exaOccaKernel ok;
   exaKernelGetData(k,(void**)&ok);
+
+  exaValue  val;
+  exaVector vec;
+  void *occaArgs[EXA_KERNEL_ARGS_MAX];
+
+  exaTypeInfo info;
+  int i;
+  for(i=0;i<nArgs;i++){
+    info=va_arg(args,exaTypeInfo);
+    switch(info->type){
+      case exaValueType:
+        val=(exaValue)info;
+        exaDebug(h,"arg: %d type=exaValue  pointer=%p\n",i,val);
+        break;
+      case exaVectorType:
+        vec=(exaVector)info;
+        exaDebug(h,"arg: %d type=exaVector pointer=%p\n",i,vec);
+        break;
+      default:
+        break;
+    }
+  }
 
   return 0;
 }

@@ -22,12 +22,12 @@ int main(int argc,char *argv[])
 
   exaKernel k;
   exaKernelCreate(p,"vectorAdd",&k);
+  exaKernelRun(k,getExaInt(1),getExaScalar(1.0));
 
   exaDestroy(k);
   exaDestroy(p);
-  exaFinalize(h);
-
   exaDestroy(s);
+  exaFinalize(h);
 
   MPI_Finalize();
 

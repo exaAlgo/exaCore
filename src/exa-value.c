@@ -5,7 +5,7 @@
 //
 int exaValueCreate(exaDataType t,void *ptr,exaValue *val_)
 {
-  exaMalloc(1,&val_);
+  exaMalloc(1,val_);
   exaValue val=*val_;
 
   val->info.type=exaValueType;
@@ -43,4 +43,4 @@ exaValue getExaULong (exaULong  i){exaValue v; exaValueCreate(exaULong_t ,(void*
 exaValue getExaScalar(exaScalar i){exaValue v; exaValueCreate(exaScalar_t,(void*)&i,&v); return v;}
 exaValue getExaByte  (exaByte   i){exaValue v; exaValueCreate(exaByte_t  ,(void*)&i,&v); return v;}
 
-int exaValueFree(exaValue v){exaFree(v);}
+int exaValueFree(exaValue v){ exaFree(v); }

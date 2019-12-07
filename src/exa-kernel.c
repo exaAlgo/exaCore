@@ -43,7 +43,7 @@ int exaKernelRunN(exaKernel k,const int nArgs,...){
   va_list argList;
   va_start(argList,nArgs);
 
-  //k->runKernel(k,nArgs,);
+  k->runKernel(k,nArgs,argList);
 
   va_end(argList);
 

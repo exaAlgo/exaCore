@@ -36,7 +36,7 @@ int exaOpenCLProgramFree(exaProgram p);
 //
 int exaOpenCLKernelCreate(exaProgram p,const char *kernelName,
   exaKernel k);
-int exaOpenCLKernelRun(exaKernel k,const int nArgs,...);
+int exaOpenCLKernelRun(exaKernel k,const int nArgs,va_list args);
 int exaOpenCLKernelFree(exaKernel k);
 //
 // Barrier

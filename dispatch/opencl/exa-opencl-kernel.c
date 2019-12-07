@@ -23,7 +23,7 @@ int exaOpenCLKernelCreate(exaProgram p,const char *kernelName,exaKernel k){
   return 0;
 }
 
-int exaOpenCLKernelRun(exaKernel k,const int nArgs,...){
+int exaOpenCLKernelRun(exaKernel k,const int nArgs,va_list args){
   exaHandle h;
   exaKernelGetHandle(k,&h);
   exaOpenCLHandle oclh;
