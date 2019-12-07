@@ -70,7 +70,7 @@ print :
 
 $(shell mkdir -p $(DEPDIR))
 $(shell mkdir -p $(BUILDDIR))
-$(shell mkdir -p $(BUILDDIR)/examples)
-$(shell mkdir -p $(BUILDDIR)/tests)
+$(shell mkdir -p $(BUILDDIR)/$(EXAMPLESDIR))
+$(shell mkdir -p $(BUILDDIR)/$(TESTSDIR))
 $(shell mkdir -p $(BUILDDIR)/$(OpenCL.dir))
 $(shell mkdir -p $(BUILDDIR)/$(occa.dir))

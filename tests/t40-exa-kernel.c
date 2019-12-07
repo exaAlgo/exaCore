@@ -18,11 +18,11 @@ int main(int argc,char *argv[])
   exaInit(&h,MPI_COMM_WORLD,s);
 
   exaProgram p;
-  exaProgramCreate(h,"kernels",s,&p);
+  exaProgramCreate(h,argv[0],s,&p);
 
   exaKernel k;
-  exaKernelCreate(p,"vectorAdd",&k);
-  exaKernelRun(k,getExaInt(1),getExaScalar(1.0));
+  exaKernelCreate(p,"dummy1",&k);
+  exaKernelRun(k,getExaInt(10));
 
   exaDestroy(k);
   exaDestroy(p);

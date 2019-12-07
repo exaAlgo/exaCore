@@ -14,6 +14,8 @@ int exaOccaProgramCreate(exaProgram p,const char *fname,
   exaOccaProgram op;
   exaCalloc(1,&op);
 
+  op->props=occaCreateProperties();
+
   const char *ext=exaOccaGetExt();
   exaMalloc(strlen(fname)+1+strlen(ext),&op->fileName);
   strcpy(op->fileName                  ,fname);
