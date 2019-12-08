@@ -45,13 +45,14 @@ int exaInit(exaHandle *h_,exaCommExternal ce,exaSettings settings) {
 
   // Default value for options
   char *debug=getenv("EXA_DEBUG");
-  if(debug==NULL){
+  if(debug==NULL)
 #if defined(EXA_DEBUG)
     h->debug=1;
 #else
     h->debug=0;
 #endif
-  } else h->debug=atoi(debug);
+  else
+    h->debug=atoi(debug);
 
   char *root=getenv("EXA_ROOT");
   if(root==NULL) h->root = 0;
