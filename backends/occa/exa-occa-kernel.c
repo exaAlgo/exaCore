@@ -124,8 +124,6 @@ int exaOccaKernelFree(exaKernel k)
   occaFree(ok->kernel);
 
   exaFree(ok);
-  ok=NULL;
-  exaKernelSetData(k,(void**)&ok);
 
   return 0;
 }

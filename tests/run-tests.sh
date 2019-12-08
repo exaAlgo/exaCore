@@ -2,7 +2,7 @@
 
 # Setup variables
 tests=(`ls -I '*.okl' -I '*.sh'`)
-backends=("/occa/cpu" "/occa/gpu/opencl")
+backends=("/host" "/occa/cpu" "/occa/gpu/opencl")
 
 # Set debug to 0 to avoid output
 export EXA_DEBUG=0
@@ -18,6 +18,3 @@ for t in "${tests[@]}"; do
     fi
   done
 done
-
-# Clean up
-rm err out

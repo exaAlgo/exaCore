@@ -36,8 +36,6 @@ int exaOccaProgramFree(exaProgram p){
   occaFree(op->props);
 
   exaFree(op);
-  op=NULL;
-  exaProgramSetData(p,(void**)&op);
 
   return 0;
 }

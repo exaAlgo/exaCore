@@ -45,13 +45,14 @@ int exaInit(exaHandle *h_,exaCommExternal ce,exaSettings settings) {
 
   // Default value for options
   char *debug=getenv("EXA_DEBUG");
-  if(debug==NULL){
+  if(debug==NULL)
 #if defined(EXA_DEBUG)
     h->debug=1;
 #else
     h->debug=0;
 #endif
-  } else h->debug=atoi(debug);
+  else
+    h->debug=atoi(debug);
 
   char *root=getenv("EXA_ROOT");
   if(root==NULL) h->root = 0;
@@ -60,9 +61,19 @@ int exaInit(exaHandle *h_,exaCommExternal ce,exaSettings settings) {
   exaDebug(h,"numBackends: %d\n",numBackends);
 
   //TODO: sort backends based on priority
-  int i;
-  for(i=0;i<numBackends;i++)
-    if(strcmp(backends[i].prefix,backend)==0) backends[i].init(h,backend);
+  int i,hostI;
+  for(i=0;i<numBackends;i++){
+    if(strcmp(backends[i].prefix,"/host")==0) hostI=i;
+    if(strcmp(backends[i].prefix,backend)==0){
+      backends[i].init(h,backend);
+      break;
+    }
+  }
+  if(i==numBackends){
+    exaDebug(h,"Backend: %s is not registered. Using /host instead.\n",
+      backend);
+    backends[hostI].init(h,"/host");
+  }
 
   h->info.type=exaHandleType;
 
