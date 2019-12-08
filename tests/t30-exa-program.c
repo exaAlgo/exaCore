@@ -18,7 +18,7 @@ int main(int argc,char *argv[])
   exaInit(&h,MPI_COMM_WORLD,s);
 
   exaProgram p;
-  exaProgramCreate(h,"kernels",s,&p);
+  exaProgramCreate(h,argv[0],s,&p);
 
   exaDestroy(p);
   exaDestroy(s);

@@ -60,7 +60,6 @@ int exaHostVectorFree(exaVector x){
   exaVectorGetData(x,(void**)&data);
 
   exaFree(data);
-  exaFree(x);
 
   return 0;
 }

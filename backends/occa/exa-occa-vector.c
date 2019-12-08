@@ -1,6 +1,6 @@
 #include "exa-occa-impl.h"
 //
-// Create an Opencl vector
+// Create an Occa vector
 //
 int exaOccaVectorCreate(exaVector x,exaInt size)
 {
@@ -66,8 +66,6 @@ int exaOccaVectorFree(exaVector x){
   occaFree(vec->vector);
 
   exaFree(vec);
-  vec=NULL;
-  exaVectorSetData(x,(void **)&vec);
 
   return 0;
 }

@@ -31,7 +31,11 @@ int exaHostProgramFree(exaProgram p){ return 0; }
 // Create an Host kernel
 //
 int exaHostKernelCreate(exaProgram p,const char *kernelName,
-  exaKernel k){ return 0; }
+  exaKernel k)
+{
+  k->runKernel=exaHostKernelRun;
+  return 0;
+}
 int exaHostKernelRun(exaKernel k,const int nArgs,va_list args){ return 0; }
 int exaHostKernelFree(exaKernel k){ return 0; }
 //
