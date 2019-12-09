@@ -159,8 +159,11 @@ int exaHandleSetData(exaHandle h,void **data){
   return 0;
 }
 
-const char *exaGetBackendExtension(exaHandle h)
-{
+const char *exaGetBackendName(exaHandle h){
+  return h->backendName;
+}
+
+const char *exaGetBackendExtension(exaHandle h){
   return h->backendExt();
 }
 //

@@ -111,6 +111,7 @@ int         exaFinalize     (exaHandle h);
 int         exaHandleGetData(exaHandle h,void **data);
 int         exaHandleSetData(exaHandle h,void **data);
 // functions to query the backend
+const char *exaGetBackendName     (exaHandle h);
 const char *exaGetBackendExtension(exaHandle h);
 // communication
 exaComm     exaGetComm   (exaHandle h);
