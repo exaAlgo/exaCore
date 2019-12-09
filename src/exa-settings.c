@@ -12,13 +12,13 @@ int exaSettingsInit(exaHandle h,const char *fname,
   exaArrayInit(&s->settings,exaSetting,10);
 
   // set some defaults
-  exaSettingsSetSetting("backend:name",exaGetBackendName(h),s);
+  exaSettingsSet("backend::name",exaGetBackendName(h),s);
 
-  exaSettingsSetSetting("defines:exaLong",exaLongString,s);
-  exaSettingsSetSetting("defines:exaULong",exaULongString,s);
-  exaSettingsSetSetting("defines:exaInt",exaIntString,s);
-  exaSettingsSetSetting("defines:exaUInt",exaUIntString,s);
-  exaSettingsSetSetting("defines:exaScalar",exaScalarString,s);
+  exaSettingsSet("defines::exaLong",exaLongString,s);
+  exaSettingsSet("defines::exaULong",exaULongString,s);
+  exaSettingsSet("defines::exaInt",exaIntString,s);
+  exaSettingsSet("defines::exaUInt",exaUIntString,s);
+  exaSettingsSet("defines::exaScalar",exaScalarString,s);
 
   // TODO: read settings from file: fname
 
@@ -33,8 +33,7 @@ int exaSettingsFree(exaSettings settings){
   return 0;
 }
 
-const char *exaSettingsGetSetting(const char *settingName,
-  exaSettings s)
+const char *exaSettingsGet(const char *settingName,exaSettings s)
 {
   exaInt size=exaArrayGetSize(s->settings);
   exaSetting *ptr=exaArrayGetPointer(s->settings);
@@ -47,7 +46,7 @@ const char *exaSettingsGetSetting(const char *settingName,
   else return "\0";
 }
 
-int exaSettingsSetSetting(const char *settingName,const char *value,
+int exaSettingsSet(const char *settingName,const char *value,
   exaSettings s)
 {
   exaInt size=exaArrayGetSize(s->settings);

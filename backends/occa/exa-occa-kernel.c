@@ -41,8 +41,10 @@ occaType exaValueToOccaType(exaValue v){
       t=occaULong(v->value.ul);
       break;
     case exaScalar_t:
-      //TODO double or float?
-      t=occaDouble(v->value.s);
+      if(strcmp(exaScalarString,"double")==0)
+        t=occaDouble(v->value.s);
+      else
+        t=occaFloat(v->value.s);
       break;
     case exaByte_t:
       t=occaChar(v->value.b);

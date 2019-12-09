@@ -166,9 +166,8 @@ int         exaCommCrystalFinalize(exaComm c);
 int exaSettingsInit(exaHandle h,const char *fname,
   exaSettings *settings);
 int exaSettingsFree(exaSettings settings);
-const char *exaSettingsGetSetting(const char *settingName,
-  exaSettings s);
-int exaSettingsSetSetting(const char *settingName,const char *value,
+const char *exaSettingsGet(const char *settingName,exaSettings s);
+int exaSettingsSet(const char *settingName,const char *value,
   exaSettings s);
 //
 // exaBuffer:
