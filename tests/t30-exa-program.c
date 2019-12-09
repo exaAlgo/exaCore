@@ -12,10 +12,9 @@ int main(int argc,char *argv[])
 
   exaSettings s;
   exaSettingsInit(&s);
-  exaSettingsSetSetting("backend",argv[1],s);
 
   exaHandle h;
-  exaInit(&h,MPI_COMM_WORLD,s);
+  exaInit(&h,MPI_COMM_WORLD,argv[1]);
 
   exaProgram p;
   exaProgramCreate(h,argv[0],s,&p);

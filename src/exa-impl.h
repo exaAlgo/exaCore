@@ -58,25 +58,27 @@ struct exaHandle_private{
 
   exaComm comm;
   exaBuffer buf;
-  exaSettings settings;
 
+  // backend specific data
+  char backendName[BUFSIZ];
   void *data;
 
   int debug;
   int root;
 
   const char *(*backendExt)();
-
   int (*backendInit)(exaHandle h,const char *backend);
   int (*backendFinalize)(exaHandle h);
 
   int (*vectorCreate)(exaVector x,exaInt size);
   int (*vectorFree)(exaVector x);
 
-  int (*programCreate)(exaProgram p,const char *fname,exaSettings settings);
+  int (*programCreate)(exaProgram p,const char *fname,
+    exaSettings settings);
   int (*programFree)(exaProgram p);
 
-  int (*kernelCreate)(exaProgram p,const char *kernelName,exaKernel k);
+  int (*kernelCreate)(exaProgram p,const char *kernelName,
+    exaKernel k);
   int (*kernelFree)(exaKernel k);
 
   int (*barrier)(exaHandle h);

@@ -52,10 +52,9 @@ int exaOpenCLInit(exaHandle h,const char *backend){
   oclh->context=clCreateContext(0,1,&oclh->deviceId,NULL,NULL,&err);
   exaOpenCLChk(err);
 
-  const char *debug=exaGetSetting("debug",h);
   cl_command_queue_properties prop[]={CL_QUEUE_PROPERTIES,
     CL_QUEUE_PROFILING_ENABLE,0};
-  if(strcmp(debug,"on")==0)
+  if(exaGetDebug(h))
     oclh->queue=clCreateCommandQueueWithProperties(oclh->context,
       oclh->deviceId,prop,&err);
   else

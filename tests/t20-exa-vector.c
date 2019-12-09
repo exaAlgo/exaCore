@@ -14,12 +14,8 @@ int main(int argc,char *argv[])
     exit(0);
   }
 
-  exaSettings s;
-  exaSettingsInit(&s);
-  exaSettingsSetSetting("backend",argv[1],s);
-
   exaHandle h;
-  exaInit(&h,MPI_COMM_WORLD,s);
+  exaInit(&h,MPI_COMM_WORLD,argv[1]);
 
   exaVector vec;
   exaVectorCreate(h,M,&vec);
@@ -43,7 +39,6 @@ int main(int argc,char *argv[])
   exaFree(in);
   exaFree(out);
   exaDestroy(vec);
-  exaDestroy(s);
   exaFinalize(h);
 
   MPI_Finalize();

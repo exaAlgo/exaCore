@@ -12,12 +12,8 @@ int main(int argc,char *argv[])
 {
   MPI_Init(NULL,NULL);
 
-  exaSettings s;
-  exaSettingsInit(&s);
-  exaSettingsSetSetting("backend",argv[1],s);
-
   exaHandle h;
-  exaInit(&h,MPI_COMM_WORLD,s);
+  exaInit(&h,MPI_COMM_WORLD,argv[1]);
 
   exaInt rank=exaRank(h);
   exaInt size=exaSize(h);
@@ -50,7 +46,6 @@ int main(int argc,char *argv[])
   assert(exaArrayGetSize(arr)==4*N-1);
   assert(exaArrayGetMaxSize(arr)==max);
 
-  exaDestroy(s);
   exaDestroy(arr);
   exaFinalize(h);
 

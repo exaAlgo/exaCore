@@ -10,14 +10,9 @@ int main(int argc,char *argv[])
     exit(0);
   }
 
-  exaSettings s;
-  exaSettingsInit(&s);
-  exaSettingsSetSetting("backend",argv[1],s);
-
   exaHandle h;
-  exaInit(&h,MPI_COMM_WORLD,s);
+  exaInit(&h,MPI_COMM_WORLD,argv[1]);
 
-  exaDestroy(s);
   exaFinalize(h);
 
   MPI_Finalize();

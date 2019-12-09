@@ -18,9 +18,6 @@ int exaSettingsFree(exaSettings settings){
   return 0;
 }
 
-const char *exaGetSetting(const char *settingName,exaHandle h){
-  return exaSettingsGetSetting(settingName,h->settings);
-}
 const char *exaSettingsGetSetting(const char *settingName,exaSettings s){
   exaInt size=exaArrayGetSize(s->settings);
   exaSetting *ptr=exaArrayGetPointer(s->settings);
@@ -33,9 +30,6 @@ const char *exaSettingsGetSetting(const char *settingName,exaSettings s){
   else return "\0";
 }
 
-int exaSetSetting(const char *settingName,const char *value,exaHandle h){
-  return exaSettingsSetSetting(settingName,value,h->settings);
-}
 int exaSettingsSetSetting(const char *settingName,const char *value,exaSettings s){
   exaInt size=exaArrayGetSize(s->settings);
   exaSetting *ptr=exaArrayGetPointer(s->settings);

@@ -105,7 +105,8 @@ size_t exaSizeOf      (void *p);
 //
 // exaHandle: wraps an exaComm, buffer and other options
 //
-int         exaInit         (exaHandle *h,exaCommExternal ce,exaSettings settings);
+int         exaInit         (exaHandle *h,exaCommExternal ce,
+  const char *backend);
 int         exaFinalize     (exaHandle h);
 int         exaHandleGetData(exaHandle h,void **data);
 int         exaHandleSetData(exaHandle h,void **data);
@@ -118,19 +119,18 @@ struct comm exaGetGSComm (exaHandle h);
 int         exaSetComm   (exaHandle h,exaComm c);
 exaInt      exaSize      (exaHandle h);
 exaInt      exaRank      (exaHandle h);
-int         exaScan      (exaHandle h,void *out,void *in,void *buf,exaInt size,
-                          exaDataType t,exaOp op);
+int         exaScan      (exaHandle h,void *out,void *in,void *buf,
+  exaInt size,exaDataType t,exaOp op);
 int         exaSplit     (exaHandle h,int bin);
-int         exaGop       (exaHandle h,void *v,exaInt size,exaDataType type,exaOp op);
-int         exaReduce    (exaHandle h,void *out,void *in,exaInt size,exaDataType type,
-                          exaOp op);
-int         exaBcast     (exaHandle h,void *in,exaInt count,exaDataType type);
+int         exaGop       (exaHandle h,void *v,exaInt size,
+  exaDataType type,exaOp op);
+int         exaReduce    (exaHandle h,void *out,void *in,exaInt size,
+  exaDataType type,exaOp op);
+int         exaBcast     (exaHandle h,void *in,exaInt count,
+  exaDataType type);
 void        exaBarrier   (exaHandle h);
 int         exaCrystalInit    (exaHandle h);
 int         exaCrystalFinalize(exaHandle h);
-// settings
-const char *exaGetSetting(const char *settingName,exaHandle h);
-int         exaSetSetting(const char *settingName,const char *value,exaHandle h);
 // debug
 int         exaDebug(exaHandle h,const char *format,...);
 int         exaGetDebug(exaHandle h);
@@ -144,13 +144,16 @@ MPI_Comm    exaCommGetMPIComm(exaComm c);
 struct comm exaCommGetGSComm (exaComm c);
 exaInt      exaCommSize      (exaComm c);
 exaInt      exaCommRank      (exaComm c);
-int         exaCommScan      (exaComm c,void *out,void *in,void *buf,exaInt size,
-                              exaDataType t,exaOp op);
+int         exaCommScan      (exaComm c,void *out,void *in,void *buf,
+  exaInt size,exaDataType t,exaOp op);
 int         exaCommSplit     (exaComm *c,int bin);
 int         exaCommDup       (exaComm *newComm,exaComm oldComm);
-int         exaCommGop       (exaComm c,void *v,exaInt size,exaDataType type,exaOp op);
-int         exaCommReduce    (exaComm c,void *out,void *in,exaInt size,exaDataType type,exaOp op);
-int         exaCommBcast     (exaComm c,void *in,exaInt count,exaDataType type,int root);
+int         exaCommGop       (exaComm c,void *v,exaInt size,
+  exaDataType type,exaOp op);
+int         exaCommReduce    (exaComm c,void *out,void *in,
+  exaInt size,exaDataType type,exaOp op);
+int         exaCommBcast     (exaComm c,void *in,exaInt count,
+  exaDataType type,int root);
 void        exaCommBarrier   (exaComm c);
 // crystal router functionality
 int         exaCommCrystalInit    (exaComm c);
@@ -163,8 +166,10 @@ int exaBufferFree(exaBuffer buf);
 //
 // exaTopology: gs topology setup and gs_op
 //
-int exaTopologySetup(exaLong *ids,exaUInt n,exaComm c,int unique,int verbose,exaTopology *t);
-int exaTopologyOp(void *v,exaDataType T,exaOp op,unsigned transpose,exaTopology t,exaBuffer buf);
+int exaTopologySetup(exaLong *ids,exaUInt n,exaComm c,int unique,
+  int verbose,exaTopology *t);
+int exaTopologyOp(void *v,exaDataType T,exaOp op,unsigned transpose,
+  exaTopology t,exaBuffer buf);
 int exaTopologyFree(exaTopology t);
 //
 // exaVector: wraps a vector. Currently just a host vector.
@@ -181,7 +186,8 @@ int exaVectorFree(exaVector vec);
 //
 // exaProgram: wraps a exaProgram
 //
-int exaProgramCreate(exaHandle h,const char *fname,exaSettings settings,exaProgram *p);
+int exaProgramCreate(exaHandle h,const char *fname,
+  exaSettings settings,exaProgram *p);
 int exaProgramGetHandle(exaProgram p,exaHandle *h);
 int exaProgramSetData(exaProgram p,void **data);
 int exaProgramGetData(exaProgram p,void **data);
@@ -264,8 +270,10 @@ int    exaArrayFree(exaArray a);
 //
 int exaSettingsInit(exaSettings *settings);
 int exaSettingsFree(exaSettings settings);
-const char *exaSettingsGetSetting(const char *settingName,exaSettings s);
-int exaSettingsSetSetting(const char *settingName,const char *value,exaSettings s);
+const char *exaSettingsGetSetting(const char *settingName,
+  exaSettings s);
+int exaSettingsSetSetting(const char *settingName,const char *value,
+  exaSettings s);
 //
 // Debug routines
 //

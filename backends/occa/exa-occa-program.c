@@ -14,6 +14,7 @@ int exaOccaProgramCreate(exaProgram p,const char *fname,
   exaOccaProgram op;
   exaCalloc(1,&op);
 
+  // TODO: converts settings to props
   op->props=occaCreateProperties();
 
   const char *ext=exaOccaGetExt();

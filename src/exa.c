@@ -28,14 +28,10 @@ void exaRegister(int (*init)(exaHandle,const char*),const char *prefix,int prior
 //
 // exaHandle: wraps exaComm, buffer and other options
 //
-int exaInit(exaHandle *h_,exaCommExternal ce,exaSettings settings) {
+int exaInit(exaHandle *h_,exaCommExternal ce,const char *backend) {
   exaMalloc(1,h_);
   exaHandle h=*h_;
 
-  // Point to user ettings array
-  h->settings=settings;
-  // get the backend
-  const char *backend=exaGetSetting("backend",h);
   // Create comm
   exaCommCreate(&h->comm,ce);
   // Init crystal router
@@ -51,8 +47,7 @@ int exaInit(exaHandle *h_,exaCommExternal ce,exaSettings settings) {
 #else
     h->debug=0;
 #endif
-  else
-    h->debug=atoi(debug);
+  else h->debug=atoi(debug);
 
   char *root=getenv("EXA_ROOT");
   if(root==NULL) h->root = 0;
@@ -66,13 +61,15 @@ int exaInit(exaHandle *h_,exaCommExternal ce,exaSettings settings) {
     if(strcmp(backends[i].prefix,"/host")==0) hostI=i;
     if(strcmp(backends[i].prefix,backend)==0){
       backends[i].init(h,backend);
+      strcpy(h->backendName,backend);
       break;
     }
   }
   if(i==numBackends){
-    exaDebug(h,"Backend: %s is not registered. Using /host instead.\n",
-      backend);
+    exaDebug(h,"Backend: %s is not registered. Using /host "
+      "instead.\n",backend);
     backends[hostI].init(h,"/host");
+    strcpy(h->backendName,"/host");
   }
 
   h->info.type=exaHandleType;
