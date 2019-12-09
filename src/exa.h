@@ -92,7 +92,8 @@ typedef MPI_Comm exaCommExternal;
 //
 // exaRegister
 //
-void exaRegister(int (*init)(exaHandle,const char*),const char *prefix,int priority);
+void exaRegister(int (*init)(exaHandle,const char*),
+  const char *prefix,int priority);
 //
 // exaMalloc, Realloc, Calloc, Free and size of
 //
@@ -159,6 +160,16 @@ void        exaCommBarrier   (exaComm c);
 // crystal router functionality
 int         exaCommCrystalInit    (exaComm c);
 int         exaCommCrystalFinalize(exaComm c);
+//
+// exaSettings
+//
+int exaSettingsInit(exaHandle h,const char *fname,
+  exaSettings *settings);
+int exaSettingsFree(exaSettings settings);
+const char *exaSettingsGetSetting(const char *settingName,
+  exaSettings s);
+int exaSettingsSetSetting(const char *settingName,const char *value,
+  exaSettings s);
 //
 // exaBuffer:
 //
@@ -266,15 +277,6 @@ size_t exaArrayGetAlign(exaArray array);
 int    exaArrayAppend(exaArray arr,void *p);
 int    exaArrayBcast(exaComm c,exaInt source,exaArray arr);
 int    exaArrayFree(exaArray a);
-//
-// exaSettings
-//
-int exaSettingsInit(exaSettings *settings);
-int exaSettingsFree(exaSettings settings);
-const char *exaSettingsGetSetting(const char *settingName,
-  exaSettings s);
-int exaSettingsSetSetting(const char *settingName,const char *value,
-  exaSettings s);
 //
 // Debug routines
 //

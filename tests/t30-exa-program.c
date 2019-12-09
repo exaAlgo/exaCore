@@ -10,11 +10,10 @@ int main(int argc,char *argv[])
     exit(0);
   }
 
-  exaSettings s;
-  exaSettingsInit(&s);
-
   exaHandle h;
   exaInit(&h,MPI_COMM_WORLD,argv[1]);
+
+  exaSettings s; exaSettingsInit(h,NULL,&s);
 
   exaProgram p;
   exaProgramCreate(h,argv[0],s,&p);

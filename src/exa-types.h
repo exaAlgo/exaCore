@@ -9,6 +9,8 @@
 //
 typedef long long exaLong;
 typedef unsigned long long exaULong;
+#define exaLongString "long long"
+#define exaULongString "unsigned long long"
 #define exaLongFormat "%lld"
 #define exaULongFormat "%llu"
 #define exaLongMAX LLONG_MAX
@@ -24,6 +26,8 @@ typedef unsigned long long exaULong;
 
 typedef int exaInt;
 typedef unsigned int exaUInt;
+#define exaIntString "int"
+#define exaUIntString "unsigned int"
 #define exaIntFormat "%d"
 #define exaUIntFormat "%u"
 #define exaIntMAX INT_MAX
@@ -38,6 +42,7 @@ typedef unsigned int exaUInt;
 #define exaUIntGSSortType 0
 
 typedef double exaScalar;
+#define exaScalarString "double"
 #define exaScalarFormat "%lf"
 #define exaScalarMAX DBL_MAX
 #define exaScalarMIN DBL_MIN
