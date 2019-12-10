@@ -167,11 +167,13 @@ int         exaCommCrystalFinalize(exaComm c);
 int exaSettingsInit(exaHandle h,const char *fname,
   exaSettings *settings);
 int exaSettingsFree(exaSettings settings);
-const char *exaSettingsGet(const char *settingName,exaSettings s);
+int exaSettingsGetHandle(exaSettings s,exaHandle *h);
+exaValue exaSettingsGet(const char *settingName,exaSettings s);
 const char *exaSettingsIterateKeys(const char *startsWith,
   exaSettings s);
-int exaSettingsSet(const char *settingName,const char *value,
+int exaSettingsSet(const char *settingName,exaValue value,
   exaSettings s);
+int exaValueEq(exaValue val1,exaValue val2);
 //
 // exaBuffer:
 //
@@ -211,13 +213,13 @@ int exaProgramFree(exaProgram p);
 //
 int      exaValueCreate(exaDataType t,void *value,exaValue *v);
 //TODO change arguments to standard c types
-exaValue getExaInt   (exaInt    i);
-exaValue getExaUInt  (exaUInt   i);
-exaValue getExaLong  (exaLong   i);
-exaValue getExaULong (exaULong  i);
-exaValue getExaScalar(exaScalar i);
-exaValue getExaChar  (exaChar   i);
-exaValue getExaStr   (exaStr    i);
+exaValue getExaInt   (const exaInt    i);
+exaValue getExaUInt  (const exaUInt   i);
+exaValue getExaLong  (const exaLong   i);
+exaValue getExaULong (const exaULong  i);
+exaValue getExaScalar(const exaScalar i);
+exaValue getExaChar  (const exaChar   i);
+exaValue getExaStr   (const char *    i);
 int exaValueFree(exaValue v);
 //
 // exaKernel: wraps a kernel

@@ -16,9 +16,9 @@ int main(int argc,char *argv[])
   exaSettings s; exaSettingsInit(h,NULL,&s);
 
   const char *key=exaSettingsIterateKeys("backend::nam",s);
-  const char *val=exaSettingsGet(key,s);
-  if(key==NULL || strcmp(argv[1],val)!=0)
-    fprintf(stderr,"key: backend::name, val: %s != %s",val,argv[1]);
+  exaValue val=exaSettingsGet(key,s);
+  if(val==NULL || !exaValueEq(val,getExaStr(argv[1])))
+    fprintf(stderr,"key: backend::name, value != %s",argv[1]);
 
   int count=0;
   const char *prefix="defines::";

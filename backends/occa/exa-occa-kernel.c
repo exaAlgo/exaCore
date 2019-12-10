@@ -25,37 +25,6 @@ int exaOccaKernelCreate(exaProgram p,const char *kernelName,
   return 0;
 }
 
-occaType exaValueToOccaType(exaValue v){
-  occaType t;
-  switch(v->type){
-    case exaInt_t:
-      t=occaInt(v->value.i);
-      break;
-    case exaUInt_t:
-      t=occaUInt(v->value.ui);
-      break;
-    case exaLong_t:
-      t=occaLong(v->value.l);
-      break;
-    case exaULong_t:
-      t=occaULong(v->value.ul);
-      break;
-    case exaScalar_t:
-      if(strcmp(exaScalarString,"double")==0)
-        t=occaDouble(v->value.s);
-      else
-        t=occaFloat(v->value.s);
-      break;
-    case exaChar_t:
-      t=occaChar(v->value.b);
-      break;
-    default:
-      break;
-  }
-
-  return t;
-}
-
 int exaOccaKernelRun(exaKernel k,const int nArgs_,va_list args){
   exaHandle h;
   exaKernelGetHandle(k,&h);

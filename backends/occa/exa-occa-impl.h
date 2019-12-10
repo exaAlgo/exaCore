@@ -6,6 +6,8 @@
 
 #include <occa.h>
 
+occaType exaValueToOccaType(exaValue v);
+
 struct exaOccaHandle_private{
   occaDevice device;
 };

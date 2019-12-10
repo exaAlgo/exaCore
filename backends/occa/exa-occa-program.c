@@ -16,20 +16,17 @@ int exaOccaProgramCreate(exaProgram p,const char *fname,
 
   op->props=occaCreateProperties();
 
+  exaValue val;
+  const char *key;
   char str[BUFSIZ];
-  const char *format="defines/%s";
-  const char *defines="defines::";
 
-  const char *val;
-  const char *key=exaSettingsIterateKeys(defines,s);
+  const char *defines="defines::";
+  key=exaSettingsIterateKeys(defines,s);
   while(key!=NULL){
     val=exaSettingsGet(key,s);
 
-    snprintf(str,BUFSIZ,format,key+strlen(defines));
-    occaPropertiesSet(op->props,str,occaString(val));
-
-    // TODO support Ints,Longs,Scalars
-    exaDebug(h,"key:%s val:%s\n",str,val);
+    snprintf(str,BUFSIZ,"defines/%s",key+strlen(defines));
+    occaPropertiesSet(op->props,str,exaValueToOccaType(val));
 
     key=exaSettingsIterateKeys(NULL,s);
   }

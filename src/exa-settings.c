@@ -12,18 +12,26 @@ int exaSettingsInit(exaHandle h,const char *fname,
   exaArrayInit(&s->settings,exaSetting,10);
 
   // set some defaults
-  exaSettingsSet("backend::name",exaGetBackendName(h),s);
+  const char *name=exaGetBackendName(h);
+  exaSettingsSet("backend::name",getExaStr(name),s);
 
-  exaSettingsSet("defines::exaLong",exaLongString,s);
-  exaSettingsSet("defines::exaULong",exaULongString,s);
-  exaSettingsSet("defines::exaInt",exaIntString,s);
-  exaSettingsSet("defines::exaUInt",exaUIntString,s);
-  exaSettingsSet("defines::exaScalar",exaScalarString,s);
+  exaSettingsSet("defines::exaLong"  ,getExaStr(exaLongString  ),s);
+  exaSettingsSet("defines::exaULong" ,getExaStr(exaULongString ),s);
+  exaSettingsSet("defines::exaInt"   ,getExaStr(exaIntString   ),s);
+  exaSettingsSet("defines::exaUInt"  ,getExaStr(exaUIntString  ),s);
+  exaSettingsSet("defines::exaScalar",getExaStr(exaScalarString),s);
 
   // TODO: read settings from file: fname
 
   s->info.type=exaSettingsType;
 
+  s->h=h;
+
+  return 0;
+}
+
+int exaSettingsGetHandle(exaSettings s,exaHandle *h){
+  *h=s->h;
   return 0;
 }
 
@@ -33,7 +41,7 @@ int exaSettingsFree(exaSettings settings){
   return 0;
 }
 
-const char *exaSettingsGet(const char *settingName,exaSettings s)
+exaValue exaSettingsGet(const char *settingName,exaSettings s)
 {
   exaInt size=exaArrayGetSize(s->settings);
   exaSetting *ptr=exaArrayGetPointer(s->settings);
@@ -71,7 +79,7 @@ const char *exaSettingsIterateKeys(const char *startsWith,
   return  NULL;
 }
 
-int exaSettingsSet(const char *settingName,const char *value,
+int exaSettingsSet(const char *settingName,exaValue value,
   exaSettings s)
 {
   exaInt size=exaArrayGetSize(s->settings);
@@ -79,11 +87,11 @@ int exaSettingsSet(const char *settingName,const char *value,
 
   exaInt i;
   for(i=0;i<size;i++) if(strcmp(ptr[i].key,settingName)==0) break;
-  if(i<size) strcpy(ptr[i].value,value);
+  if(i<size) ptr[i].value=value;
   else{
     exaSetting t;
     strcpy(t.key,settingName);
-    strcpy(t.value,value);
+    t.value=value;
     exaArrayAppend(s->settings,&t);
   }
 }

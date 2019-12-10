@@ -17,11 +17,16 @@ const char *exaOccaGetExt();
 int exaOccaInit(exaHandle h,const char *backend);
 int exaOccaFinalize(exaHandle h);
 //
+// update backend specific settings
+//
+int exaOccaUpdateSettings(exaSettings s);
+//
 // Create an Occa vector
 //
 int exaOccaVectorCreate(exaVector x,exaInt size);
 int exaOccaVectorFree(exaVector x);
-int exaOccaVectorGetDevicePointer(exaVector x,void **ptr,size_t *size);
+int exaOccaVectorGetDevicePointer(exaVector x,void **ptr,
+  size_t *size);
 int exaOccaVectorRead(exaVector x ,exaScalar *out);
 int exaOccaVectorWrite(exaVector x,exaScalar *in);
 //

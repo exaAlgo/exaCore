@@ -35,12 +35,13 @@ struct exaValue_private{
 //
 typedef struct{
   char key[BUFSIZ];
-  char value[BUFSIZ];
+  exaValue value;
   exaLong hash;
 } exaSetting;
 
 struct exaSettings_private{
   struct exaTypeInfo_private info;
+  exaHandle h;
   exaArray settings;
 };
 //
@@ -70,6 +71,8 @@ struct exaHandle_private{
   const char *(*backendExt)();
   int (*backendInit)(exaHandle h,const char *backend);
   int (*backendFinalize)(exaHandle h);
+
+  int (*updateSettings)(exaSettings s);
 
   int (*vectorCreate)(exaVector x,exaInt size);
   int (*vectorFree)(exaVector x);

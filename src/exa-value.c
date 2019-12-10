@@ -43,43 +43,69 @@ int exaValueCreate(exaDataType t,void *ptr,exaValue *val_)
   return 0;
 }
 
-exaValue getExaInt(exaInt i){
+int exaValueEq(exaValue val1,exaValue val2)
+{
+  if(val1->type!=val2->type) return 0;
+
+  switch(val1->type){
+    case exaInt_t:
+      return val1->value.i==val2->value.i;
+    case exaUInt_t:
+      return val1->value.ui==val2->value.ui;
+    case exaLong_t:
+      return val1->value.l==val2->value.l;
+    case exaULong_t:
+      return val1->value.ul==val2->value.ul;
+    case exaScalar_t:
+      return fabs(val1->value.s-val2->value.s)<EXA_TOL;
+    case exaChar_t:
+      return val1->value.b==val2->value.b;
+    case exaStr_t:
+      return strcmp(val1->value.str,val2->value.str)==0;
+    default:
+      break;
+  }
+
+  return 0;
+}
+
+exaValue getExaInt(const exaInt i){
   exaValue v;
   exaValueCreate(exaInt_t,(void*)&i,&v);
   return v;
 }
 
-exaValue getExaUInt(exaUInt i){
+exaValue getExaUInt(const exaUInt i){
   exaValue v;
   exaValueCreate(exaUInt_t,(void*)&i,&v);
   return v;
 }
 
-exaValue getExaLong(exaLong i){
+exaValue getExaLong(const exaLong i){
   exaValue v;
   exaValueCreate(exaLong_t,(void*)&i,&v);
   return v;
 }
 
-exaValue getExaULong(exaULong i){
+exaValue getExaULong(const exaULong i){
   exaValue v;
   exaValueCreate(exaULong_t,(void*)&i,&v);
   return v;
 }
 
-exaValue getExaScalar(exaScalar i){
+exaValue getExaScalar(const exaScalar i){
   exaValue v;
   exaValueCreate(exaScalar_t,(void*)&i,&v);
   return v;
 }
 
-exaValue getExaChar(exaChar i){
+exaValue getExaChar(const exaChar i){
   exaValue v;
   exaValueCreate(exaChar_t,(void*)&i,&v);
   return v;
 }
 
-exaValue getExaStr(exaStr i){
+exaValue getExaStr(const char *i){
   exaValue v;
   exaValueCreate(exaStr_t,(void*)i,&v);
   return v;

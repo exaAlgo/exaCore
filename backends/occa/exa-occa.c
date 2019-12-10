@@ -63,6 +63,7 @@ int exaOccaInit(exaHandle h,const char *backend)
 
   // set call back functions for the backend
   h->backendFinalize=exaOccaFinalize;
+  h->updateSettings=exaOccaUpdateSettings;
   h->backendExt=exaOccaGetExt;
   h->vectorCreate=exaOccaVectorCreate;
   h->vectorFree=exaOccaVectorFree;
@@ -75,8 +76,12 @@ int exaOccaInit(exaHandle h,const char *backend)
   return 0;
 }
 
-int exaOccaBarrier(exaHandle h)
-{
+int exaOccaUpdateSettings(exaSettings s){
+  //exaSettingsSet("defines::blockSize",getExaUInt(256));
+  return 0;
+}
+
+int exaOccaBarrier(exaHandle h){
   exaOccaHandle oh;
   exaHandleGetData(h,(void**)&oh);
   occaDeviceFinish(oh->device);
@@ -103,4 +108,38 @@ static void Register(void){
   exaRegister(exaOccaInit,"/occa/gpu/cuda",10);
   exaRegister(exaOccaInit,"/occa/cpu",10);
   exaRegister(exaOccaInit,"/occa/openmp",10);
+}
+
+occaType exaValueToOccaType(exaValue v){
+  occaType t;
+  switch(v->type){
+    case exaInt_t:
+      t=occaInt(v->value.i);
+      break;
+    case exaUInt_t:
+      t=occaUInt(v->value.ui);
+      break;
+    case exaLong_t:
+      t=occaLong(v->value.l);
+      break;
+    case exaULong_t:
+      t=occaULong(v->value.ul);
+      break;
+    case exaScalar_t:
+      if(strcmp(exaScalarString,"double")==0)
+        t=occaDouble(v->value.s);
+      else
+        t=occaFloat(v->value.s);
+      break;
+    case exaChar_t:
+      t=occaChar(v->value.b);
+      break;
+    case exaStr_t:
+      t=occaString(v->value.str);
+      break;
+    default:
+      break;
+  }
+
+  return t;
 }
