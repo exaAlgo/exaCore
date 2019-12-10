@@ -169,11 +169,12 @@ int exaSettingsInit(exaHandle h,const char *fname,
 int exaSettingsFree(exaSettings settings);
 int exaSettingsGetHandle(exaSettings s,exaHandle *h);
 exaValue exaSettingsGet(const char *settingName,exaSettings s);
-const char *exaSettingsIterateKeys(const char *startsWith,
+int exaSettingsGetNative(void *out,const char *settingName,
   exaSettings s);
 int exaSettingsSet(const char *settingName,exaValue value,
   exaSettings s);
-int exaValueEq(exaValue val1,exaValue val2);
+const char *exaSettingsIterateKeys(const char *startsWith,
+  exaSettings s);
 //
 // exaBuffer:
 //
@@ -211,7 +212,9 @@ int exaProgramFree(exaProgram p);
 //
 // exaValue
 //
-int      exaValueCreate(exaDataType t,void *value,exaValue *v);
+int exaValueCreate(exaDataType t,void *value,exaValue *v);
+int exaValueGetNative(void *out,exaValue v);
+int exaValueEq(exaValue val1,exaValue val2);
 //TODO change arguments to standard c types
 exaValue getExaInt   (const exaInt    i);
 exaValue getExaUInt  (const exaUInt   i);

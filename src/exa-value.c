@@ -43,6 +43,37 @@ int exaValueCreate(exaDataType t,void *ptr,exaValue *val_)
   return 0;
 }
 
+int exaValueGetNative(void *p,exaValue val){
+  //TODO: Check if this is redundant
+  switch(val->type){
+    case exaInt_t:
+      *(exaInt*)p=val->value.i;
+      break;
+    case exaUInt_t:
+      *(exaUInt*)p=val->value.ui;
+      break;
+    case exaLong_t:
+      *(exaLong*)p=val->value.l;
+      break;
+    case exaULong_t:
+      *(exaULong*)p=val->value.ul;
+      break;
+    case exaScalar_t:
+      *(exaScalar*)p=val->value.s;
+      break;
+    case exaChar_t:
+      *(exaChar*)p=val->value.b;
+      break;
+    case exaStr_t:
+      *(void**)p=(void *)val->value.str;
+      break;
+    default:
+      break;
+  }
+
+  return 0;
+}
+
 int exaValueEq(exaValue val1,exaValue val2)
 {
   if(val1->type!=val2->type) return 0;

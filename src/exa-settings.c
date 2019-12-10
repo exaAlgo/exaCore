@@ -56,6 +56,12 @@ exaValue exaSettingsGet(const char *settingName,exaSettings s)
   else return NULL;
 }
 
+int exaSettingsGetNative(void *out,const char *key,exaSettings s){
+  exaValue v=exaSettingsGet(key,s);
+  exaValueGetNative(out,v);
+  return 0;
+}
+
 const char *exaSettingsIterateKeys(const char *startsWith,
   exaSettings s)
 {
