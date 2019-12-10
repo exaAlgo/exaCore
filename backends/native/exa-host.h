@@ -12,6 +12,10 @@ const char *exaHostGetExt();
 int exaHostInit(exaHandle h,const char *backend);
 int exaHostFinalize(exaHandle h);
 //
+// Update settings
+//
+int exaHostUpdateSettings(exaSettings s);
+//
 // Create an Host vector
 //
 int exaHostVectorCreate(exaVector x,exaInt size);

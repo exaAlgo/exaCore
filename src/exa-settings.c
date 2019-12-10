@@ -21,10 +21,12 @@ int exaSettingsInit(exaHandle h,const char *fname,
   exaSettingsSet("defines::exaUInt"  ,getExaStr(exaUIntString  ),s);
   exaSettingsSet("defines::exaScalar",getExaStr(exaScalarString),s);
 
+  // get backend specific settings
+  h->updateSettings(s);
+
   // TODO: read settings from file: fname
 
   s->info.type=exaSettingsType;
-
   s->h=h;
 
   return 0;

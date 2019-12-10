@@ -10,6 +10,7 @@ int exaHostInit(exaHandle h,const char *backend)
   // set call back functions for the backend
   h->backendFinalize=exaHostFinalize;
   h->backendExt=exaHostGetExt;
+  h->updateSettings=exaHostUpdateSettings;
   h->vectorCreate=exaHostVectorCreate;
   h->vectorFree=exaHostVectorFree;
   h->programCreate=exaHostProgramCreate;
@@ -21,6 +22,10 @@ int exaHostInit(exaHandle h,const char *backend)
   return 0;
 }
 int exaHostFinalize(exaHandle h){ return 0; }
+//
+// exaSettings
+//
+int exaHostUpdateSettings(exaSettings s){ return 0; }
 //
 // Create an Host program
 //
