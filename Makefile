@@ -30,7 +30,6 @@ OCCA_DIR ?= $(HOME)/local/occa
 ### Meta info about the package ###
 SRCDIR      = src
 BUILDDIR    = build
-DEPDIR      = .deps
 EXAMPLESDIR = examples
 TESTSDIR    = tests
 

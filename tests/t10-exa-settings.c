@@ -15,17 +15,14 @@ int main(int argc,char *argv[])
 
   exaSettings s; exaSettingsInit(h,NULL,&s);
 
-  const char *backend=exaSettingsGet("backend:name",s);
-  if(strcmp(backend,argv[1])!=0)
+  const char *backend=exaSettingsGet("backend::name",s);
+  if(backend==NULL || strcmp(backend,argv[1])!=0)
     fprintf(stderr,"exaSettingsGet failed: %s != %s\n",
       backend,argv[1]);
-  if(strcmp(backend,"/invalid/backend")==0)
-    fprintf(stderr,"exaSettingsGet failed: %s == %s\n",backend,
-      "/occa/cpu");
 
   exaSettingsSet("debug","off",s);
   const char *debug=exaSettingsGet("debug",s);
-  if(strcmp(debug,"off")!=0)
+  if(debug==NULL || strcmp(debug,"off")!=0)
     fprintf(stderr,"exaSettingsGetSetting failed: %s != off\n",debug);
 
   exaDestroy(s);

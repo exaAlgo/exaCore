@@ -43,7 +43,32 @@ const char *exaSettingsGet(const char *settingName,exaSettings s)
     if(strcmp(ptr[i].key,settingName)==0) break;
 
   if(i<size) return ptr[i].value;
-  else return "\0";
+  else return NULL;
+}
+
+const char *exaSettingsIterateKeys(const char *startsWith,
+  exaSettings s)
+{
+  static exaInt count=0;
+  static int initialized=0;
+  static const char *prefix;
+
+  // initialize if startsWith not null
+  if(startsWith!=NULL){
+    initialized=1; count=0;
+    prefix=startsWith;
+  }
+
+  exaInt size=exaArrayGetSize(s->settings);
+  exaSetting *ptr=exaArrayGetPointer(s->settings);
+
+  if(initialized)
+    for(;count<size;count++)
+      if(strncmp(ptr[count].key,prefix,strlen(prefix))==0) break;
+
+  if(initialized && count<size)
+    return ptr[count++].key;
+  return  NULL;
 }
 
 int exaSettingsSet(const char *settingName,const char *value,

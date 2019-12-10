@@ -167,6 +167,8 @@ int exaSettingsInit(exaHandle h,const char *fname,
   exaSettings *settings);
 int exaSettingsFree(exaSettings settings);
 const char *exaSettingsGet(const char *settingName,exaSettings s);
+const char *exaSettingsIterateKeys(const char *startsWith,
+  exaSettings s);
 int exaSettingsSet(const char *settingName,const char *value,
   exaSettings s);
 //

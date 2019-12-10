@@ -1,8 +1,6 @@
 src.c = $(wildcard $(SRCDIR)/*.c)
 obj  += $(patsubst $(SRCDIR)/%.c,$(BUILDDIR)/%.c.o,$(src.c))
 
-deps = $(patsubst $(BUILDDIR)/%.o,$(DEPDIR)/%.d,$(obj))
-
 example.src     = $(wildcard $(EXAMPLESDIR)/*.c)
 example.obj     = $(patsubst $(EXAMPLESDIR)/%.c,$(BUILDDIR)/examples/%,$(example.src))
 example.ldflags = -L$(BUILDDIR) -l$(libname) $(LDFLAGS)
@@ -40,11 +38,6 @@ install-base: lib-base
 	@mkdir -p $(DESTDIR)$(PREFIX)/lib
 	@cp -u $(BUILDDIR)/$(prefix)$(libname).$(ext) $(DESTDIR)$(PREFIX)/lib/
 
-$(DEPDIR)/%.d: $(SRCDIR)/%.c
-	@$(CPP) $(CFLAGS) $(incflags) $< -MM -MT $(@:$(DEPDIR)/%.d=$(BUILDDIR)/%.deps) >$@
-
--include $(deps)
-
 $(BUILDDIR)/%.c.o: $(SRCDIR)/%.c
 	$(compile.c) -c $< -o $@
 
@@ -62,13 +55,12 @@ $(BUILDDIR)/tests/%: $(TESTSDIR)/%.c
 
 .PHONY: clean
 clean:
-	@rm -rf $(BUILDDIR) $(DEPDIR)
+	@rm -rf $(BUILDDIR)
 
 .PHONY: print
 print :
 	@echo $(VAR)=$($(VAR))
 
-$(shell mkdir -p $(DEPDIR))
 $(shell mkdir -p $(BUILDDIR))
 $(shell mkdir -p $(BUILDDIR)/$(EXAMPLESDIR))
 $(shell mkdir -p $(BUILDDIR)/$(TESTSDIR))
