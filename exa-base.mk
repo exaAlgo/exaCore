@@ -1,6 +1,12 @@
 src.c = $(wildcard $(SRCDIR)/*.c)
 obj  += $(patsubst $(SRCDIR)/%.c,$(BUILDDIR)/%.c.o,$(src.c))
 
+native.dir       = backends/native
+native.src       = $(wildcard $(native.dir)/*.c)
+native.obj       = $(patsubst $(native.dir)/%.c,$(BUILDDIR)/$(native.dir)/%.c.o,$(native.src))
+native.incflags += -I$(native.dir)
+obj             += $(native.obj)
+
 example.src     = $(wildcard $(EXAMPLESDIR)/*.c)
 example.obj     = $(patsubst $(EXAMPLESDIR)/%.c,$(BUILDDIR)/examples/%,$(example.src))
 example.ldflags = -L$(BUILDDIR) -l$(libname) $(LDFLAGS)
@@ -40,6 +46,9 @@ install-base: lib-base
 
 $(BUILDDIR)/%.c.o: $(SRCDIR)/%.c
 	$(compile.c) -c $< -o $@
+
+$(BUILDDIR)/$(native.dir)/%.c.o: $(native.dir)/%.c
+	$(compile.c) $(native.incflags) -c $< -o $@
 
 .PHONY: examples-base
 examples-base: lib $(example.obj)

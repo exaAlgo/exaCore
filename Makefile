@@ -18,10 +18,8 @@ PREFIX ?= $(HOME)/local/exa
 GSDIR ?=
 
 ### Backends ###
-# exa native backend based on loopy and OpenCl
-NATIVE ?= 1
-OPENCL_INCDIR ?= /usr/include
-OPENCL_LIBDIR ?= /usr/lib/x86_64-linux-gnu
+# Exa backend based on loopy
+LOOPY ?= 0
 
 # OCCA Backend
 OCCA ?= 1
@@ -41,19 +39,18 @@ obj      =
 ### Backends ###
 # Backend = codegen + tuning + dispatch
 # TODO:
-# 1. exa backend based on loopy + opencl
-native.dir       = backends/native
-native.src       = $(wildcard $(native.dir)/*.c)
-native.obj       = $(patsubst $(native.dir)/%.c,$(BUILDDIR)/$(native.dir)/%.o,$(native.src))
-native.incflags += -I$(native.dir) -I$(OPENCL_INCDIR)
+# 1. loopy backend with CUDA and OpenCL dispatch
+loopy.dir       = backends/loopy
+loopy.src       = $(wildcard $(loopy.dir)/*.c)
+loopy.obj       = $(patsubst $(loopy.dir)/%.c,$(BUILDDIR)/$(loopy.dir)/%.o,$(loopy.src))
+loopy.incflags += -I$(loopy.dir)
 
-ifneq ($(NATIVE),0)
-  LDFLAGS += -L$(OPENCL_LIBDIR) -lOpenCL
-  obj     += $(native.obj)
+ifneq ($(LOOPY),0)
+  obj     += $(loopy.obj)
 endif
 
-$(BUILDDIR)/$(native.dir)/%.o: $(native.dir)/%.c
-	$(compile.c) $(native.incflags) -c $< -o $@
+$(BUILDDIR)/$(loopy.dir)/%.o: $(loopy.dir)/%.c
+	$(compile.c) $(loopy.incflags) -c $< -o $@
 
 # 2. occa backend (third party)
 occa.dir       = backends/occa
