@@ -51,13 +51,13 @@ $(BUILDDIR)/$(native.dir)/%.c.o: $(native.dir)/%.c
 	$(compile.c) $(native.incflags) -c $< -o $@
 
 .PHONY: examples-base
-examples-base: lib $(example.obj)
+examples-base: install-base $(example.obj)
 
 $(BUILDDIR)/examples/%: $(EXAMPLESDIR)/%.c
 	$(compile.c) $< -o $@ $(example.ldflags)
 
 .PHONY: tests-base
-tests-base: lib $(test.obj)
+tests-base: install-base $(test.obj)
 
 $(BUILDDIR)/tests/%: $(TESTSDIR)/%.c
 	$(compile.c) $< -o $@ $(example.ldflags)
