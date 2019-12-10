@@ -50,7 +50,8 @@ typedef enum {
   exaLong_t  =2,
   exaULong_t =3,
   exaScalar_t=4,
-  exaChar_t  =5
+  exaChar_t  =5,
+  exaStr_t   =6
 } exaDataType;
 
 void         exaDataTypeGetMin    (exaDataType t,void *out);
@@ -209,12 +210,14 @@ int exaProgramFree(exaProgram p);
 // exaValue
 //
 int      exaValueCreate(exaDataType t,void *value,exaValue *v);
+//TODO change arguments to standard c types
 exaValue getExaInt   (exaInt    i);
 exaValue getExaUInt  (exaUInt   i);
 exaValue getExaLong  (exaLong   i);
 exaValue getExaULong (exaULong  i);
 exaValue getExaScalar(exaScalar i);
-exaValue getExaByte  (exaByte   i);
+exaValue getExaChar  (exaChar   i);
+exaValue getExaStr   (exaStr    i);
 int exaValueFree(exaValue v);
 //
 // exaKernel: wraps a kernel

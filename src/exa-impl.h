@@ -26,7 +26,8 @@ struct exaValue_private{
     exaLong l;
     exaULong ul;
     exaScalar s;
-    exaByte b;
+    exaChar b;
+    exaStr str;
   } value;
 };
 //

@@ -1,5 +1,8 @@
 #include "exa-impl.h"
 #include "exa-memory.h"
+
+#include <string.h>
+
 //
 // exaValue
 //
@@ -27,7 +30,11 @@ int exaValueCreate(exaDataType t,void *ptr,exaValue *val_)
       val->value.s=*((exaScalar *)ptr);
       break;
     case exaChar_t:
-      val->value.b=*((exaByte *)ptr);
+      val->value.b=*((exaChar *)ptr);
+      break;
+    case exaStr_t:
+      exaCalloc(strlen((exaStr)ptr)+1,&val->value.str);
+      strcpy(val->value.str,(exaStr)ptr);
       break;
     default:
       break;
@@ -66,9 +73,15 @@ exaValue getExaScalar(exaScalar i){
   return v;
 }
 
-exaValue getExaByte(exaByte i){
+exaValue getExaChar(exaChar i){
   exaValue v;
   exaValueCreate(exaChar_t,(void*)&i,&v);
+  return v;
+}
+
+exaValue getExaStr(exaStr i){
+  exaValue v;
+  exaValueCreate(exaStr_t,(void*)i,&v);
   return v;
 }
 

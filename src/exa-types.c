@@ -22,7 +22,7 @@ size_t exaDataTypeGetSize(exaDataType t)
       size=sizeof(exaScalar);
       break;
     case exaChar_t:
-      size=sizeof(exaByte);
+      size=sizeof(exaChar);
       break;
     default:
       break;
@@ -74,7 +74,7 @@ MPI_Datatype exaDataTypeGetMPIType(exaDataType t)
       out=exaScalarMPIType;
       break;
     case exaChar_t:
-      out=exaByteMPIType;
+      out=exaCharMPIType;
       break;
     default:
       break;

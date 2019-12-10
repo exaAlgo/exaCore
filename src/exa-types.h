@@ -50,9 +50,15 @@ typedef double exaScalar;
 #define exaScalarGSType gs_double
 #define exaScalarGSSortType 3
 
-typedef char exaByte;
-#define exaByteMPIType MPI_BYTE
+typedef char exaChar;
+#define exaCharString "char"
+#define exaCharMPIType MPI_BYTE
 
+typedef char *exaStr;
+#define exaStrString "char *"
+#define exaCharMPIType MPI_BYTE
+
+/* Following are not valid for Byte and Str types */
 #define exaTypeGetMax(T) T##MAX
 #define exaTypeGetMin(T) T##MIN
 #define exaTypeGetMPIType(T) T##MPIType
