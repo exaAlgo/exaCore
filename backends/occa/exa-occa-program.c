@@ -4,7 +4,7 @@
 // Create an Occa program
 //
 int exaOccaProgramCreate(exaProgram p,const char *fname,
-  exaSettings kernelSettings)
+  exaSettings s)
 {
   exaHandle h;
   exaOccaHandle oh;
@@ -14,8 +14,25 @@ int exaOccaProgramCreate(exaProgram p,const char *fname,
   exaOccaProgram op;
   exaCalloc(1,&op);
 
-  // TODO: converts settings to props
   op->props=occaCreateProperties();
+
+  char str[BUFSIZ];
+  const char *format="defines/%s";
+  const char *defines="defines::";
+
+  const char *val;
+  const char *key=exaSettingsIterateKeys(defines,s);
+  while(key!=NULL){
+    val=exaSettingsGet(key,s);
+
+    snprintf(str,BUFSIZ,format,key+strlen(defines));
+    occaPropertiesSet(op->props,str,occaString(val));
+
+    // TODO support Ints,Longs,Scalars
+    exaDebug(h,"key:%s val:%s\n",str,val);
+
+    key=exaSettingsIterateKeys(NULL,s);
+  }
 
   const char *ext=exaOccaGetExt();
   exaMalloc(strlen(fname)+1+strlen(ext),&op->fileName);
