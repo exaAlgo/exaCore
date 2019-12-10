@@ -46,7 +46,7 @@ occaType exaValueToOccaType(exaValue v){
       else
         t=occaFloat(v->value.s);
       break;
-    case exaByte_t:
+    case exaChar_t:
       t=occaChar(v->value.b);
       break;
     default:

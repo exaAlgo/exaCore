@@ -50,7 +50,7 @@ typedef enum {
   exaLong_t  =2,
   exaULong_t =3,
   exaScalar_t=4,
-  exaByte_t  =5
+  exaChar_t  =5
 } exaDataType;
 
 void         exaDataTypeGetMin    (exaDataType t,void *out);

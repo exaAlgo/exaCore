@@ -41,7 +41,7 @@ int exaOpenCLProgramCreate(exaProgram p,const char *fname,
     fclose(fp);
     assert(read==size);
   }
-  exaBcast(h,oclp->source,(size+1)*sizeof(char),exaByte_t);
+  exaBcast(h,oclp->source,(size+1)*sizeof(char),exaChar_t);
 
   cl_int err;
   oclp->program=clCreateProgramWithSource(oclh->context,1,

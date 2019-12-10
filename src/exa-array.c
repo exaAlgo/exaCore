@@ -95,7 +95,7 @@ int exaArrayBcast(exaComm c,exaInt source,exaArray arr){
   if(rank!=source) exaArrayResize(arr,size);
 
   size_t unitSize=exaArrayGetUnitSize(arr);
-  exaCommBcast(c,exaArrayGetPointer(arr),size*unitSize,exaByte_t,source);
+  exaCommBcast(c,exaArrayGetPointer(arr),size*unitSize,exaChar_t,source);
   exaArraySetSize(arr,size);
 }
 //

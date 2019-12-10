@@ -26,7 +26,7 @@ int exaValueCreate(exaDataType t,void *ptr,exaValue *val_)
     case exaScalar_t:
       val->value.s=*((exaScalar *)ptr);
       break;
-    case exaByte_t:
+    case exaChar_t:
       val->value.b=*((exaByte *)ptr);
       break;
     default:
@@ -68,7 +68,7 @@ exaValue getExaScalar(exaScalar i){
 
 exaValue getExaByte(exaByte i){
   exaValue v;
-  exaValueCreate(exaByte_t,(void*)&i,&v);
+  exaValueCreate(exaChar_t,(void*)&i,&v);
   return v;
 }
 
