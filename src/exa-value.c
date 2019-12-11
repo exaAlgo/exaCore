@@ -44,6 +44,8 @@ int exaValueCreate(exaDataType t,void *ptr,exaValue *val_)
 }
 
 int exaValueGetNative(void *p,exaValue val){
+  if(val==NULL) return 1;
+
   //TODO: Check if this is redundant
   switch(val->type){
     case exaInt_t:

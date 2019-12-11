@@ -27,7 +27,8 @@ int exaOccaProgramCreate(exaProgram p,const char *fname,
     exaDebug(h,"exa key: %s occa key: %s\n",key,str);
 
     val=exaSettingsGet(key,s);
-    occaPropertiesSet(op->props,str,exaValueToOccaType(val));
+    if(val!=NULL)
+      occaPropertiesSet(op->props,str,exaValueToOccaType(val));
 
     key=exaSettingsIterateKeys(NULL,s);
   }
