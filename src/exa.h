@@ -168,8 +168,8 @@ int exaSettingsInit(exaHandle h,const char *fname,
   exaSettings *settings);
 int exaSettingsFree(exaSettings settings);
 int exaSettingsGetHandle(exaSettings s,exaHandle *h);
-exaValue exaSettingsGet(const char *settingName,exaSettings s);
-int exaSettingsGetNative(void *out,const char *settingName,
+exaValue exaSettingsGetValue(const char *settingName,exaSettings s);
+int exaSettingsGet(void *out,const char *settingName,
   exaSettings s);
 int exaSettingsSet(const char *settingName,exaValue value,
   exaSettings s);

@@ -43,7 +43,7 @@ int exaSettingsFree(exaSettings settings){
   return 0;
 }
 
-exaValue exaSettingsGet(const char *settingName,exaSettings s)
+exaValue exaSettingsGetValue(const char *settingName,exaSettings s)
 {
   exaInt size=exaArrayGetSize(s->settings);
   exaSetting *ptr=exaArrayGetPointer(s->settings);
@@ -56,8 +56,8 @@ exaValue exaSettingsGet(const char *settingName,exaSettings s)
   else return NULL;
 }
 
-int exaSettingsGetNative(void *out,const char *key,exaSettings s){
-  exaValue v=exaSettingsGet(key,s);
+int exaSettingsGet(void *out,const char *key,exaSettings s){
+  exaValue v=exaSettingsGetValue(key,s);
   int err=exaValueGetNative(out,v);
   return err;
 }

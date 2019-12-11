@@ -15,15 +15,15 @@ int main(int argc,char *argv[])
 
   exaSettings s; exaSettingsInit(h,NULL,&s);
 
-  char *backend; exaSettingsGetNative(&backend,"backend::name",s);
-  if(backend==NULL || strcmp(backend,argv[1])!=0)
+  exaValue backend=exaSettingsGetValue("backend::name",s);
+  if(backend==NULL || !exaValueEq(backend,getExaStr(argv[1])))
     fprintf(stderr,"exaSettingsGet failed: backend::name != %s\n",
       argv[1]);
 
-  exaSettingsSet("order",getExaUInt(10),s);
-  exaUInt order; exaSettingsGetNative(&order,"order",s);
-  if(order!=10)
-    fprintf(stderr,"exaSettingsGetSetting failed: order != 20\n");
+  exaSettingsSet("debug",getExaStr("off"),s);
+  exaValue debug=exaSettingsGetValue("debug",s);
+  if(debug==NULL || !exaValueEq(debug,getExaStr("off")))
+    fprintf(stderr,"exaSettingsGetSetting failed: debug != off\n");
 
   exaDestroy(s);
   exaFinalize(h);
