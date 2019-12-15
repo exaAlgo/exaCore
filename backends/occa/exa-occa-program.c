@@ -34,7 +34,7 @@ int exaOccaProgramCreate(exaProgram p,const char *fname,
   }
 
   const char *ext=exaOccaGetExt();
-  exaMalloc(strlen(fname)+1+strlen(ext),&op->fileName);
+  exaCalloc(strlen(fname)+1+strlen(ext)+1,&op->fileName);
   strcpy(op->fileName                  ,fname);
   strcpy(op->fileName+strlen(fname)    ,"."  );
   strcpy(op->fileName+strlen(fname)+1  ,ext  );
