@@ -77,7 +77,7 @@ int exaOccaInit(exaHandle h,const char *backend)
 }
 
 int exaOccaUpdateSettings(exaSettings s){
-  exaSettingsSet("defines::p_blockSize",getExaUInt(64),s);
+  exaSettingsSet("defines::p_blockSize",getExaUInt(256),s);
   return 0;
 }
 
