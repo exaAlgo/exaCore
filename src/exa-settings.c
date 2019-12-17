@@ -21,6 +21,25 @@ int exaSettingsInit(exaHandle h,const char *fname,
   exaSettingsSet("defines::exaUInt"  ,getExaStr(exaUIntString  ),s);
   exaSettingsSet("defines::exaScalar",getExaStr(exaScalarString),s);
 
+  if(exaGetDebug(h)){
+    exaSettingsSet("debug::device" ,getExaStr("on"),s);
+    exaSettingsSet("debug::vector" ,getExaStr("on"),s);
+    exaSettingsSet("debug::program",getExaStr("on"),s);
+    exaSettingsSet("debug::kernel" ,getExaStr("on"),s);
+  }
+
+  char installDir[BUFSIZ];
+  char *ret=getenv("EXA_DIR");
+  if(ret==NULL){
+    const char *home=getenv("HOME");
+    const char *suffix="/local/exa/";
+    strcpy(installDir,home);
+    strcpy(installDir+strlen(home),suffix);
+  } else
+    strcpy(installDir,ret);
+  exaDebug(h,"exaCore install dir=%s\n",installDir);
+  exaSettingsSet("exa::install_dir",getExaStr(installDir),s);
+
   // get backend specific settings
   h->updateSettings(s);
 
