@@ -149,9 +149,9 @@ struct exaBuffer_private{
   buffer buf;
 };
 //
-// exaTopology
+// exaGS
 //
-struct exaTopology_private{
+struct exaGS_private{
   struct exaTypeInfo_private info;
 
   struct gs_data *topology;

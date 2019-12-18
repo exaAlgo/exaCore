@@ -139,8 +139,8 @@ int exaDestroy(void *p){
     case exaBufferType:
       exaBufferFree(p);
       break;
-    case exaTopologyType:
-      exaTopologyFree(p);
+    case exaGSType:
+      exaGSFree(p);
       break;
     default:
       break;

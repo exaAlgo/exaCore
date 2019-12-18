@@ -72,7 +72,7 @@ typedef enum {
   exaKernelType   = 7,
   exaArrayType    = 8,
   exaBufferType   = 9,
-  exaTopologyType =10
+  exaGSType       =10
 } exaType;
 
 typedef struct exaTypeInfo_private *exaTypeInfo;
@@ -85,7 +85,7 @@ typedef struct exaProgram_private *exaProgram;
 typedef struct exaKernel_private *exaKernel;
 typedef struct exaArray_private *exaArray;
 typedef struct exaBuffer_private *exaBuffer;
-typedef struct exaTopology_private *exaTopology;
+typedef struct exaGS_private *exaGS;
 //
 // exaCommExternal
 //
@@ -180,13 +180,13 @@ const char *exaSettingsIterateKeys(const char *startsWith,
 int exaBufferCreate(exaBuffer *buf,size_t size);
 int exaBufferFree(exaBuffer buf);
 //
-// exaTopology: gs topology setup and gs_op
+// exaGS: gs topology setup and gs_op
 //
-int exaTopologySetup(exaLong *ids,exaUInt n,exaComm c,int unique,
-  int verbose,exaTopology *t);
-int exaTopologyOp(void *v,exaDataType T,exaOp op,unsigned transpose,
-  exaTopology t,exaBuffer buf);
-int exaTopologyFree(exaTopology t);
+int exaGSSetup(exaLong *ids,exaUInt n,exaComm c,int unique,
+  int verbose,exaGS *t);
+int exaGSOp(void *v,exaDataType T,exaOp op,unsigned transpose,
+  exaGS t,exaBuffer buf);
+int exaGSFree(exaGS t);
 //
 // exaVector: wraps a vector. Currently just a host vector.
 //
