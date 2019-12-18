@@ -25,7 +25,7 @@ int main(int argc,char *argv[])
   exaKernel k;
   exaKernelCreate(p,"setVector",&k);
 
-  exaVector vec; exaVectorCreate(h,M,&vec);
+  exaVector vec; exaVectorCreate(h,M,exaScalar_t,&vec);
   exaKernelRun(k,getExaInt(M),getExaScalar(0.5),vec);
 
   exaScalar *out; exaCalloc(M,&out);

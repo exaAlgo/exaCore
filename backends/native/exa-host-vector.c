@@ -3,7 +3,7 @@
 //
 // Create an Host vector
 //
-int exaHostVectorCreate(exaVector x,exaInt size)
+int exaHostVectorCreate(exaVector x,exaUInt size)
 {
   exaHandle h;
   exaVectorGetHandle(x,&h);
@@ -20,7 +20,9 @@ int exaHostVectorCreate(exaVector x,exaInt size)
   return 0;
 }
 
-int exaHostVectorGetDevicePointer(exaVector x,void **ptr,size_t *size){
+int exaHostVectorGetDevicePointer(exaVector x,void **ptr,
+  size_t *size)
+{
   exaScalar *data;
   exaVectorGetData(x,(void**)&data);
 
@@ -28,7 +30,7 @@ int exaHostVectorGetDevicePointer(exaVector x,void **ptr,size_t *size){
   *size=sizeof(exaScalar);
 }
 
-int exaHostVectorRead(exaVector x,exaScalar *out){
+int exaHostVectorRead(exaVector x,void *out){
   exaHandle h;
   exaVectorGetHandle(x,&h);
 
@@ -41,7 +43,7 @@ int exaHostVectorRead(exaVector x,exaScalar *out){
   return 0;
 }
 
-int exaHostVectorWrite(exaVector x,exaScalar *in){
+int exaHostVectorWrite(exaVector x,void *in){
   exaHandle h;
   exaVectorGetHandle(x,&h);
 

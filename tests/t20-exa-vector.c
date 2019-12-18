@@ -18,7 +18,7 @@ int main(int argc,char *argv[])
   exaInit(&h,MPI_COMM_WORLD,argv[1]);
 
   exaVector vec;
-  exaVectorCreate(h,M,&vec);
+  exaVectorCreate(h,M,exaScalar_t,&vec);
 
   if(M!=exaVectorGetSize(vec))
     fprintf(stderr,"exaVectorGetSize failed: %d != %d\n",M,exaVectorGetSize(vec));

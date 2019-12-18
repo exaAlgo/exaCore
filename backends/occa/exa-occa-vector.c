@@ -2,7 +2,7 @@
 //
 // Create an Occa vector
 //
-int exaOccaVectorCreate(exaVector x,exaInt size)
+int exaOccaVectorCreate(exaVector x,exaUInt size)
 {
   exaHandle h; exaOccaHandle oh;
   exaVectorGetHandle(x,&h);
@@ -13,14 +13,15 @@ int exaOccaVectorCreate(exaVector x,exaInt size)
   x->vectorWrite=exaOccaVectorWrite;
 
   exaOccaVector vec; exaMalloc(1,&vec);
-  vec->vector=occaDeviceMalloc(oh->device,size*sizeof(exaScalar),
-    NULL,occaDefault);
+  vec->vector=occaDeviceMalloc(oh->device,size,NULL,occaDefault);
   exaVectorSetData(x,(void**)&vec);
 
   return 0;
 }
 
-int exaOccaVectorGetDevicePointer(exaVector x,void **ptr,size_t *size){
+int exaOccaVectorGetDevicePointer(exaVector x,void **ptr,
+  size_t *size)
+{
   exaOccaVector vec;
   exaVectorGetData(x,(void**)&vec);
 
@@ -28,7 +29,7 @@ int exaOccaVectorGetDevicePointer(exaVector x,void **ptr,size_t *size){
   *size=sizeof(occaMemory);
 }
 
-int exaOccaVectorRead(exaVector x,exaScalar *out){
+int exaOccaVectorRead(exaVector x,void *out){
   exaHandle h;
   exaVectorGetHandle(x,&h);
   exaOccaHandle oh;
@@ -37,13 +38,13 @@ int exaOccaVectorRead(exaVector x,exaScalar *out){
   exaVectorGetData(x,(void**)&ov);
 
   exaInt size=exaVectorGetSize(x);
-  occaCopyMemToPtr(out,ov->vector,size*sizeof(exaScalar),0,
-    occaDefault);
+  size_t unitSize=exaVectorGetUnitSize(x);
+  occaCopyMemToPtr(out,ov->vector,size*unitSize,0,occaDefault);
 
   return 0;
 }
 
-int exaOccaVectorWrite(exaVector x,exaScalar *in){
+int exaOccaVectorWrite(exaVector x,void *in){
   exaHandle h;
   exaVectorGetHandle(x,&h);
   exaOccaHandle oh;
@@ -52,8 +53,8 @@ int exaOccaVectorWrite(exaVector x,exaScalar *in){
   exaVectorGetData(x,(void**)&ov);
 
   exaInt size=exaVectorGetSize(x);
-  occaCopyPtrToMem(ov->vector,in,size*sizeof(exaScalar),0,
-    occaDefault);
+  size_t unitSize=exaVectorGetUnitSize(x);
+  occaCopyPtrToMem(ov->vector,in,size*unitSize,0,occaDefault);
 
   return 0;
 }

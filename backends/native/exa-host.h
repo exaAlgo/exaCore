@@ -18,11 +18,12 @@ int exaHostUpdateSettings(exaSettings s);
 //
 // Create an Host vector
 //
-int exaHostVectorCreate(exaVector x,exaInt size);
+int exaHostVectorCreate(exaVector x,exaUInt size);
 int exaHostVectorFree(exaVector x);
-int exaHostVectorGetDevicePointer(exaVector x,void **ptr,size_t *size);
-int exaHostVectorRead(exaVector x ,exaScalar *out);
-int exaHostVectorWrite(exaVector x,exaScalar *in);
+int exaHostVectorGetDevicePointer(exaVector x,void **ptr,
+  size_t *size);
+int exaHostVectorRead (exaVector x,void *out);
+int exaHostVectorWrite(exaVector x,void *in);
 //
 // Create an Host program
 //

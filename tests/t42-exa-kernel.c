@@ -26,9 +26,9 @@ int main(int argc,char *argv[])
   exaKernelCreate(p,"addVectors",&k);
 
   exaVector vecIn1,vecIn2,vecOut;
-  exaVectorCreate(h,M,&vecIn1);
-  exaVectorCreate(h,M,&vecIn2);
-  exaVectorCreate(h,M,&vecOut);
+  exaVectorCreate(h,M,exaScalar_t,&vecIn1);
+  exaVectorCreate(h,M,exaScalar_t,&vecIn2);
+  exaVectorCreate(h,M,exaScalar_t,&vecOut);
 
   exaScalar *in1,*in2,*out;
   exaCalloc(M,&in1); exaCalloc(M,&in2); exaCalloc(M,&out);

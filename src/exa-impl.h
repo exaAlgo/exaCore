@@ -74,7 +74,7 @@ struct exaHandle_private{
 
   int (*updateSettings)(exaSettings s);
 
-  int (*vectorCreate)(exaVector x,exaInt size);
+  int (*vectorCreate)(exaVector x,exaUInt size);
   int (*vectorFree)(exaVector x);
 
   int (*programCreate)(exaProgram p,const char *fname,
@@ -100,11 +100,12 @@ struct exaVector_private{
 
   exaHandle handle;
   exaInt size;
+  size_t unitSize;
   void *data;
 
   int (*getDevicePointer)(exaVector x,void **ptr,size_t *size);
-  int (*vectorWrite)(exaVector x,exaScalar *in);
-  int (*vectorRead)(exaVector x,exaScalar *out);
+  int (*vectorWrite)(exaVector x,void *in);
+  int (*vectorRead )(exaVector x,void *out);
 };
 //
 // exaProgram

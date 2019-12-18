@@ -23,12 +23,12 @@ int exaOccaUpdateSettings(exaSettings s);
 //
 // Create an Occa vector
 //
-int exaOccaVectorCreate(exaVector x,exaInt size);
+int exaOccaVectorCreate(exaVector x,exaUInt size);
 int exaOccaVectorFree(exaVector x);
 int exaOccaVectorGetDevicePointer(exaVector x,void **ptr,
   size_t *size);
-int exaOccaVectorRead(exaVector x ,exaScalar *out);
-int exaOccaVectorWrite(exaVector x,exaScalar *in);
+int exaOccaVectorRead(exaVector x ,void *out);
+int exaOccaVectorWrite(exaVector x,void *in);
 //
 // Create an Occa program
 //

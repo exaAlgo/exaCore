@@ -103,7 +103,6 @@ int    exaCallocArray (size_t n,size_t unit,void **p);
 int    exaReallocArray(size_t n,size_t unit,void **p);
 int    exaFree        (void *p);
 int    exaDestroy     (void *p);
-size_t exaSizeOf      (void *p);
 //
 // exaHandle: wraps an exaComm, buffer and other options
 //
@@ -191,11 +190,13 @@ int exaTopologyFree(exaTopology t);
 //
 // exaVector: wraps a vector. Currently just a host vector.
 //
-int exaVectorCreate(exaHandle h,exaInt size,exaVector *x);
+int exaVectorCreate(exaHandle h,exaInt size,exaDataType t,
+  exaVector *x);
 int exaVectorGetHandle(exaVector x,exaHandle *h);
 int exaVectorSetData(exaVector x,void **data);
 int exaVectorGetData(exaVector x,void **data);
 exaInt exaVectorGetSize(exaVector x);
+size_t exaVectorGetUnitSize(exaVector x);
 int exaVectorGetDevicePointer(exaVector x,void **ptr,size_t *size);
 int exaVectorWrite(exaVector x,exaScalar *in);
 int exaVectorRead (exaVector x,exaScalar *out);

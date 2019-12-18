@@ -8,7 +8,9 @@
 //
 // Vector operations
 //
-int exaVectorCreate(exaHandle h,exaInt size,exaVector *x_){
+int exaVectorCreate(exaHandle h,exaInt size,exaDataType t,
+  exaVector *x_)
+{
   exaMalloc(1,x_);
 
   exaVector x=*x_;
@@ -16,8 +18,27 @@ int exaVectorCreate(exaHandle h,exaInt size,exaVector *x_){
 
   x->handle=h;
   x->size = size;
+  switch(t){
+    case exaInt_t:
+      x->unitSize=sizeof(exaInt);
+      break;
+    case exaUInt_t:
+      x->unitSize=sizeof(exaUInt);
+      break;
+    case exaLong_t:
+      x->unitSize=sizeof(exaLong);
+      break;
+    case exaULong_t:
+      x->unitSize=sizeof(exaULong);
+      break;
+    case exaScalar_t:
+      x->unitSize=sizeof(exaScalar);
+      break;
+    default:
+      break;
+  }
 
-  h->vectorCreate(x,size);
+  h->vectorCreate(x,size*x->unitSize);
 
   x->info.type=exaVectorType;
 
@@ -41,6 +62,10 @@ int exaVectorGetData(exaVector x,void **data){
 
 exaInt exaVectorGetSize(exaVector x){
   return x->size;
+}
+
+size_t exaVectorGetUnitSize(exaVector x){
+  return x->unitSize;
 }
 
 int exaVectorGetDevicePointer(exaVector x,void **ptr,size_t *size){
