@@ -38,7 +38,8 @@ int exaHostVectorRead(exaVector x,void *out){
   exaVectorGetData(x,(void**)&data);
 
   exaInt size=exaVectorGetSize(x);
-  memcpy(out,data,size*sizeof(exaScalar));
+  size_t unitSize=exaVectorGetUnitSize(x);
+  memcpy(out,data,size*unitSize);
 
   return 0;
 }
@@ -51,7 +52,8 @@ int exaHostVectorWrite(exaVector x,void *in){
   exaVectorGetData(x,(void**)&data);
 
   exaInt size=exaVectorGetSize(x);
-  memcpy(data,in,size*sizeof(exaScalar));
+  size_t unitSize=exaVectorGetUnitSize(x);
+  memcpy(data,in,size*unitSize);
 
   return 0;
 }

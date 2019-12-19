@@ -21,7 +21,8 @@ int main(int argc,char *argv[])
   exaVectorCreate(h,M,exaScalar_t,&vec);
 
   if(M!=exaVectorGetSize(vec))
-    fprintf(stderr,"exaVectorGetSize failed: %d != %d\n",M,exaVectorGetSize(vec));
+    fprintf(stderr,"exaVectorGetSize failed: %d != %d\n",M,
+      exaVectorGetSize(vec));
 
   exaScalar *in,*out;
   exaCalloc(M,&in); exaCalloc(M,&out);
@@ -39,6 +40,30 @@ int main(int argc,char *argv[])
   exaFree(in);
   exaFree(out);
   exaDestroy(vec);
+
+  exaVector iVec;
+  exaVectorCreate(h,M,exaInt_t,&iVec);
+
+  if(M!=exaVectorGetSize(iVec))
+    fprintf(stderr,"exaVectorGetSize failed: %d != %d\n",M,
+      exaVectorGetSize(iVec));
+
+  exaInt *iIn,*iOut;
+  exaCalloc(M,&iIn); exaCalloc(M,&iOut);
+
+  for(i=0;i<M;i++)
+    iIn[i]=2*i+1;
+  exaVectorWrite(iVec,iIn);
+
+  exaVectorRead(iVec,iOut);
+  for(i=0;i<M;i++)
+    if(iOut[i]!=2*i+1)
+      fprintf(stderr,"Error %d != %d\n",2*i+1,iOut[i]);
+
+  exaFree(iIn);
+  exaFree(iOut);
+  exaDestroy(iVec);
+
   exaFinalize(h);
 
   MPI_Finalize();

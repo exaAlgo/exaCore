@@ -198,8 +198,8 @@ int exaVectorGetData(exaVector x,void **data);
 exaInt exaVectorGetSize(exaVector x);
 size_t exaVectorGetUnitSize(exaVector x);
 int exaVectorGetDevicePointer(exaVector x,void **ptr,size_t *size);
-int exaVectorWrite(exaVector x,exaScalar *in);
-int exaVectorRead (exaVector x,exaScalar *out);
+int exaVectorWrite(exaVector x,void *in);
+int exaVectorRead (exaVector x,void *out);
 int exaVectorFree(exaVector vec);
 //
 // exaProgram: wraps a exaProgram
