@@ -61,6 +61,7 @@ int exaOccaInit(exaHandle h,const char *backend)
 
   exaHandleSetData(h,(void **)&oh);
 
+  exaDebug(h,"Initializing handles ...");
   // set call back functions for the backend
   h->backendFinalize=exaOccaFinalize;
   h->updateSettings=exaOccaUpdateSettings;

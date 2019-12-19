@@ -25,7 +25,7 @@ for t in "${tests[@]}"; do
   for b in "${backends[@]}"; do
     ./${t} ${b} >out.log 2>err.log
     wait $!
-    if [ ! -s out.log ] && [ ! -s err.log ]; then
+    if [ ! -s err.log ]; then
       exaInfo "Test: ${t} ${b} ok."
     else
       exaError "Test: ${t} ${b} not ok."
