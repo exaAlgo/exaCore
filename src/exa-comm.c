@@ -20,6 +20,8 @@ int exaCommCreate(exaComm *c,exaCommExternal ce){
 }
 
 int exaCommDestroy(exaComm c){
+  if(c==NULL) return 0;
+
   comm_free(&c->gsComm);
   exaFree(c);
   return 0;

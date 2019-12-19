@@ -102,6 +102,8 @@ int exaArrayBcast(exaComm c,exaInt source,exaArray arr){
 // exaArrayFree
 //
 int exaArrayFree(exaArray a){
+  if(a==NULL) return 0;
+
   array_free(&(a->arr));
   exaFree(a);
   return 0;

@@ -12,6 +12,10 @@ int exaBufferCreate(exaBuffer *buf_,size_t size){
 }
 
 int exaBufferFree(exaBuffer buf){
+  if(buf==NULL) return 0;
+
   buffer_free(&buf->buf);
   exaFree(buf);
+
+  return 0;
 }

@@ -57,8 +57,11 @@ int exaSettingsGetHandle(exaSettings s,exaHandle *h){
 }
 
 int exaSettingsFree(exaSettings settings){
+  if(settings==NULL) return 0;
+
   exaArrayFree(settings->settings);
   exaFree(settings);
+
   return 0;
 }
 
@@ -121,4 +124,6 @@ int exaSettingsSet(const char *settingName,exaValue value,
     t.value=value;
     exaArrayAppend(s->settings,&t);
   }
+
+  return 0;
 }

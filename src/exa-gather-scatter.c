@@ -17,10 +17,14 @@ int exaGSOp(void *v,exaDataType T,exaOp op,unsigned transpose,
 {
   gs(v,exaDataTypeGetGSType(T),exaOpGetGSOp(op),transpose,
     t->topology,&buf->buf);
+  return 0;
 }
 
 int exaGSFree(exaGS t){
+  if(t==NULL) return 0;
+
   gs_free(t->topology);
   exaFree(t);
+
   return 0;
 }

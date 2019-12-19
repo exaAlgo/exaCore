@@ -115,8 +115,9 @@ int exaSetDebug(exaHandle h,int debug)
 }
 
 int exaDestroy(void *p){
-  exaTypeInfo info=(exaTypeInfo)p;
+  if(p==NULL) return 0;
 
+  exaTypeInfo info=(exaTypeInfo)p;
   switch(info->type){
     case exaSettingsType:
       exaSettingsFree(p);

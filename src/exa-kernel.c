@@ -51,11 +51,11 @@ int exaKernelRunN(exaKernel k,const int nArgs,...){
 }
 
 int exaKernelFree(exaKernel k){
+  if(k==NULL) return 0;
+
   exaHandle h;
   exaKernelGetHandle(k,&h);
-
   h->kernelFree(k);
-
   exaFree(k);
 
   return 0;
