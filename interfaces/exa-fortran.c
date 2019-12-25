@@ -49,7 +49,7 @@ void fExaInit(const char *backend,MPI_Fint *fcomm,int *exa,int *err,
     handleMax+=handleMax/2+1,exaRealloc(handleMax,&handleDict);
 
   MPI_Comm comm=MPI_Comm_f2c(*fcomm);
-  *err=exaInit(&handleDict[handleCurrent],comm,backend);
+  *err=exaInit(&handleDict[handleCurrent],comm,backend_c);
 
   if(*err==0)
     *exa=handleCurrent++,handleActive++;
