@@ -24,6 +24,9 @@ GSDIR ?=
 OCCA ?= 1
 OCCA_DIR ?= $(HOME)/local/occa
 
+### Fortran interface ###
+UNDERSCORE ?= 1
+
 ### Meta info about the package ###
 SRCDIR       = src
 BUILDDIR     = build
@@ -38,10 +41,11 @@ obj      =
 
 ### Backends ###
 # Backend = codegen + tuning + dispatch
-# 1. occa backend (third party)
+# OCCA backend (third party)
 occa.dir       = backends/occa
 occa.src       = $(wildcard $(occa.dir)/*.c)
-occa.obj       = $(patsubst $(occa.dir)/%.c,$(BUILDDIR)/$(occa.dir)/%.o,$(occa.src))
+occa.obj       = $(patsubst $(occa.dir)/%.c,\
+  $(BUILDDIR)/$(occa.dir)/%.o,$(occa.src))
 occa.incflags += -I$(occa.dir) -I$(OCCA_DIR)/include
 ifneq ($(OCCA),0)
   LDFLAGS += -L$(OCCA_DIR)/lib -locca

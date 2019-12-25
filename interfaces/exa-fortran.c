@@ -18,8 +18,6 @@ typedef size_t fortran_charlen_t;
 typedef int fortran_charlen_t;
 #endif
 
-#define Splice(a, b) a ## b
-
 // Fortran strings are generally unterminated and the length is
 // passed as an extra argument after all the normal arguments.
 // Some compilers (I only know of Windows) place the length
@@ -29,19 +27,20 @@ typedef int fortran_charlen_t;
 // memory.  This macro allocates a string to hold the null-terminated
 // version of the string that C expects.
 #define FIX_STRING(stringname)\
-  char Splice(stringname, _c)[1024];\
-  if (Splice(stringname, _len) > 1023)\
+  char EXA_TOKEN_PASTE(stringname, _c)[1024];\
+  if (EXA_TOKEN_PASTE(stringname, _len) > 1023)\
     fprintf(stderr,"Fortran string length too long %zd",\
-      (size_t)Splice(stringname, _len));\
-  strncpy(Splice(stringname,_c),stringname,Splice(stringname,_len));\
-  Splice(stringname,_c)[Splice(stringname,_len)]=0;\
+      (size_t)EXA_TOKEN_PASTE(stringname, _len));\
+  strncpy(EXA_TOKEN_PASTE(stringname,_c),stringname,\
+    EXA_TOKEN_PASTE(stringname,_len));\
+  EXA_TOKEN_PASTE(stringname,_c)[EXA_TOKEN_PASTE(stringname,_len)]=0;\
 
 static exaHandle *handleDict=NULL;
 static int handleCurrent=0;
 static int handleActive=0;
 static int handleMax=0;
 
-#define fExaInit FORTRAN_NAME(exainit,EXAINIT)
+#define fExaInit EXA_FORTRAN_NAME(exainit,EXAINIT)
 void fExaInit(const char *backend,MPI_Fint *fcomm,int *exa,int *err,
   fortran_charlen_t backend_len)
 {
@@ -56,7 +55,7 @@ void fExaInit(const char *backend,MPI_Fint *fcomm,int *exa,int *err,
     *exa=handleCurrent++,handleActive++;
 }
 
-#define fExaFinalize FORTRAN_NAME(exafinalize,EXAFINALIZE)
+#define fExaFinalize EXA_FORTRAN_NAME(exafinalize,EXAFINALIZE)
 void fExaFinalize(int *exa, int *err){
   *err=exaFinalize(handleDict[*exa]);
 
@@ -72,7 +71,8 @@ static int vectorCurrent=0;
 static int vectorActive=0;
 static int vectorMax=0;
 
-#define fexaVectorCreate FORTRAN_NAME(exavectorcreate,EXAVECTORCREATE)
+#define fexaVectorCreate\
+  EXA_FORTRAN_NAME(exavectorcreate,EXAVECTORCREATE)
 void fExaVectorCreate(int *exa,int *length,int *type,int *vec,
   int *err)
 {
@@ -88,7 +88,7 @@ void fExaVectorCreate(int *exa,int *length,int *type,int *vec,
     *vec=vectorCurrent++,vectorActive++;
 }
 
-#define fexaVectorRead FORTRAN_NAME(exavectorread,EXAVECTORREAD)
+#define fexaVectorRead EXA_FORTRAN_NAME(exavectorread,EXAVECTORREAD)
 void fExaVectorRead(int *vec,exaScalar *array,int64_t *offset,
   int *err)
 {
@@ -97,14 +97,14 @@ void fExaVectorRead(int *vec,exaScalar *array,int64_t *offset,
   *offset=b-array;
 }
 
-#define fexaVectorWrite FORTRAN_NAME(exavectorread,EXAVECTORREAD)
+#define fexaVectorWrite EXA_FORTRAN_NAME(exavectorread,EXAVECTORREAD)
 void fExaVectorWrite(int *vec,exaScalar *array,int64_t *offset,
   int *err)
 {
   *err=exaVectorWrite(vectorDict[*vec],(array+*offset));
 }
 
-#define fExaVectorFree FORTRAN_NAME(exavectorfree,EXAVECTORFREE)
+#define fExaVectorFree EXA_FORTRAN_NAME(exavectorfree,EXAVECTORFREE)
 void fExaVectorFree(int *vec,int *err){
   *err=exaVectorFree(vectorDict[*vec]);
 
@@ -114,4 +114,3 @@ void fExaVectorFree(int *vec,int *err){
       exaFree(&vectorDict),vectorCurrent=0,vectorMax= 0;
   }
 }
-

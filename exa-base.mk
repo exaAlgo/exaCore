@@ -1,3 +1,4 @@
+### Set source files and objects ###
 src.c = $(wildcard $(SRCDIR)/*.c)
 obj  += $(patsubst $(SRCDIR)/%.c,$(BUILDDIR)/%.c.o,$(src.c))
 
@@ -24,19 +25,26 @@ test.obj = $(patsubst $(TESTSDIR)/%.c,\
 test.obj+= $(patsubst $(TESTSDIR)/%.f,\
   $(BUILDDIR)/$(TESTSDIR)/%-f,$(test.f))
 
+CMMNFLAGS ?=
+
 ### Set various flags ###
-ifneq ($(DEBUG),0)
-  CFLAGS += -g -DEXA_DEBUG
+ifneq ($(UNDERSCORE),0)
+  CMMNFLAGS += -DEXA_UNDERSCORE
 endif
-CFLAGS += -fPIC
+
+ifneq ($(DEBUG),0)
+  CMMNFLAGS += -g -DEXA_DEBUG
+endif
+
+CMMNFLAGS += -fPIC
 
 incflags += -I$(SRCDIR) -I$(INTERFACESDIR)
 ext       = so
 prefix    = lib
 
-compile.c   = $(CC) $(CFLAGS) $(CPPFLAGS) $(incflags)
-compile.cpp = $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(incflags)
-compile.f   = $(FC) $(CXXFLAGS) $(CPPFLAGS) $(incflags)
+compile.c  =$(CC) $(CFLAGS) $(CMMNFLAGS) $(CPPFLAGS) $(incflags)
+compile.cpp=$(CXX) $(CXXFLAGS) $(CMMNFLAGS) $(CPPFLAGS) $(incflags)
+compile.f  =$(FC) $(FFLAGS) $(CMMNFLAGS) $(CPPFLAGS) $(incflags)
 
 link.c   = $(CC) -shared -o
 link.cpp = $(CXX) -shared -o
