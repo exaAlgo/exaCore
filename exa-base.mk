@@ -7,19 +7,22 @@ obj  += $(patsubst $(INTERFACESDIR)/%.c,\
 
 native.dir       = backends/native
 native.src       = $(wildcard $(native.dir)/*.c)
+native.incflags += -I$(native.dir)
 native.obj       = $(patsubst $(native.dir)/%.c,\
   $(BUILDDIR)/$(native.dir)/%.c.o,$(native.src))
-native.incflags += -I$(native.dir)
 obj             += $(native.obj)
 
 example.src     = $(wildcard $(EXAMPLESDIR)/*.c)
 example.obj     = $(patsubst $(EXAMPLESDIR)/%.c,\
-  $(BUILDDIR)/examples/%,$(example.src))
+  $(BUILDDIR)/$(EXAMPLESDIR)/%,$(example.src))
 example.ldflags = -L$(BUILDDIR) -l$(libname) $(LDFLAGS)
 
-test.src        = $(wildcard $(TESTSDIR)/*.c)
-test.obj        = $(patsubst $(TESTSDIR)/%.c,\
-  $(BUILDDIR)/tests/%,$(test.src))
+test.c   = $(wildcard $(TESTSDIR)/*.c)
+test.f   = $(wildcard $(TESTSDIR)/*.f)
+test.obj = $(patsubst $(TESTSDIR)/%.c,\
+  $(BUILDDIR)/$(TESTSDIR)/%-c,$(test.c))
+test.obj+= $(patsubst $(TESTSDIR)/%.f,\
+  $(BUILDDIR)/$(TESTSDIR)/%-f,$(test.f))
 
 ### Set various flags ###
 ifneq ($(DEBUG),0)
@@ -33,8 +36,11 @@ prefix    = lib
 
 compile.c   = $(CC) $(CFLAGS) $(CPPFLAGS) $(incflags)
 compile.cpp = $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(incflags)
+compile.f   = $(FC) $(CXXFLAGS) $(CPPFLAGS) $(incflags)
+
 link.c   = $(CC) -shared -o
 link.cpp = $(CXX) -shared -o
+link.f   = $(FC) -shared -o
 
 ### Make targets ###
 .PHONY: all-base
@@ -69,8 +75,11 @@ $(BUILDDIR)/examples/%: $(EXAMPLESDIR)/%.c
 .PHONY: tests-base
 tests-base: install-base $(test.obj)
 
-$(BUILDDIR)/tests/%: $(TESTSDIR)/%.c
+$(BUILDDIR)/tests/%-c: $(TESTSDIR)/%.c
 	$(compile.c) $< -o $@ $(example.ldflags)
+
+$(BUILDDIR)/tests/%-f: $(TESTSDIR)/%.f
+	$(compile.f) $< -o $@ $(example.ldflags)
 
 .PHONY: clean
 clean:

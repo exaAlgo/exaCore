@@ -4,6 +4,12 @@
 #include <math.h>
 
 #define M 10
+#define GET_OKL_NAME(sin,sout) do{\
+  const char *slash=strrchr(sin,'-');\
+  int length=strlen(sin)-strlen(slash);\
+  strncpy(sout,sin,length);\
+  sout[length]='\0';\
+} while(0)
 
 int main(int argc,char *argv[])
 {
@@ -19,8 +25,8 @@ int main(int argc,char *argv[])
 
   exaSettings s; exaSettingsInit(h,NULL,&s);
 
-  exaProgram p;
-  exaProgramCreate(h,argv[0],s,&p);
+  exaProgram p; char okl[BUFSIZ]; GET_OKL_NAME(argv[0],okl);
+  exaProgramCreate(h,okl,s,&p);
 
   exaKernel k;
   exaKernelCreate(p,"addVectors",&k);

@@ -2,8 +2,10 @@
 # Compilers and flags
 CC ?= mpicc
 CXX ?= mpic++
+FC ?= mpifort
 CFLAGS ?= -O0
 CXXFLAGS ?= -O0
+FFLAGS ?= -O0
 CPP ?= cpp
 CPPFLAGS ?=
 LDFLAGS ?=
@@ -60,7 +62,7 @@ examples: examples-base
 
 .PHONY: tests
 tests: tests-base
-	@cp $(TESTSDIR)/t[0-9][0-9]-*.[^c]* $(BUILDDIR)/$(TESTSDIR)/
+	@cp $(TESTSDIR)/t[0-9][0-9]-*.[^cf]* $(BUILDDIR)/$(TESTSDIR)/
 	@cp $(TESTSDIR)/run-tests.sh $(BUILDDIR)/$(TESTSDIR)
 	@cd $(BUILDDIR)/$(TESTSDIR) && ./run-tests.sh
 
