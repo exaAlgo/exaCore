@@ -18,18 +18,16 @@ PREFIX ?= $(HOME)/local/exa
 GSDIR ?=
 
 ### Backends ###
-# Exa backend based on loopy
-LOOPY ?= 0
-
 # OCCA Backend
 OCCA ?= 1
 OCCA_DIR ?= $(HOME)/local/occa
 
 ### Meta info about the package ###
-SRCDIR      = src
-BUILDDIR    = build
-EXAMPLESDIR = examples
-TESTSDIR    = tests
+SRCDIR       = src
+BUILDDIR     = build
+EXAMPLESDIR  = examples
+TESTSDIR     = tests
+INTERFACESDIR=interfaces
 
 LDFLAGS += -L$(GSDIR)/lib -lgs -lm
 incflags = -I$(GSDIR)/include
@@ -38,21 +36,7 @@ obj      =
 
 ### Backends ###
 # Backend = codegen + tuning + dispatch
-# TODO:
-# 1. loopy backend with CUDA and OpenCL dispatch
-loopy.dir       = backends/loopy
-loopy.src       = $(wildcard $(loopy.dir)/*.c)
-loopy.obj       = $(patsubst $(loopy.dir)/%.c,$(BUILDDIR)/$(loopy.dir)/%.o,$(loopy.src))
-loopy.incflags += -I$(loopy.dir)
-
-ifneq ($(LOOPY),0)
-  obj     += $(loopy.obj)
-endif
-
-$(BUILDDIR)/$(loopy.dir)/%.o: $(loopy.dir)/%.c
-	$(compile.c) $(loopy.incflags) -c $< -o $@
-
-# 2. occa backend (third party)
+# 1. occa backend (third party)
 occa.dir       = backends/occa
 occa.src       = $(wildcard $(occa.dir)/*.c)
 occa.obj       = $(patsubst $(occa.dir)/%.c,$(BUILDDIR)/$(occa.dir)/%.o,$(occa.src))

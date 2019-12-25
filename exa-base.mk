@@ -1,18 +1,25 @@
 src.c = $(wildcard $(SRCDIR)/*.c)
 obj  += $(patsubst $(SRCDIR)/%.c,$(BUILDDIR)/%.c.o,$(src.c))
 
+interfaces.c = $(wildcard $(INTERFACESDIR)/*.c)
+obj  += $(patsubst $(INTERFACESDIR)/%.c,\
+  $(BUILDDIR)/$(INTERFACESDIR)/%.c.o,$(interfaces.c))
+
 native.dir       = backends/native
 native.src       = $(wildcard $(native.dir)/*.c)
-native.obj       = $(patsubst $(native.dir)/%.c,$(BUILDDIR)/$(native.dir)/%.c.o,$(native.src))
+native.obj       = $(patsubst $(native.dir)/%.c,\
+  $(BUILDDIR)/$(native.dir)/%.c.o,$(native.src))
 native.incflags += -I$(native.dir)
 obj             += $(native.obj)
 
 example.src     = $(wildcard $(EXAMPLESDIR)/*.c)
-example.obj     = $(patsubst $(EXAMPLESDIR)/%.c,$(BUILDDIR)/examples/%,$(example.src))
+example.obj     = $(patsubst $(EXAMPLESDIR)/%.c,\
+  $(BUILDDIR)/examples/%,$(example.src))
 example.ldflags = -L$(BUILDDIR) -l$(libname) $(LDFLAGS)
 
 test.src        = $(wildcard $(TESTSDIR)/*.c)
-test.obj        = $(patsubst $(TESTSDIR)/%.c,$(BUILDDIR)/tests/%,$(test.src))
+test.obj        = $(patsubst $(TESTSDIR)/%.c,\
+  $(BUILDDIR)/tests/%,$(test.src))
 
 ### Set various flags ###
 ifneq ($(DEBUG),0)
@@ -20,7 +27,7 @@ ifneq ($(DEBUG),0)
 endif
 CFLAGS += -fPIC
 
-incflags += -I$(SRCDIR)
+incflags += -I$(SRCDIR) -I$(INTERFACESDIR)
 ext       = so
 prefix    = lib
 
@@ -50,6 +57,9 @@ $(BUILDDIR)/%.c.o: $(SRCDIR)/%.c
 $(BUILDDIR)/$(native.dir)/%.c.o: $(native.dir)/%.c
 	$(compile.c) $(native.incflags) -c $< -o $@
 
+$(BUILDDIR)/$(INTERFACESDIR)/%.c.o: $(INTERFACESDIR)/%.c
+	$(compile.c) -c $< -o $@
+
 .PHONY: examples-base
 examples-base: install-base $(example.obj)
 
@@ -75,3 +85,4 @@ $(shell mkdir -p $(BUILDDIR)/$(EXAMPLESDIR))
 $(shell mkdir -p $(BUILDDIR)/$(TESTSDIR))
 $(shell mkdir -p $(BUILDDIR)/$(native.dir))
 $(shell mkdir -p $(BUILDDIR)/$(occa.dir))
+$(shell mkdir -p $(BUILDDIR)/$(INTERFACESDIR))

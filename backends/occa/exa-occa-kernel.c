@@ -46,14 +46,10 @@ int exaOccaKernelRun(exaKernel k,const int nArgs_,va_list args){
     switch(info->type){
       case exaValueType:
         val=(exaValue)info;
-        exaDebug(h,"arg: %d/%d type=exaValue  pointer=%p\n",i+1,
-          nArgs,val);
         occaArgs[i]=exaValueToOccaType(val);
         break;
       case exaVectorType:
         vec=(exaVector)info;
-        exaDebug(h,"arg: %d/%d type=exaVector pointer=%p\n",i+1,
-          nArgs,vec);
         exaOccaVector ovec;
         exaVectorGetData(vec,(void**)&ovec);
         occaArgs[i]=ovec->vector;

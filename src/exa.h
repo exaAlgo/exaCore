@@ -98,21 +98,20 @@ void exaRegister(int (*init)(exaHandle,const char*),
 //
 // exaMalloc, Realloc, Calloc, Free and size of
 //
-int    exaMallocArray (size_t n,size_t unit,void **p);
-int    exaCallocArray (size_t n,size_t unit,void **p);
-int    exaReallocArray(size_t n,size_t unit,void **p);
-int    exaFree        (void *p);
-int    exaDestroy     (void *p);
+int exaMallocArray (size_t n,size_t unit,void **p);
+int exaCallocArray (size_t n,size_t unit,void **p);
+int exaReallocArray(size_t n,size_t unit,void **p);
+int exaFree        (void *p);
+int exaDestroy     (void *p);
 //
 // exaHandle: wraps an exaComm, buffer and other options
 //
-int         exaInit         (exaHandle *h,exaCommExternal ce,
-  const char *backend);
-int         exaFinalize     (exaHandle h);
-int         exaHandleGetData(exaHandle h,void **data);
-int         exaHandleSetData(exaHandle h,void **data);
+int exaInit(exaHandle *h,exaCommExternal ce,const char *backend);
+int exaFinalize(exaHandle h);
+int exaHandleGetData(exaHandle h,void **data);
+int exaHandleSetData(exaHandle h,void **data);
 // functions to query the backend
-const char *exaGetBackendName     (exaHandle h);
+const char *exaGetBackendName(exaHandle h);
 const char *exaGetBackendExtension(exaHandle h);
 // communication
 exaComm     exaGetComm   (exaHandle h);
@@ -121,22 +120,22 @@ struct comm exaGetGSComm (exaHandle h);
 int         exaSetComm   (exaHandle h,exaComm c);
 exaInt      exaSize      (exaHandle h);
 exaInt      exaRank      (exaHandle h);
-int         exaScan      (exaHandle h,void *out,void *in,void *buf,
-  exaInt size,exaDataType t,exaOp op);
-int         exaSplit     (exaHandle h,int bin);
-int         exaGop       (exaHandle h,void *v,exaInt size,
+// scan, gop and bcast
+int exaScan(exaHandle h,void *out,void *in,void *buf,exaInt size,
   exaDataType type,exaOp op);
-int         exaReduce    (exaHandle h,void *out,void *in,exaInt size,
+int exaGop(exaHandle h,void *v,exaInt size,exaDataType type,exaOp op);
+int exaReduce(exaHandle h,void *out,void *in,exaInt size,
   exaDataType type,exaOp op);
-int         exaBcast     (exaHandle h,void *in,exaInt count,
-  exaDataType type);
-void        exaBarrier   (exaHandle h);
-int         exaCrystalInit    (exaHandle h);
-int         exaCrystalFinalize(exaHandle h);
+int exaBcast(exaHandle h,void *in,exaInt count,exaDataType type);
+// crystal transfer
+int exaCrystalInit    (exaHandle h);
+int exaCrystalFinalize(exaHandle h);
+void exaBarrier(exaHandle h);
+int exaSplit(exaHandle h,int bin);
 // debug
-int         exaDebug(exaHandle h,const char *format,...);
-int         exaGetDebug(exaHandle h);
-int         exaSetDebug(exaHandle h,int debug);
+int exaDebug   (exaHandle h,const char *format,...);
+int exaGetDebug(exaHandle h);
+int exaSetDebug(exaHandle h,int debug);
 //
 // exaComm: wraps gslib comm, gs_op and crystal router
 //
@@ -190,7 +189,7 @@ int exaGSFree(exaGS t);
 //
 // exaVector: wraps a vector. Currently just a host vector.
 //
-int exaVectorCreate(exaHandle h,exaInt size,exaDataType t,
+int exaVectorCreate(exaHandle h,exaInt size,exaDataType type,
   exaVector *x);
 int exaVectorGetHandle(exaVector x,exaHandle *h);
 int exaVectorSetData(exaVector x,void **data);
