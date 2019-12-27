@@ -13,7 +13,7 @@ int main(int argc,char *argv[])
   exaHandle h;
   exaInit(&h,MPI_COMM_WORLD,argv[1]);
 
-  exaSettings s; exaSettingsInit(h,NULL,&s);
+  exaSettings s; exaSettingsCreate(h,NULL,&s);
 
   char *backend; exaSettingsGet(&backend,"backend::name",s);
   if(backend==NULL || strcmp(backend,argv[1])!=0)

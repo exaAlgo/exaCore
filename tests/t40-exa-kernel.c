@@ -23,7 +23,7 @@ int main(int argc,char *argv[])
   exaHandle h;
   exaInit(&h,MPI_COMM_WORLD,argv[1]);
 
-  exaSettings s; exaSettingsInit(h,NULL,&s);
+  exaSettings s; exaSettingsCreate(h,NULL,&s);
 
   exaProgram p; char okl[BUFSIZ]; GET_OKL_NAME(argv[0],okl);
   exaProgramCreate(h,okl,s,&p);

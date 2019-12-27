@@ -27,13 +27,18 @@ typedef int fortran_charlen_t;
 // memory.  This macro allocates a string to hold the null-terminated
 // version of the string that C expects.
 #define FIX_STRING(stringname)\
-  char EXA_TOKEN_PASTE(stringname, _c)[1024];\
-  if (EXA_TOKEN_PASTE(stringname, _len) > 1023)\
-    fprintf(stderr,"Fortran string length too long %zd",\
-      (size_t)EXA_TOKEN_PASTE(stringname, _len));\
+  char EXA_TOKEN_PASTE(stringname,_c)[1024];\
+  if (EXA_TOKEN_PASTE(stringname,_len) > 1023)\
+    fprintf(stderr,"Fortran string length too long %zd\n",\
+      (size_t)EXA_TOKEN_PASTE(stringname,_len));\
   strncpy(EXA_TOKEN_PASTE(stringname,_c),stringname,\
     EXA_TOKEN_PASTE(stringname,_len));\
-  EXA_TOKEN_PASTE(stringname,_c)[EXA_TOKEN_PASTE(stringname,_len)]=0;\
+  EXA_TOKEN_PASTE(stringname,_c)[EXA_TOKEN_PASTE_(stringname,_len)]=0;\
+
+//
+// Defines
+//
+#define EXA_NULL -1
 
 static exaHandle *handleDict=NULL;
 static int handleCurrent=0;
@@ -57,12 +62,98 @@ void fExaInit(const char *backend,MPI_Fint *fcomm,int *exa,int *err,
 
 #define fExaFinalize EXA_FORTRAN_NAME(exafinalize,EXAFINALIZE)
 void fExaFinalize(int *exa, int *err){
+  // TODO: Validate handle
   *err=exaFinalize(handleDict[*exa]);
 
   if(*err==0){
     handleActive--;
     if(handleActive==0)
       exaFree(handleDict),handleCurrent=0,handleMax=0;
+  }
+}
+
+static exaSettings *settingsDict=NULL;
+static int settingsCurrent=0;
+static int settingsActive=0;
+static int settingsMax=0;
+
+#define fSettingsCreate EXA_FORTRAN_NAME(exasettingscreate,\
+  EXASETTINGSCREATE)
+void fSettingsCreate(int *exa,const char *fname,int *s,int *err,
+  fortran_charlen_t fname_len)
+{
+  FIX_STRING(fname);
+
+  if(settingsCurrent==settingsMax){
+    settingsMax+=settingsMax/2+1;
+    exaRealloc(settingsMax,&settingsDict);
+  }
+
+  // TODO: Validate handle
+  *err=exaSettingsCreate(handleDict[*exa],
+    strlen(fname_c)>0?fname_c:NULL,&settingsDict[settingsCurrent]);
+
+  if(*err==0)
+    *s=settingsCurrent++,settingsActive++;
+}
+
+#define fSettingsSetInt EXA_FORTRAN_NAME(exasettingssetint,\
+  EXASETTINGSSETINT)
+void fSettingsSetInt(const char *sname,int *ival,int *s,int *err,
+  fortran_charlen_t sname_len)
+{
+  FIX_STRING(sname);
+
+  // TODO: Validate Settings Handle
+  *err=exaSettingsSet(sname_c,getExaInt(*ival),settingsDict[*s]);
+}
+
+#define fSettingsSetStr EXA_FORTRAN_NAME(exasettingssetstr,\
+  EXASETTINGSSETSTR)
+void fSettingsSetStr(const char *sname,const char *sval,int *s,
+  int *err,fortran_charlen_t sname_len,fortran_charlen_t sval_len)
+{
+  FIX_STRING(sname);
+  FIX_STRING(sval);
+
+  // TODO: Validate Settings Handle
+  *err=exaSettingsSet(sname_c,getExaStr(sval_c),settingsDict[*s]);
+}
+
+#define fSettingsGetStr EXA_FORTRAN_NAME(exasettingsgetstr,\
+  EXASETTINGSGETSTR)
+void fSettingsGetStr(char *sval,const char *sname,int *s,
+  int *err,fortran_charlen_t sval_len,fortran_charlen_t sname_len)
+{
+  FIX_STRING(sname);
+
+  // TODO: Validate Settings Handle
+  char *val;
+  *err=exaSettingsGet(&val,sname_c,settingsDict[*s]);
+  memset(sval,' ',sval_len);
+  strcpy(sval,val),sval[strlen(sval)]=' ';
+}
+
+#define fSettingsGetInt EXA_FORTRAN_NAME(exasettingsgetint,\
+  EXASETTINGSGETint)
+void fSettingsGetInt(int *ival,const char *sname,int *s,
+  int *err,fortran_charlen_t sname_len)
+{
+  FIX_STRING(sname);
+
+  // TODO: Validate Settings Handle
+  *err=exaSettingsGet(ival,sname_c,settingsDict[*s]);
+}
+
+#define fSettingsFree EXA_FORTRAN_NAME(exasettingsfree,\
+  EXASETTINGSFREE)
+void fSettingsFree(int *s,int *err){
+  *err=exaSettingsFree(settingsDict[*s]);
+
+  if(*err==0){
+    settingsActive--;
+    if(settingsActive==0)
+      exaFree(settingsDict),settingsCurrent=0,settingsMax=0;
   }
 }
 

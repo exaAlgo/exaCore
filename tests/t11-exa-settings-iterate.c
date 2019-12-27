@@ -13,7 +13,7 @@ int main(int argc,char *argv[])
   exaHandle h;
   exaInit(&h,MPI_COMM_WORLD,argv[1]);
 
-  exaSettings s; exaSettingsInit(h,NULL,&s);
+  exaSettings s; exaSettingsCreate(h,NULL,&s);
 
   const char *key=exaSettingsIterateKeys("backend::nam",s);
   char *backend; exaSettingsGet(&backend,key,s);

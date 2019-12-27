@@ -162,7 +162,7 @@ int         exaCommCrystalFinalize(exaComm c);
 //
 // exaSettings
 //
-int exaSettingsInit(exaHandle h,const char *fname,
+int exaSettingsCreate(exaHandle h,const char *fname,
   exaSettings *settings);
 int exaSettingsFree(exaSettings settings);
 int exaSettingsGetHandle(exaSettings s,exaHandle *h);

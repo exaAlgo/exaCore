@@ -3,7 +3,7 @@
 //
 // exaSettings
 //
-int exaSettingsInit(exaHandle h,const char *fname,
+int exaSettingsCreate(exaHandle h,const char *fname,
   exaSettings *settings)
 {
   exaMalloc(1,settings);

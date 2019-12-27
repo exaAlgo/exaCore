@@ -3,8 +3,18 @@
 !-----------------------------------------------------------------------
 
 !-----------------------------------------------------------------------
+! Define NULL pointer
+!-----------------------------------------------------------------------
+      integer exa_int_null
+      parameter(exa_int_null=-1)
+
+      character*1 exa_str_null
+      parameter(exa_str_null='')
+
+!-----------------------------------------------------------------------
 ! Define stdin,stdout and stderr
 !-----------------------------------------------------------------------
+! TODO: Do this in a compatible way with f2003
       integer stdin,stdout,stderr
       parameter(stdin =5)
       parameter(stdout=6)

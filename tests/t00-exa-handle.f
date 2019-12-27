@@ -4,8 +4,10 @@
       include 'mpif.h'
       include 'exaf.h'
 
-      integer handle,ierr,nargs
-      character arg*64
+      integer ierr,nargs
+      integer handle
+
+      character*128 arg
 
       call mpi_init(ierr)
 
