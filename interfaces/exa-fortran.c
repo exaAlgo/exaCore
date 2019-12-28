@@ -1,5 +1,4 @@
 // Fortran interface
-#include <exa.h>
 #include <exa-impl.h>
 #include <exa-memory.h>
 #include <exa-fortran-name.h>
@@ -26,10 +25,10 @@ typedef int fortran_charlen_t;
 // could overwrite other strings or attempt to write to read-only
 // memory.  This macro allocates a string to hold the null-terminated
 // version of the string that C expects.
-#define MAX_LEN 2048
-#define FIX_STRING(stringname)\
-  char EXA_TOKEN_PASTE(stringname,_c)[MAX_LEN];\
-  if (EXA_TOKEN_PASTE(stringname,_len)>MAX_LEN-1)\
+#define EXA_MAX_STRLEN 2048
+#define EXA_FIX_STRING(stringname)\
+  char EXA_TOKEN_PASTE(stringname,_c)[EXA_MAX_STRLEN];\
+  if (EXA_TOKEN_PASTE(stringname,_len)>EXA_MAX_STRLEN-1)\
     fprintf(stderr,"Fortran string length too long %zd\n",\
       (size_t)EXA_TOKEN_PASTE(stringname,_len));\
   strncpy(EXA_TOKEN_PASTE(stringname,_c),stringname,\
@@ -50,7 +49,7 @@ static int handleMax=0;
 void fExaInit(const char *backend,MPI_Fint *fcomm,int *exa,int *err,
   fortran_charlen_t backend_len)
 {
-  FIX_STRING(backend);
+  EXA_FIX_STRING(backend);
   if(handleCurrent==handleMax)
     handleMax+=handleMax/2+1,exaRealloc(handleMax,&handleDict);
 
@@ -83,7 +82,7 @@ static int settingsMax=0;
 void fSettingsCreate(int *exa,const char *fname,int *s,int *err,
   fortran_charlen_t fname_len)
 {
-  FIX_STRING(fname);
+  EXA_FIX_STRING(fname);
 
   if(settingsCurrent==settingsMax){
     settingsMax+=settingsMax/2+1;
@@ -103,7 +102,7 @@ void fSettingsCreate(int *exa,const char *fname,int *s,int *err,
 void fSettingsSetInt(const char *sname,int *ival,int *s,int *err,
   fortran_charlen_t sname_len)
 {
-  FIX_STRING(sname);
+  EXA_FIX_STRING(sname);
 
   // TODO: Validate Settings Handle
   *err=exaSettingsSet(sname_c,getExaInt(*ival),settingsDict[*s]);
@@ -114,8 +113,8 @@ void fSettingsSetInt(const char *sname,int *ival,int *s,int *err,
 void fSettingsSetStr(const char *sname,const char *sval,int *s,
   int *err,fortran_charlen_t sname_len,fortran_charlen_t sval_len)
 {
-  FIX_STRING(sname);
-  FIX_STRING(sval);
+  EXA_FIX_STRING(sname);
+  EXA_FIX_STRING(sval);
 
   // TODO: Validate Settings Handle
   *err=exaSettingsSet(sname_c,getExaStr(sval_c),settingsDict[*s]);
@@ -126,7 +125,7 @@ void fSettingsSetStr(const char *sname,const char *sval,int *s,
 void fSettingsGetStr(char *sval,const char *sname,int *s,
   int *err,fortran_charlen_t sval_len,fortran_charlen_t sname_len)
 {
-  FIX_STRING(sname);
+  EXA_FIX_STRING(sname);
 
   // TODO: Validate Settings Handle
   char *val;
@@ -140,7 +139,7 @@ void fSettingsGetStr(char *sval,const char *sname,int *s,
 void fSettingsGetInt(int *ival,const char *sname,int *s,
   int *err,fortran_charlen_t sname_len)
 {
-  FIX_STRING(sname);
+  EXA_FIX_STRING(sname);
 
   // TODO: Validate Settings Handle
   *err=exaSettingsGet(ival,sname_c,settingsDict[*s]);
@@ -226,7 +225,7 @@ static int programMax=0;
 void fExaProgramCreate(int *exa,const char *fname,int *s,int *prog,
   int *err,fortran_charlen_t fname_len)
 {
-  FIX_STRING(fname);
+  EXA_FIX_STRING(fname);
 
   if(programCurrent==programMax){
     programMax+=programMax/2+1;
@@ -263,7 +262,7 @@ static int kernelMax=0;
 void fExaKernelCreate(int *prog,const char *knlName,int *knl,
   int *err,fortran_charlen_t knlName_len)
 {
-  FIX_STRING(knlName);
+  EXA_FIX_STRING(knlName);
 
   if(kernelCurrent==kernelMax){
     kernelMax+=kernelMax/2+1;

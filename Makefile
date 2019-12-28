@@ -73,6 +73,7 @@ tests: tests-base
 .PHONY: install
 install: install-base
 	@cp -u $(GSDIR)/include/*.h $(DESTDIR)$(PREFIX)/include/
+	@cp -u interfaces/*.h $(DESTDIR)$(PREFIX)/include/
 	@mkdir -p $(DESTDIR)$(PREFIX)/share
 	@cp -u exa-base.mk tests/run-tests.sh $(DESTDIR)$(PREFIX)/share
 
