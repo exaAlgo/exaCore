@@ -17,28 +17,13 @@ int exaVectorCreate(exaHandle h,exaInt size,exaDataType t,
   if(x==NULL) return 1;
 
   x->handle=h;
-  x->size = size;
-  switch(t){
-    case exaInt_t:
-      x->unitSize=sizeof(exaInt);
-      break;
-    case exaUInt_t:
-      x->unitSize=sizeof(exaUInt);
-      break;
-    case exaLong_t:
-      x->unitSize=sizeof(exaLong);
-      break;
-    case exaULong_t:
-      x->unitSize=sizeof(exaULong);
-      break;
-    case exaScalar_t:
-      x->unitSize=sizeof(exaScalar);
-      break;
-    default:
-      break;
-  }
+  x->size=size;
+  x->unitSize=exaDataTypeGetSize(t);
 
   h->vectorCreate(x,size*x->unitSize);
+
+  x->hostData=NULL;
+  x->syncStatus=exaNoneSync;
 
   x->info.type=exaVectorType;
 
@@ -74,35 +59,30 @@ int exaVectorGetDevicePointer(exaVector x,void **ptr,size_t *size){
 }
 
 int exaVectorWrite(exaVector x,void *in){
-  return x->vectorWrite(x,in);
+  x->vectorWrite(x,in);
+  x->syncStatus=exaDeviceSync;
+  return 0;
 }
 
-int exaVectorRead(exaVector x,void *out){
-  return x->vectorRead(x,out);
+int exaVectorRead(exaVector x,void **out){
+  if(!x->hostData)
+    exaCalloc(x->size*x->unitSize,&x->hostData);
+
+  if(x->syncStatus==exaDeviceSync || x->syncStatus==exaNoneSync){
+    x->vectorRead(x,x->hostData);
+    x->syncStatus=exaBothSync;
+  }
+
+  *out=x->hostData;
+
+  return 0;
 }
 
 int exaVectorFree(exaVector vec){
   exaHandle h;
   exaVectorGetHandle(vec,&h);
   h->vectorFree(vec);
+  if(vec->hostData)
+    exaFree(vec->hostData);
   exaFree(vec);
 }
-
-#if 0
-int exaSetVector(exaVector x, exaScalar *array) {
-  memcpy(x->data, array, sizeof(exaScalar) * (size_t)x->size);
-  return 0;
-}
-
-int exaDestroyVector(exaVector x) {
-  if(x->data) {
-    exaFree(x->data);
-  }
-
-  if(x) {
-    exaFree(x);
-  }
-
-  return 0;
-}
-#endif

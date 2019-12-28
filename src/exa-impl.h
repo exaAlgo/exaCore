@@ -95,12 +95,22 @@ int exaDestroyHandle(exaHandle h);
 //
 // exaVector
 //
+typedef enum{
+  exaHostSync=0,
+  exaDeviceSync=1,
+  exaBothSync=2,
+  exaNoneSync=3
+} exaSyncStatus;
+
 struct exaVector_private{
   struct exaTypeInfo_private info;
 
   exaHandle handle;
   exaInt size;
   size_t unitSize;
+
+  exaSyncStatus syncStatus;
+  void *hostData;
   void *data;
 
   int (*getDevicePointer)(exaVector x,void **ptr,size_t *size);

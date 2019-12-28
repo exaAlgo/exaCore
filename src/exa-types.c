@@ -27,6 +27,8 @@ size_t exaDataTypeGetSize(exaDataType t)
     default:
       break;
   }
+
+  return size;
 }
 
 gs_dom exaDataTypeGetGSType(exaDataType t)

@@ -34,16 +34,13 @@ int main(int argc,char *argv[])
   exaVector vec; exaVectorCreate(h,M,exaScalar_t,&vec);
   exaKernelRun(k,getExaInt(M),getExaScalar(0.5),vec);
 
-  exaScalar *out; exaCalloc(M,&out);
-  exaVectorRead(vec,out);
+  exaScalar *out; exaVectorRead(vec,(void**)&out);
   int i;
   for(i=0;i<M;i++){
     exaScalar ans=0.5;
     if(fabs(ans-out[i])>EXA_TOL)
       fprintf(stderr,"Error %lf != %lf\n",ans,out[i]);
   }
-
-  exaFree(out);
 
   exaDestroy(vec);
   exaDestroy(k);

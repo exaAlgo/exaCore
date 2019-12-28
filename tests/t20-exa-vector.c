@@ -24,21 +24,19 @@ int main(int argc,char *argv[])
     fprintf(stderr,"exaVectorGetSize failed: %d != %d\n",M,
       exaVectorGetSize(vec));
 
-  exaScalar *in,*out;
-  exaCalloc(M,&in); exaCalloc(M,&out);
+  exaScalar *in,*out; exaCalloc(M,&in);
 
   int i;
   for(i=0;i<M;i++)
     in[i]=i+0.1;
   exaVectorWrite(vec,in);
 
-  exaVectorRead(vec,out);
+  exaVectorRead(vec,(void**)&out);
   for(i=0;i<M;i++)
     if(fabs(i+0.1-out[i])>EXA_TOL)
       fprintf(stderr,"Error %lf != %lf\n",i+0.1,out[i]);
 
   exaFree(in);
-  exaFree(out);
   exaDestroy(vec);
 
   exaVector iVec;
@@ -48,20 +46,18 @@ int main(int argc,char *argv[])
     fprintf(stderr,"exaVectorGetSize failed: %d != %d\n",M,
       exaVectorGetSize(iVec));
 
-  exaInt *iIn,*iOut;
-  exaCalloc(M,&iIn); exaCalloc(M,&iOut);
+  exaInt *iIn,*iOut; exaCalloc(M,&iIn);
 
   for(i=0;i<M;i++)
     iIn[i]=2*i+1;
   exaVectorWrite(iVec,iIn);
 
-  exaVectorRead(iVec,iOut);
+  exaVectorRead(iVec,(void**)&iOut);
   for(i=0;i<M;i++)
     if(iOut[i]!=2*i+1)
       fprintf(stderr,"Error %d != %d\n",2*i+1,iOut[i]);
 
   exaFree(iIn);
-  exaFree(iOut);
   exaDestroy(iVec);
 
   exaFinalize(h);
