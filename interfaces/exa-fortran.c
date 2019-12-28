@@ -1,7 +1,7 @@
 // Fortran interface
 #include <exa-impl.h>
 #include <exa-memory.h>
-#include <exa-fortran-name.h>
+#include <exa-fortran.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -16,6 +16,11 @@ typedef size_t fortran_charlen_t;
 #else
 typedef int fortran_charlen_t;
 #endif
+//
+// Defines
+//
+#define EXA_NULL -1
+#define EXA_MAX_STRLEN 2048
 
 // Fortran strings are generally unterminated and the length is
 // passed as an extra argument after all the normal arguments.
@@ -25,7 +30,6 @@ typedef int fortran_charlen_t;
 // could overwrite other strings or attempt to write to read-only
 // memory.  This macro allocates a string to hold the null-terminated
 // version of the string that C expects.
-#define EXA_MAX_STRLEN 2048
 #define EXA_FIX_STRING(stringname)\
   char EXA_TOKEN_PASTE(stringname,_c)[EXA_MAX_STRLEN];\
   if (EXA_TOKEN_PASTE(stringname,_len)>EXA_MAX_STRLEN-1)\
@@ -35,10 +39,6 @@ typedef int fortran_charlen_t;
     EXA_TOKEN_PASTE(stringname,_len));\
   EXA_TOKEN_PASTE(stringname,_c)[EXA_TOKEN_PASTE_(stringname,_len)]\
     =0;
-//
-// Defines
-//
-#define EXA_NULL -1
 
 static exaHandle *handleDict=NULL;
 static int handleCurrent=0;
@@ -46,8 +46,8 @@ static int handleActive=0;
 static int handleMax=0;
 
 #define fExaInit EXA_FORTRAN_NAME(exainit,EXAINIT)
-void fExaInit(const char *backend,MPI_Fint *fcomm,int *exa,int *err,
-  fortran_charlen_t backend_len)
+void fExaInit(const char *backend,MPI_Fint *fcomm,
+  exaFortranHandle *exa,int *err,fortran_charlen_t backend_len)
 {
   EXA_FIX_STRING(backend);
   if(handleCurrent==handleMax)
@@ -61,9 +61,8 @@ void fExaInit(const char *backend,MPI_Fint *fcomm,int *exa,int *err,
 }
 
 #define fExaFinalize EXA_FORTRAN_NAME(exafinalize,EXAFINALIZE)
-void fExaFinalize(int *exa, int *err){
-  // TODO: Validate handle
-  *err=exaFinalize(handleDict[*exa]);
+void fExaFinalize(exaFortranHandle *exa,int *err){
+  *err=exaFinalize(exaHandleF2C(*exa));
 
   if(*err==0){
     handleActive--;
@@ -79,8 +78,8 @@ static int settingsMax=0;
 
 #define fSettingsCreate\
   EXA_FORTRAN_NAME(exasettingscreate,EXASETTINGSCREATE)
-void fSettingsCreate(int *exa,const char *fname,int *s,int *err,
-  fortran_charlen_t fname_len)
+void fSettingsCreate(exaFortranHandle *exa,const char *fname,
+  exaFortranSettings *s,int *err,fortran_charlen_t fname_len)
 {
   EXA_FIX_STRING(fname);
 
@@ -89,8 +88,7 @@ void fSettingsCreate(int *exa,const char *fname,int *s,int *err,
     exaRealloc(settingsMax,&settingsDict);
   }
 
-  // TODO: Validate handle
-  *err=exaSettingsCreate(handleDict[*exa],
+  *err=exaSettingsCreate(exaHandleF2C(*exa),
     strlen(fname_c)>0?fname_c:NULL,&settingsDict[settingsCurrent]);
 
   if(*err==0)
@@ -99,56 +97,52 @@ void fSettingsCreate(int *exa,const char *fname,int *s,int *err,
 
 #define fSettingsSetInt\
   EXA_FORTRAN_NAME(exasettingssetint,EXASETTINGSSETINT)
-void fSettingsSetInt(const char *sname,int *ival,int *s,int *err,
-  fortran_charlen_t sname_len)
+void fSettingsSetInt(const char *sname,int *ival,
+  exaFortranSettings *s,int *err,fortran_charlen_t sname_len)
 {
   EXA_FIX_STRING(sname);
-
-  // TODO: Validate Settings Handle
-  *err=exaSettingsSet(sname_c,getExaInt(*ival),settingsDict[*s]);
+  *err=exaSettingsSet(sname_c,getExaInt(*ival),exaSettingsF2C(*s));
 }
 
 #define fSettingsSetStr\
   EXA_FORTRAN_NAME(exasettingssetstr,EXASETTINGSSETSTR)
-void fSettingsSetStr(const char *sname,const char *sval,int *s,
-  int *err,fortran_charlen_t sname_len,fortran_charlen_t sval_len)
+void fSettingsSetStr(const char *sname,const char *sval,
+  exaFortranSettings *s,int *err,fortran_charlen_t sname_len,
+  fortran_charlen_t sval_len)
 {
   EXA_FIX_STRING(sname);
   EXA_FIX_STRING(sval);
 
-  // TODO: Validate Settings Handle
-  *err=exaSettingsSet(sname_c,getExaStr(sval_c),settingsDict[*s]);
+  *err=exaSettingsSet(sname_c,getExaStr(sval_c),exaSettingsF2C(*s));
 }
 
 #define fSettingsGetStr\
   EXA_FORTRAN_NAME(exasettingsgetstr,EXASETTINGSGETSTR)
-void fSettingsGetStr(char *sval,const char *sname,int *s,
-  int *err,fortran_charlen_t sval_len,fortran_charlen_t sname_len)
+void fSettingsGetStr(char *sval,const char *sname,
+  exaFortranSettings *s,int *err,fortran_charlen_t sval_len,
+  fortran_charlen_t sname_len)
 {
   EXA_FIX_STRING(sname);
 
-  // TODO: Validate Settings Handle
   char *val;
-  *err=exaSettingsGet(&val,sname_c,settingsDict[*s]);
+  *err=exaSettingsGet(&val,sname_c,exaSettingsF2C(*s));
   memset(sval,' ',sval_len);
   strcpy(sval,val),sval[strlen(sval)]=' ';
 }
 
 #define fSettingsGetInt\
   EXA_FORTRAN_NAME(exasettingsgetint,EXASETTINGSGETint)
-void fSettingsGetInt(int *ival,const char *sname,int *s,
-  int *err,fortran_charlen_t sname_len)
+void fSettingsGetInt(int *ival,const char *sname,
+  exaFortranSettings *s,int *err,fortran_charlen_t sname_len)
 {
   EXA_FIX_STRING(sname);
-
-  // TODO: Validate Settings Handle
-  *err=exaSettingsGet(ival,sname_c,settingsDict[*s]);
+  *err=exaSettingsGet(ival,sname_c,exaSettingsF2C(*s));
 }
 
 #define fSettingsFree EXA_FORTRAN_NAME(exasettingsfree,\
   EXASETTINGSFREE)
-void fSettingsFree(int *s,int *err){
-  *err=exaSettingsFree(settingsDict[*s]);
+void fSettingsFree(exaFortranSettings *s,int *err){
+  *err=exaSettingsFree(exaSettingsF2C(*s));
 
   if(*err==0){
     settingsActive--;
@@ -164,15 +158,15 @@ static int vectorMax=0;
 
 #define fExaVectorCreate\
   EXA_FORTRAN_NAME(exavectorcreate,EXAVECTORCREATE)
-void fExaVectorCreate(int *exa,int *length,int *type,int *vec,
-  int *err)
+void fExaVectorCreate(exaFortranHandle *exa,int *length,
+  int *type,exaFortranVector *vec,int *err)
 {
   if(vectorCurrent==vectorMax){
     vectorMax+=vectorMax/2+1;
     exaRealloc(vectorMax,&vectorDict);
   }
 
-  *err=exaVectorCreate(handleDict[*exa],*length,*type,
+  *err=exaVectorCreate(exaHandleF2C(*exa),*length,*type,
     &vectorDict[vectorCurrent]);
 
   if(*err==0)
@@ -181,32 +175,32 @@ void fExaVectorCreate(int *exa,int *length,int *type,int *vec,
 
 #define fExaVectorGetSize\
   EXA_FORTRAN_NAME(exavectorgetsize,EXAVECTORGETSIZE)
-void fExaVectorGetSize(int *size,int *vec,int *err)
+void fExaVectorGetSize(int *size,exaFortranVector *vec,int *err)
 {
-  *size=exaVectorGetSize(vectorDict[*vec]);
+  *size=exaVectorGetSize(exaVectorF2C(*vec));
   *err=0;
 }
 
 #define fExaVectorRead EXA_FORTRAN_NAME(exavectorread,EXAVECTORREAD)
-void fExaVectorRead(int *vec,exaScalar *array,int64_t *offset,
-  int *err)
+void fExaVectorRead(exaFortranVector *vec,exaScalar *array,
+  int64_t *offset,int *err)
 {
   exaScalar *b;
-  *err=exaVectorRead(vectorDict[*vec],(void**)&b);
+  *err=exaVectorRead(exaVectorF2C(*vec),(void**)&b);
   *offset=b-array;
 }
 
 #define fExaVectorWrite\
   EXA_FORTRAN_NAME(exavectorwrite,EXAVECTORWRITE)
-void fExaVectorWrite(int *vec,exaScalar *array,int64_t *offset,
-  int *err)
+void fExaVectorWrite(exaFortranVector *vec,exaScalar *array,
+  int64_t *offset,int *err)
 {
-  *err=exaVectorWrite(vectorDict[*vec],(array+*offset));
+  *err=exaVectorWrite(exaVectorF2C(*vec),(array+*offset));
 }
 
 #define fExaVectorFree EXA_FORTRAN_NAME(exavectorfree,EXAVECTORFREE)
-void fExaVectorFree(int *vec,int *err){
-  *err=exaVectorFree(vectorDict[*vec]);
+void fExaVectorFree(exaFortranVector *vec,int *err){
+  *err=exaVectorFree(exaVectorF2C(*vec));
 
   if(*err==0){
     vectorActive--;
@@ -222,8 +216,9 @@ static int programMax=0;
 
 #define fExaProgramCreate\
   EXA_FORTRAN_NAME(exaprogramcreate,EXAPROGRAMCREATE)
-void fExaProgramCreate(int *exa,const char *fname,int *s,int *prog,
-  int *err,fortran_charlen_t fname_len)
+void fExaProgramCreate(exaFortranHandle *exa,const char *fname,
+  exaFortranSettings *s,exaFortranProgram *prog,int *err,
+  fortran_charlen_t fname_len)
 {
   EXA_FIX_STRING(fname);
 
@@ -232,9 +227,8 @@ void fExaProgramCreate(int *exa,const char *fname,int *s,int *prog,
     exaRealloc(programMax,&programDict);
   }
 
-  //TODO: Validate handles
-  *err=exaProgramCreate(handleDict[*exa],fname_c,settingsDict[*s],
-    &programDict[programCurrent]);
+  *err=exaProgramCreate(exaHandleF2C(*exa),fname_c,
+    exaSettingsF2C(*s),&programDict[programCurrent]);
 
   if(*err==0)
     *prog=programCurrent++,programActive++;
@@ -242,8 +236,8 @@ void fExaProgramCreate(int *exa,const char *fname,int *s,int *prog,
 
 #define fExaProgramFree\
   EXA_FORTRAN_NAME(exaprogramfree,EXAPROGRAMFREE)
-void fExaProgramFree(int *prog,int *err){
-  *err=exaProgramFree(programDict[*prog]);
+void fExaProgramFree(exaFortranProgram *prog,int *err){
+  *err=exaProgramFree(exaProgramF2C(*prog));
 
   if(*err==0){
     programActive--;
@@ -259,8 +253,8 @@ static int kernelMax=0;
 
 #define fExaKernelCreate\
   EXA_FORTRAN_NAME(exakernelcreate,EXAKERNELCREATE)
-void fExaKernelCreate(int *prog,const char *knlName,int *knl,
-  int *err,fortran_charlen_t knlName_len)
+void fExaKernelCreate(exaFortranProgram *prog,const char *knlName,
+  exaFortranKernel *knl,int *err,fortran_charlen_t knlName_len)
 {
   EXA_FIX_STRING(knlName);
 
@@ -269,8 +263,7 @@ void fExaKernelCreate(int *prog,const char *knlName,int *knl,
     exaRealloc(kernelMax,&kernelDict);
   }
 
-  //TODO: Validate handles
-  *err=exaKernelCreate(programDict[*prog],knlName_c,
+  *err=exaKernelCreate(exaProgramF2C(*prog),knlName_c,
     &kernelDict[kernelCurrent]);
 
   if(*err==0)
@@ -281,12 +274,52 @@ void fExaKernelCreate(int *prog,const char *knlName,int *knl,
 
 #define fExaKernelFree\
   EXA_FORTRAN_NAME(exakernelfree,EXAKERNELFREE)
-void fExaKernelFree(int *knl,int *err){
-  *err=exaKernelFree(kernelDict[*knl]);
+void fExaKernelFree(exaFortranKernel *knl,int *err){
+  *err=exaKernelFree(exaKernelF2C(*knl));
 
   if(*err==0){
     kernelActive--;
     if(kernelActive==0)
       exaFree(kernelDict),kernelCurrent=0,kernelMax=0;
   }
+}
+
+exaHandle exaHandleF2C(exaFortranHandle handle){
+  if(handle<0||handle>=handleCurrent||handleActive<=0){
+    fprintf(stderr,"Invalid exaFortranHandle.");
+    return NULL;
+  }
+  return handleDict[handle];
+}
+
+exaSettings exaSettingsF2C(exaFortranSettings settings){
+  if(settings<0||settings>=settingsCurrent||settingsActive<=0){
+    fprintf(stderr,"Invalid exaFortranSettings.");
+    return NULL;
+  }
+  return settingsDict[settings];
+}
+
+exaVector exaVectorF2C(exaFortranVector vector){
+  if(vector<0||vector>=vectorCurrent||vectorActive<=0){
+    fprintf(stderr,"Invalid exaFortranVector.");
+    return NULL;
+  }
+  return vectorDict[vector];
+}
+
+exaProgram exaProgramF2C(exaFortranProgram program){
+  if(program<0||program>=programCurrent||programActive<=0){
+    fprintf(stderr,"Invalid exaFortranProgram.");
+    return NULL;
+  }
+  return programDict[program];
+}
+
+exaKernel exaKernelF2C(exaFortranKernel kernel){
+  if(kernel<0||kernel>=kernelCurrent||kernelActive<=0){
+    fprintf(stderr,"Invalid exaFortranKernel.");
+    return NULL;
+  }
+  return kernelDict[kernel];
 }

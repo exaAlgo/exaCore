@@ -1,5 +1,5 @@
-#ifndef _EXA_FORTRAN_NAME_H_
-#define _EXA_FORTRAN_NAME_H_
+#ifndef _EXA_FORTRAN_H_
+#define _EXA_FORTRAN_H_
 
 /* establishes some macros to establish
    * the FORTRAN naming convention
@@ -39,5 +39,17 @@
 #  define EXA_FORTRAN_NAME(low,up) EXA_FPREFIXED_NAME(low)
 #  define EXA_FORTRAN_UNPREFIXED(low,up) low
 #endif
+
+typedef int exaFortranHandle;
+typedef int exaFortranSettings;
+typedef int exaFortranVector;
+typedef int exaFortranProgram;
+typedef int exaFortranKernel;
+
+exaHandle exaHandleF2C(exaFortranHandle handle);
+exaSettings exaSettingsF2C(exaFortranSettings settings);
+exaVector exaVectorF2C(exaFortranVector vector);
+exaProgram exaProgramF2C(exaFortranProgram program);
+exaKernel exaKernelF2C(exaFortranKernel handle);
 
 #endif
