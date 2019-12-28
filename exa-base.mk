@@ -2,9 +2,10 @@
 src.c = $(wildcard $(SRCDIR)/*.c)
 obj  += $(patsubst $(SRCDIR)/%.c,$(BUILDDIR)/%.c.o,$(src.c))
 
-interfaces.c = $(wildcard $(INTERFACESDIR)/*.c)
-obj  += $(patsubst $(INTERFACESDIR)/%.c,\
+interfaces.c   = $(wildcard $(INTERFACESDIR)/*.c)
+interfaces.obj = $(patsubst $(INTERFACESDIR)/%.c,\
   $(BUILDDIR)/$(INTERFACESDIR)/%.c.o,$(interfaces.c))
+obj           += $(interfaces.obj)
 
 native.dir       = backends/native
 native.src       = $(wildcard $(native.dir)/*.c)
@@ -52,10 +53,14 @@ link.f   = $(FC) -shared -o
 
 ### Make targets ###
 .PHONY: all-base
-all-base: lib-base install-base examples-base tests-base
+all-base: interfaces-base lib-base install-base examples-base\
+  tests-base
+
+.PHONY: interfaces-base
+interfaces-base: $(interfaces.obj)
 
 .PHONY: lib-base
-lib-base: $(obj)
+lib-base: $(obj) interfaces-base
 	$(link.c) $(BUILDDIR)/lib$(libname).$(ext) $(obj) $(LDFLAGS)
 
 .PHONY: install-base
@@ -63,7 +68,8 @@ install-base: lib-base
 	@mkdir -p $(DESTDIR)$(PREFIX)/include
 	@cp -u $(SRCDIR)/*.h $(DESTDIR)$(PREFIX)/include/
 	@mkdir -p $(DESTDIR)$(PREFIX)/lib
-	@cp -u $(BUILDDIR)/$(prefix)$(libname).$(ext) $(DESTDIR)$(PREFIX)/lib/
+	@cp -u $(BUILDDIR)/$(prefix)$(libname).$(ext)\
+    $(DESTDIR)$(PREFIX)/lib/
 
 $(BUILDDIR)/%.c.o: $(SRCDIR)/%.c
 	$(compile.c) -c $< -o $@

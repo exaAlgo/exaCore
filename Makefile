@@ -58,24 +58,28 @@ $(BUILDDIR)/$(occa.dir)/%.o: $(occa.dir)/%.c
 ### Include template makefile ###
 -include exa-base.mk
 
+### Make targets ###
+.PHONY: all
+all: interfaces lib examples tests install
+
+.PHONY: interfaces
+interfaces: interfaces-base
+
 .PHONY: lib
-lib: lib-base
-
-.PHONY: examples
-examples: examples-base
-
-.PHONY: tests
-tests: tests-base
-	@cp $(TESTSDIR)/t[0-9][0-9]-*.[^cf]* $(BUILDDIR)/$(TESTSDIR)/
-	@cp $(TESTSDIR)/run-tests.sh $(BUILDDIR)/$(TESTSDIR)
-	@cd $(BUILDDIR)/$(TESTSDIR) && ./run-tests.sh
+lib: lib-base interfaces
 
 .PHONY: install
-install: install-base
+install: install-base lib
 	@cp -u $(GSDIR)/include/*.h $(DESTDIR)$(PREFIX)/include/
 	@cp -u interfaces/*.h $(DESTDIR)$(PREFIX)/include/
 	@mkdir -p $(DESTDIR)$(PREFIX)/share
 	@cp -u exa-base.mk tests/run-tests.sh $(DESTDIR)$(PREFIX)/share
 
-.PHONY: all
-all: lib examples tests install
+.PHONY: examples
+examples: examples-base install
+
+.PHONY: tests
+tests: tests-base install
+	@cp $(TESTSDIR)/t[0-9][0-9]-*.[^cf]* $(BUILDDIR)/$(TESTSDIR)/
+	@cp $(TESTSDIR)/run-tests.sh $(BUILDDIR)/$(TESTSDIR)
+	@cd $(BUILDDIR)/$(TESTSDIR) && ./run-tests.sh
