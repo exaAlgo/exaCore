@@ -26,15 +26,16 @@ typedef int fortran_charlen_t;
 // could overwrite other strings or attempt to write to read-only
 // memory.  This macro allocates a string to hold the null-terminated
 // version of the string that C expects.
+#define MAX_LEN 2048
 #define FIX_STRING(stringname)\
-  char EXA_TOKEN_PASTE(stringname,_c)[1024];\
-  if (EXA_TOKEN_PASTE(stringname,_len) > 1023)\
+  char EXA_TOKEN_PASTE(stringname,_c)[MAX_LEN];\
+  if (EXA_TOKEN_PASTE(stringname,_len)>MAX_LEN-1)\
     fprintf(stderr,"Fortran string length too long %zd\n",\
       (size_t)EXA_TOKEN_PASTE(stringname,_len));\
   strncpy(EXA_TOKEN_PASTE(stringname,_c),stringname,\
     EXA_TOKEN_PASTE(stringname,_len));\
-  EXA_TOKEN_PASTE(stringname,_c)[EXA_TOKEN_PASTE_(stringname,_len)]=0;\
-
+  EXA_TOKEN_PASTE(stringname,_c)[EXA_TOKEN_PASTE_(stringname,_len)]\
+    =0;
 //
 // Defines
 //
@@ -249,5 +250,44 @@ void fExaProgramFree(int *prog,int *err){
     programActive--;
     if(programActive==0)
       exaFree(programDict),programCurrent=0,programMax=0;
+  }
+}
+
+static exaKernel *kernelDict=NULL;
+static int kernelCurrent=0;
+static int kernelActive=0;
+static int kernelMax=0;
+
+#define fExaKernelCreate\
+  EXA_FORTRAN_NAME(exakernelcreate,EXAKERNELCREATE)
+void fExaKernelCreate(int *prog,const char *knlName,int *knl,
+  int *err,fortran_charlen_t knlName_len)
+{
+  FIX_STRING(knlName);
+
+  if(kernelCurrent==kernelMax){
+    kernelMax+=kernelMax/2+1;
+    exaRealloc(kernelMax,&kernelDict);
+  }
+
+  //TODO: Validate handles
+  *err=exaKernelCreate(programDict[*prog],knlName_c,
+    &kernelDict[kernelCurrent]);
+
+  if(*err==0)
+    *knl=kernelCurrent++,kernelActive++;
+}
+
+//TODO: exaKernelRun
+
+#define fExaKernelFree\
+  EXA_FORTRAN_NAME(exakernelfree,EXAKERNELFREE)
+void fExaKernelFree(int *knl,int *err){
+  *err=exaKernelFree(kernelDict[*knl]);
+
+  if(*err==0){
+    kernelActive--;
+    if(kernelActive==0)
+      exaFree(kernelDict),kernelCurrent=0,kernelMax=0;
   }
 }

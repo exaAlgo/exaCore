@@ -4,11 +4,10 @@
 #include <math.h>
 
 #define M 10
-#define GET_OKL_NAME(sin,sout) do{\
-  const char *slash=strrchr(sin,'-');\
-  int length=strlen(sin)-strlen(slash);\
-  strncpy(sout,sin,length);\
-  sout[length]='\0';\
+#define KERNEL_FILENAME(sin,sout) do{\
+  int length=strlen(sin);\
+  strncpy(sout,sin,length-2);\
+  sout[length-2]='\0';\
 } while(0)
 
 int main(int argc,char *argv[])
@@ -25,8 +24,9 @@ int main(int argc,char *argv[])
 
   exaSettings s; exaSettingsCreate(h,NULL,&s);
 
-  exaProgram p; char okl[BUFSIZ]; GET_OKL_NAME(argv[0],okl);
-  exaProgramCreate(h,okl,s,&p);
+  exaProgram p; char knlFname[BUFSIZ];
+  KERNEL_FILENAME(argv[0],knlFname);
+  exaProgramCreate(h,knlFname,s,&p);
 
   exaKernel k;
   exaKernelCreate(p,"setVector",&k);

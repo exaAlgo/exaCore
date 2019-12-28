@@ -5,10 +5,13 @@
       include 'exaf.h'
 
       integer ierr,nargs,i
-      integer handle,settings,prog
+      integer handle,settings,prog,kernel,vector
 
       character*1024 exename
       character*128  arg
+
+      integer M
+      parameter(M=10)
 
       call mpi_init(ierr)
 
@@ -26,8 +29,16 @@
 !     remote '-f' at the end of fortran tests
       exename=exename(1:len_trim(exename)-2)
       call exaprogramcreate(handle,trim(exename),settings,prog,ierr)
-      call exaprogramfree(prog,ierr)
 
+      call exakernelcreate(prog,'setVector',kernel,ierr)
+
+      call exavectorcreate(handle,M,exa_scalar,vector,ierr)
+
+!     TODO run the kernel and compare answers
+
+      call exavectorfree(vector,ierr)
+      call exakernelfree(kernel,ierr)
+      call exaprogramfree(prog,ierr)
       call exasettingsfree(settings,ierr)
       call exafinalize(handle,ierr)
 
