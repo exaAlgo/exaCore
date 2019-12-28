@@ -77,8 +77,8 @@ static int settingsCurrent=0;
 static int settingsActive=0;
 static int settingsMax=0;
 
-#define fSettingsCreate EXA_FORTRAN_NAME(exasettingscreate,\
-  EXASETTINGSCREATE)
+#define fSettingsCreate\
+  EXA_FORTRAN_NAME(exasettingscreate,EXASETTINGSCREATE)
 void fSettingsCreate(int *exa,const char *fname,int *s,int *err,
   fortran_charlen_t fname_len)
 {
@@ -97,8 +97,8 @@ void fSettingsCreate(int *exa,const char *fname,int *s,int *err,
     *s=settingsCurrent++,settingsActive++;
 }
 
-#define fSettingsSetInt EXA_FORTRAN_NAME(exasettingssetint,\
-  EXASETTINGSSETINT)
+#define fSettingsSetInt\
+  EXA_FORTRAN_NAME(exasettingssetint,EXASETTINGSSETINT)
 void fSettingsSetInt(const char *sname,int *ival,int *s,int *err,
   fortran_charlen_t sname_len)
 {
@@ -108,8 +108,8 @@ void fSettingsSetInt(const char *sname,int *ival,int *s,int *err,
   *err=exaSettingsSet(sname_c,getExaInt(*ival),settingsDict[*s]);
 }
 
-#define fSettingsSetStr EXA_FORTRAN_NAME(exasettingssetstr,\
-  EXASETTINGSSETSTR)
+#define fSettingsSetStr\
+  EXA_FORTRAN_NAME(exasettingssetstr,EXASETTINGSSETSTR)
 void fSettingsSetStr(const char *sname,const char *sval,int *s,
   int *err,fortran_charlen_t sname_len,fortran_charlen_t sval_len)
 {
@@ -120,8 +120,8 @@ void fSettingsSetStr(const char *sname,const char *sval,int *s,
   *err=exaSettingsSet(sname_c,getExaStr(sval_c),settingsDict[*s]);
 }
 
-#define fSettingsGetStr EXA_FORTRAN_NAME(exasettingsgetstr,\
-  EXASETTINGSGETSTR)
+#define fSettingsGetStr\
+  EXA_FORTRAN_NAME(exasettingsgetstr,EXASETTINGSGETSTR)
 void fSettingsGetStr(char *sval,const char *sname,int *s,
   int *err,fortran_charlen_t sval_len,fortran_charlen_t sname_len)
 {
@@ -134,8 +134,8 @@ void fSettingsGetStr(char *sval,const char *sname,int *s,
   strcpy(sval,val),sval[strlen(sval)]=' ';
 }
 
-#define fSettingsGetInt EXA_FORTRAN_NAME(exasettingsgetint,\
-  EXASETTINGSGETint)
+#define fSettingsGetInt\
+  EXA_FORTRAN_NAME(exasettingsgetint,EXASETTINGSGETint)
 void fSettingsGetInt(int *ival,const char *sname,int *s,
   int *err,fortran_charlen_t sname_len)
 {
@@ -162,7 +162,7 @@ static int vectorCurrent=0;
 static int vectorActive=0;
 static int vectorMax=0;
 
-#define fexaVectorCreate\
+#define fExaVectorCreate\
   EXA_FORTRAN_NAME(exavectorcreate,EXAVECTORCREATE)
 void fExaVectorCreate(int *exa,int *length,int *type,int *vec,
   int *err)
@@ -179,16 +179,25 @@ void fExaVectorCreate(int *exa,int *length,int *type,int *vec,
     *vec=vectorCurrent++,vectorActive++;
 }
 
-#define fexaVectorRead EXA_FORTRAN_NAME(exavectorread,EXAVECTORREAD)
+#define fExaVectorGetSize\
+  EXA_FORTRAN_NAME(exavectorgetsize,EXAVECTORGETSIZE)
+void fExaVectorGetSize(int *size,int *vec,int *err)
+{
+  *size=exaVectorGetSize(vectorDict[*vec]);
+  *err=0;
+}
+
+#define fExaVectorRead EXA_FORTRAN_NAME(exavectorread,EXAVECTORREAD)
 void fExaVectorRead(int *vec,exaScalar *array,int64_t *offset,
   int *err)
 {
-  const exaScalar *b;
-  *err=exaVectorRead(vectorDict[*vec],&b);
+  exaScalar *b;
+  *err=exaVectorRead(vectorDict[*vec],(void**)&b);
   *offset=b-array;
 }
 
-#define fexaVectorWrite EXA_FORTRAN_NAME(exavectorread,EXAVECTORREAD)
+#define fExaVectorWrite\
+  EXA_FORTRAN_NAME(exavectorwrite,EXAVECTORWRITE)
 void fExaVectorWrite(int *vec,exaScalar *array,int64_t *offset,
   int *err)
 {
@@ -202,6 +211,6 @@ void fExaVectorFree(int *vec,int *err){
   if(*err==0){
     vectorActive--;
     if(vectorActive==0)
-      exaFree(&vectorDict),vectorCurrent=0,vectorMax= 0;
+      exaFree(vectorDict),vectorCurrent=0,vectorMax=0;
   }
 }

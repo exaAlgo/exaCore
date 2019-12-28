@@ -1,4 +1,4 @@
-      program t10_exa_handle
+      program t20_exa_vector
       implicit none
 
       include 'mpif.h'
@@ -16,7 +16,7 @@
       integer M
       parameter(M=10)
 
-      real*8 in_(M),out_(M)
+      real*8 in_(M),out_(1)
 
       character*128 arg
 
@@ -39,13 +39,12 @@
 
       do i=1,M
         in_(i) =i+0.1
-        out_(i)=0.0
       enddo
       call exavectorwrite(vector,in_,in_offset,ierr)
 
       call exavectorread(vector,out_,out_offset,ierr)
       do i=1,M
-        if(abs(out_(i)-(i+0.1))) then
+        if(abs(out_(i+out_offset)-(i+0.1))>exa_tol) then
           write(stderr,*) 'Error reading vector.'
         endif
       enddo
