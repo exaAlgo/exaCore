@@ -214,3 +214,40 @@ void fExaVectorFree(int *vec,int *err){
       exaFree(vectorDict),vectorCurrent=0,vectorMax=0;
   }
 }
+
+static exaProgram *programDict=NULL;
+static int programCurrent=0;
+static int programActive=0;
+static int programMax=0;
+
+#define fExaProgramCreate\
+  EXA_FORTRAN_NAME(exaprogramcreate,EXAPROGRAMCREATE)
+void fExaProgramCreate(int *exa,const char *fname,int *s,int *prog,
+  int *err,fortran_charlen_t fname_len)
+{
+  FIX_STRING(fname);
+
+  if(programCurrent==programMax){
+    programMax+=programMax/2+1;
+    exaRealloc(programMax,&programDict);
+  }
+
+  //TODO: Validate handles
+  *err=exaProgramCreate(handleDict[*exa],fname_c,settingsDict[*s],
+    &programDict[programCurrent]);
+
+  if(*err==0)
+    *prog=programCurrent++,programActive++;
+}
+
+#define fExaProgramFree\
+  EXA_FORTRAN_NAME(exaprogramfree,EXAPROGRAMFREE)
+void fExaProgramFree(int *prog,int *err){
+  *err=exaProgramFree(programDict[*prog]);
+
+  if(*err==0){
+    programActive--;
+    if(programActive==0)
+      exaFree(programDict),programCurrent=0,programMax=0;
+  }
+}
