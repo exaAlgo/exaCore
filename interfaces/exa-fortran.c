@@ -1,44 +1,8 @@
-// Fortran interface
 #include <exa-impl.h>
 #include <exa-memory.h>
 #include <exa-fortran.h>
 #include <stdlib.h>
 #include <string.h>
-
-// This test should actually be for the gfortran version,
-// but we don't currently have a configure system to determine
-// that (TODO).  At present, this will use the smaller integer
-// when run with clang+gfortran=8, for example.  (That is
-// sketchy, but will likely work for users that don't have huge
-// character strings.)
-#if __GNUC__ >= 8
-typedef size_t fortran_charlen_t;
-#else
-typedef int fortran_charlen_t;
-#endif
-//
-// Defines
-//
-#define EXA_NULL -1
-#define EXA_MAX_STRLEN 2048
-
-// Fortran strings are generally unterminated and the length is
-// passed as an extra argument after all the normal arguments.
-// Some compilers (I only know of Windows) place the length
-// argument immediately after the string parameter (TODO). We can't
-// just NULL-terminate the string in-place because that
-// could overwrite other strings or attempt to write to read-only
-// memory.  This macro allocates a string to hold the null-terminated
-// version of the string that C expects.
-#define EXA_FIX_STRING(stringname)\
-  char EXA_TOKEN_PASTE(stringname,_c)[EXA_MAX_STRLEN];\
-  if (EXA_TOKEN_PASTE(stringname,_len)>EXA_MAX_STRLEN-1)\
-    fprintf(stderr,"Fortran string length too long %zd\n",\
-      (size_t)EXA_TOKEN_PASTE(stringname,_len));\
-  strncpy(EXA_TOKEN_PASTE(stringname,_c),stringname,\
-    EXA_TOKEN_PASTE(stringname,_len));\
-  EXA_TOKEN_PASTE(stringname,_c)[EXA_TOKEN_PASTE_(stringname,_len)]\
-    =0;
 
 static exaHandle *handleDict=NULL;
 static int handleCurrent=0;
