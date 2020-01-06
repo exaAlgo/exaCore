@@ -26,6 +26,11 @@ int exaKernelGetHandle(exaKernel k,exaHandle *h){
   return 0;
 }
 
+int exaKernelSetHandle(exaKernel k,exaHandle *h){
+  k->handle=*h;
+  return 0;
+}
+
 int exaKernelSetData(exaKernel k,void **data){
   k->data=*data;
   return 0;
