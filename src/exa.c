@@ -53,7 +53,7 @@ int exaInit(exaHandle *h_,exaCommExternal ce,const char *backend) {
   if(root==NULL) h->root = 0;
   else h->root=atoi(root);
 
-  exaDebug(h,"numBackends: %d\n",numBackends);
+  exaDebug(h,"[exaInit] numBackends: %d\n",numBackends);
 
   //TODO: sort backends based on priority
   int i,hostI;
@@ -89,6 +89,7 @@ int exaDebug(exaHandle h,const char *format,...)
 }
 
 int exaFinalize(exaHandle h) {
+  exaDebug(h,"[exaFinalize]\n");
   // Finalize the backend
   h->backendFinalize(h);
   // Finalize crystal router

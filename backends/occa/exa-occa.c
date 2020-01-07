@@ -56,12 +56,12 @@ int exaOccaInit(exaHandle h,const char *backend)
     snprintf(deviceConfig,BUFSIZ,occaOpenMP,schedule,chunkSize);
   }
 
-  exaDebug(h,"deviceConfig=%s\n",deviceConfig);
+  exaDebug(h,"[occaInit] deviceConfig=%s\n",deviceConfig);
   oh->device=occaCreateDeviceFromString(deviceConfig);
 
   exaHandleSetData(h,(void **)&oh);
 
-  exaDebug(h,"Initializing handles ...");
+  exaDebug(h,"[occaInit] Set backend handles ...\n");
   // set call back functions for the backend
   h->backendFinalize=exaOccaFinalize;
   h->updateSettings=exaOccaUpdateSettings;
