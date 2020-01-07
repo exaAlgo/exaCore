@@ -88,7 +88,7 @@ $(BUILDDIR)/examples/%: $(EXAMPLESDIR)/%.c
 
 .PHONY: tests-base
 tests-base: install-base $(test.obj)
-	@cp $(TESTSDIR)/t[0-9][0-9]-*.[^cf]* $(BUILDDIR)/$(TESTSDIR)/
+	@cp $(TESTSDIR)/t[0-9][0-9][0-9]-*.[^cf]* $(BUILDDIR)/$(TESTSDIR)/
 
 $(BUILDDIR)/tests/%-c: $(TESTSDIR)/%.c
 	$(compile.c) $< -o $@ $(example.ldflags)
