@@ -80,6 +80,5 @@ examples: examples-base install
 
 .PHONY: tests
 tests: tests-base install
-	@cp $(TESTSDIR)/t[0-9][0-9]-*.[^cf]* $(BUILDDIR)/$(TESTSDIR)/
 	@cp $(TESTSDIR)/run-tests.sh $(BUILDDIR)/$(TESTSDIR)
 	@cd $(BUILDDIR)/$(TESTSDIR) && ./run-tests.sh
