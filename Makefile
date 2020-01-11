@@ -31,18 +31,16 @@ UNDERSCORE ?= 1
 
 ### Make targets ###
 .PHONY: all
-all: interfaces lib examples tests install
-
-.PHONY: interfaces
-interfaces: interfaces-base
+all: lib examples tests install
 
 .PHONY: lib
-lib: lib-base interfaces
+lib: lib-base
 
 .PHONY: install
 install: install-base lib
 	@cp -u $(GSDIR)/include/*.h $(DESTDIR)$(PREFIX)/include/
 	@cp -u interfaces/*.h $(DESTDIR)$(PREFIX)/include/
+	@cp -u tests/*.h $(DESTDIR)$(PREFIX)/include/
 	@mkdir -p $(DESTDIR)$(PREFIX)/share
 	@cp -u exa-base.mk tests/run-tests.sh $(DESTDIR)$(PREFIX)/share
 

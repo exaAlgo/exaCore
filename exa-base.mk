@@ -8,9 +8,9 @@ INTERFACESDIR=interfaces
 LDFLAGS  += -L$(GSDIR)/lib -lgs -lm
 INCFLAGS += -I$(GSDIR)/include -I$(SRCDIR) -I$(INTERFACESDIR)
 
-libExt   =so
-libPrefix=lib
-libName  =exa
+libExt    ?=so
+libPrefix ?=lib
+libName   ?=exa
 
 obj=
 
@@ -43,17 +43,17 @@ $(BUILDDIR)/$(native.dir)/%.c.o: $(native.dir)/%.c
 
 ### Compile src/ ###
 src.c   = $(wildcard $(SRCDIR)/*.c)
-src.obj = $(patsubst $(SRCDIR)/%.c,$(BUILDDIR)/%.c.o,$(src.c))
+src.obj = $(patsubst $(SRCDIR)/%.c,$(BUILDDIR)/src/%.c.o,$(src.c))
 obj    += $(src.obj)
 
-$(BUILDDIR)/%.c.o: $(SRCDIR)/%.c
+$(BUILDDIR)/src/%.c.o: $(SRCDIR)/%.c
 	$(compile.c) -c $< -o $@
 
 ### Compile interfaces/ ###
 interfaces.c   = $(wildcard $(INTERFACESDIR)/*.c)
 interfaces.obj = $(patsubst $(INTERFACESDIR)/%.c,\
   $(BUILDDIR)/$(INTERFACESDIR)/%.c.o,$(interfaces.c))
-obj           += $(interfaces.obj)
+obj += $(interfaces.obj)
 
 $(BUILDDIR)/$(INTERFACESDIR)/%.c.o: $(INTERFACESDIR)/%.c
 	$(compile.c) -c $< -o $@
@@ -63,10 +63,9 @@ examples.src = $(wildcard $(EXAMPLESDIR)/*.c)
 examples.obj = $(patsubst $(EXAMPLESDIR)/%.c,\
   $(BUILDDIR)/$(EXAMPLESDIR)/%,$(examples.src))
 examples.ldflags = -L$(BUILDDIR) -l$(libName) $(LDFLAGS)
-obj += $(examples.obj)
 
 $(BUILDDIR)/examples/%: $(EXAMPLESDIR)/%.c
-	$(compile.c) $< -o $@ $(example.ldflags)
+	$(compile.c) $< -o $@ $(examples.ldflags)
 
 ### Compile tests/ ###
 tests.c   = $(wildcard $(TESTSDIR)/*.c)
@@ -77,7 +76,6 @@ tests.obj+= $(patsubst $(TESTSDIR)/%.f,\
   $(BUILDDIR)/$(TESTSDIR)/%-f,$(tests.f))
 tests.incflags= -I$(TESTSDIR)
 tests.ldflags = -L$(BUILDDIR) -l$(libName) $(LDFLAGS)
-obj += $(tests.obj)
 
 $(BUILDDIR)/tests/%-c: $(TESTSDIR)/%.c
 	$(compile.c) $(tests.incflags) $< -o $@ $(tests.ldflags)
@@ -108,14 +106,10 @@ link.f   = $(FC) -shared -o
 
 ### Make targets ###
 .PHONY: all-base
-all-base: interfaces-base lib-base install-base examples-base\
-  tests-base
-
-.PHONY: interfaces-base
-interfaces-base: $(interfaces.obj)
+all-base: lib-base install-base examples-base tests-base
 
 .PHONY: lib-base
-lib-base: $(obj) interfaces-base
+lib-base: $(obj)
 	$(link.c) $(BUILDDIR)/$(libPrefix)$(libName).$(libExt) $(obj)\
     $(LDFLAGS)
 
@@ -128,11 +122,10 @@ install-base: lib-base
     $(DESTDIR)$(PREFIX)/lib/
 
 .PHONY: examples-base
-examples-base: install-base $(example.obj)
-
+examples-base: install-base $(examples.obj)
 
 .PHONY: tests-base
-tests-base: install-base $(test.obj)
+tests-base: install-base $(tests.obj)
 	@cp $(TESTSDIR)/t[0-9][0-9][0-9]-*.[^cf]* $(BUILDDIR)/$(TESTSDIR)/
 
 .PHONY: clean
@@ -149,3 +142,4 @@ $(shell mkdir -p $(BUILDDIR)/$(TESTSDIR))
 $(shell mkdir -p $(BUILDDIR)/$(native.dir))
 $(shell mkdir -p $(BUILDDIR)/$(occa.dir))
 $(shell mkdir -p $(BUILDDIR)/$(INTERFACESDIR))
+$(shell mkdir -p $(BUILDDIR)/$(SRCDIR))
