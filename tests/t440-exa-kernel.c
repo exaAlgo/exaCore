@@ -1,14 +1,10 @@
 #include "exa.h"
+#include "exa-tests.h"
 #include "exa-memory.h"
 
 #include <math.h>
 
 #define M 10
-#define KERNEL_FILENAME(sin,sout) do{\
-  int length=strlen(sin);\
-  strncpy(sout,sin,length-2);\
-  sout[length-2]='\0';\
-} while(0)
 
 int main(int argc,char *argv[])
 {
@@ -25,7 +21,7 @@ int main(int argc,char *argv[])
   exaSettings s; exaSettingsCreate(h,NULL,&s);
 
   exaProgram p; char knlFname[BUFSIZ];
-  KERNEL_FILENAME(argv[0],knlFname);
+  GET_OKL_NAME(knlFname,argv[0]);
   exaProgramCreate(h,knlFname,s,&p);
 
   exaKernel k;
