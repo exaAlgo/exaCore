@@ -1,12 +1,36 @@
-### Set source files and objects ###
-src.c = $(wildcard $(SRCDIR)/*.c)
-obj  += $(patsubst $(SRCDIR)/%.c,$(BUILDDIR)/%.c.o,$(src.c))
+### Meta info about the package ###
+SRCDIR       =src
+BUILDDIR     =build
+EXAMPLESDIR  =examples
+TESTSDIR     =tests
+INTERFACESDIR=interfaces
 
-interfaces.c   = $(wildcard $(INTERFACESDIR)/*.c)
-interfaces.obj = $(patsubst $(INTERFACESDIR)/%.c,\
-  $(BUILDDIR)/$(INTERFACESDIR)/%.c.o,$(interfaces.c))
-obj           += $(interfaces.obj)
+LDFLAGS  += -L$(GSDIR)/lib -lgs -lm
+INCFLAGS += -I$(GSDIR)/include -I$(SRCDIR) -I$(INTERFACESDIR)
 
+libExt   =so
+libPrefix=lib
+libName  =exa
+
+obj=
+
+### Backends ###
+# OCCA backend (third party)
+occa.dir       = backends/occa
+occa.src       = $(wildcard $(occa.dir)/*.c)
+occa.obj       = $(patsubst $(occa.dir)/%.c,\
+  $(BUILDDIR)/$(occa.dir)/%.o,$(occa.src))
+occa.incflags += -I$(occa.dir) -I$(OCCA_DIR)/include
+
+ifneq ($(OCCA),0)
+  LDFLAGS += -L$(OCCA_DIR)/lib -locca
+  obj += $(occa.obj)
+endif
+
+$(BUILDDIR)/$(occa.dir)/%.o: $(occa.dir)/%.c
+	$(compile.c) $(occa.incflags) -c $< -o $@
+
+# native backend
 native.dir       = backends/native
 native.src       = $(wildcard $(native.dir)/*.c)
 native.incflags += -I$(native.dir)
@@ -14,38 +38,69 @@ native.obj       = $(patsubst $(native.dir)/%.c,\
   $(BUILDDIR)/$(native.dir)/%.c.o,$(native.src))
 obj             += $(native.obj)
 
-example.src     = $(wildcard $(EXAMPLESDIR)/*.c)
-example.obj     = $(patsubst $(EXAMPLESDIR)/%.c,\
-  $(BUILDDIR)/$(EXAMPLESDIR)/%,$(example.src))
-example.ldflags = -L$(BUILDDIR) -l$(libname) $(LDFLAGS)
+$(BUILDDIR)/$(native.dir)/%.c.o: $(native.dir)/%.c
+	$(compile.c) $(native.incflags) -c $< -o $@
 
-test.c   = $(wildcard $(TESTSDIR)/*.c)
-test.f   = $(wildcard $(TESTSDIR)/*.f)
-test.obj = $(patsubst $(TESTSDIR)/%.c,\
-  $(BUILDDIR)/$(TESTSDIR)/%-c,$(test.c))
-test.obj+= $(patsubst $(TESTSDIR)/%.f,\
-  $(BUILDDIR)/$(TESTSDIR)/%-f,$(test.f))
+### Compile src/ ###
+src.c   = $(wildcard $(SRCDIR)/*.c)
+src.obj = $(patsubst $(SRCDIR)/%.c,$(BUILDDIR)/%.c.o,$(src.c))
+obj    += $(src.obj)
 
-CMMNFLAGS ?=
+$(BUILDDIR)/%.c.o: $(SRCDIR)/%.c
+	$(compile.c) -c $< -o $@
+
+### Compile interfaces/ ###
+interfaces.c   = $(wildcard $(INTERFACESDIR)/*.c)
+interfaces.obj = $(patsubst $(INTERFACESDIR)/%.c,\
+  $(BUILDDIR)/$(INTERFACESDIR)/%.c.o,$(interfaces.c))
+obj           += $(interfaces.obj)
+
+$(BUILDDIR)/$(INTERFACESDIR)/%.c.o: $(INTERFACESDIR)/%.c
+	$(compile.c) -c $< -o $@
+
+### Compile examples/ ###
+examples.src = $(wildcard $(EXAMPLESDIR)/*.c)
+examples.obj = $(patsubst $(EXAMPLESDIR)/%.c,\
+  $(BUILDDIR)/$(EXAMPLESDIR)/%,$(examples.src))
+examples.ldflags = -L$(BUILDDIR) -l$(libName) $(LDFLAGS)
+obj += $(examples.obj)
+
+$(BUILDDIR)/examples/%: $(EXAMPLESDIR)/%.c
+	$(compile.c) $< -o $@ $(example.ldflags)
+
+### Compile tests/ ###
+tests.c   = $(wildcard $(TESTSDIR)/*.c)
+tests.f   = $(wildcard $(TESTSDIR)/*.f)
+tests.obj = $(patsubst $(TESTSDIR)/%.c,\
+  $(BUILDDIR)/$(TESTSDIR)/%-c,$(tests.c))
+tests.obj+= $(patsubst $(TESTSDIR)/%.f,\
+  $(BUILDDIR)/$(TESTSDIR)/%-f,$(tests.f))
+tests.incflags= -I$(TESTSDIR)
+tests.ldflags = -L$(BUILDDIR) -l$(libName) $(LDFLAGS)
+obj += $(tests.obj)
+
+$(BUILDDIR)/tests/%-c: $(TESTSDIR)/%.c
+	$(compile.c) $(tests.incflags) $< -o $@ $(tests.ldflags)
+
+$(BUILDDIR)/tests/%-f: $(TESTSDIR)/%.f
+	$(compile.f) $(tests.incflags) $< -o $@ $(tests.ldflags)
+
+EXAFLAGS ?=
 
 ### Set various flags ###
 ifneq ($(UNDERSCORE),0)
-  CMMNFLAGS += -DEXA_UNDERSCORE
+  EXAFLAGS += -DEXA_UNDERSCORE
 endif
 
 ifneq ($(DEBUG),0)
-  CMMNFLAGS += -g -DEXA_DEBUG
+  EXAFLAGS += -g -DEXA_DEBUG
 endif
 
-CMMNFLAGS += -fPIC
+EXAFLAGS += -fPIC
 
-incflags += -I$(SRCDIR) -I$(INTERFACESDIR)
-ext       = so
-prefix    = lib
-
-compile.c  =$(CC) $(CFLAGS) $(CMMNFLAGS) $(CPPFLAGS) $(incflags)
-compile.cpp=$(CXX) $(CXXFLAGS) $(CMMNFLAGS) $(CPPFLAGS) $(incflags)
-compile.f  =$(FC) $(FFLAGS) $(CMMNFLAGS) $(CPPFLAGS) $(incflags)
+compile.c  =$(CC) $(CFLAGS) $(EXAFLAGS) $(CPPFLAGS) $(INCFLAGS)
+compile.cpp=$(CXX) $(CXXFLAGS) $(EXAFLAGS) $(CPPFLAGS) $(INCFLAGS)
+compile.f  =$(FC) $(FFLAGS) $(EXAFLAGS) $(CPPFLAGS) $(INCFLAGS)
 
 link.c   = $(CC) -shared -o
 link.cpp = $(CXX) -shared -o
@@ -61,40 +116,24 @@ interfaces-base: $(interfaces.obj)
 
 .PHONY: lib-base
 lib-base: $(obj) interfaces-base
-	$(link.c) $(BUILDDIR)/lib$(libname).$(ext) $(obj) $(LDFLAGS)
+	$(link.c) $(BUILDDIR)/$(libPrefix)$(libName).$(libExt) $(obj)\
+    $(LDFLAGS)
 
 .PHONY: install-base
 install-base: lib-base
 	@mkdir -p $(DESTDIR)$(PREFIX)/include
 	@cp -u $(SRCDIR)/*.h $(DESTDIR)$(PREFIX)/include/
 	@mkdir -p $(DESTDIR)$(PREFIX)/lib
-	@cp -u $(BUILDDIR)/$(prefix)$(libname).$(ext)\
+	@cp -u $(BUILDDIR)/$(libPrefix)$(libName).$(libExt)\
     $(DESTDIR)$(PREFIX)/lib/
-
-$(BUILDDIR)/%.c.o: $(SRCDIR)/%.c
-	$(compile.c) -c $< -o $@
-
-$(BUILDDIR)/$(native.dir)/%.c.o: $(native.dir)/%.c
-	$(compile.c) $(native.incflags) -c $< -o $@
-
-$(BUILDDIR)/$(INTERFACESDIR)/%.c.o: $(INTERFACESDIR)/%.c
-	$(compile.c) -c $< -o $@
 
 .PHONY: examples-base
 examples-base: install-base $(example.obj)
 
-$(BUILDDIR)/examples/%: $(EXAMPLESDIR)/%.c
-	$(compile.c) $< -o $@ $(example.ldflags)
 
 .PHONY: tests-base
 tests-base: install-base $(test.obj)
 	@cp $(TESTSDIR)/t[0-9][0-9][0-9]-*.[^cf]* $(BUILDDIR)/$(TESTSDIR)/
-
-$(BUILDDIR)/tests/%-c: $(TESTSDIR)/%.c
-	$(compile.c) $< -o $@ $(example.ldflags)
-
-$(BUILDDIR)/tests/%-f: $(TESTSDIR)/%.f
-	$(compile.f) $< -o $@ $(example.ldflags)
 
 .PHONY: clean
 clean:
