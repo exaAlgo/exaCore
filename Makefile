@@ -38,11 +38,11 @@ lib: lib-base
 
 .PHONY: install
 install: install-base lib
-	@cp -u $(GSDIR)/include/*.h $(DESTDIR)$(PREFIX)/include/
-	@cp -u interfaces/*.h $(DESTDIR)$(PREFIX)/include/
-	@cp -u tests/*.h $(DESTDIR)$(PREFIX)/include/
-	@mkdir -p $(DESTDIR)$(PREFIX)/share
-	@cp -u exa-base.mk tests/run-tests.sh $(DESTDIR)$(PREFIX)/share
+	@cp -u $(GSDIR)/include/*.h $(PREFIX)/include/
+	@cp -u interfaces/*.h $(PREFIX)/include/
+	@cp -u tests/*.h $(PREFIX)/include/
+	@mkdir -p $(PREFIX)/share
+	@cp -u exa-base.mk tests/run-tests.sh $(PREFIX)/share
 
 .PHONY: examples
 examples: examples-base install

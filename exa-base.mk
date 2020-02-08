@@ -115,11 +115,11 @@ lib-base: $(obj)
 
 .PHONY: install-base
 install-base: lib-base
-	@mkdir -p $(DESTDIR)$(PREFIX)/include
-	@cp -u $(SRCDIR)/*.h $(DESTDIR)$(PREFIX)/include/
-	@mkdir -p $(DESTDIR)$(PREFIX)/lib
+	@mkdir -p $(PREFIX)/include
+	@cp -u $(SRCDIR)/*.h $(PREFIX)/include/
+	@mkdir -p $(PREFIX)/lib
 	@cp -u $(BUILDDIR)/$(libPrefix)$(libName).$(libExt)\
-    $(DESTDIR)$(PREFIX)/lib/
+    $(PREFIX)/lib/
 
 .PHONY: examples-base
 examples-base: install-base $(examples.obj)
