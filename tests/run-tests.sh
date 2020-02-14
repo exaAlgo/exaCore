@@ -18,7 +18,7 @@ export -f exaError
 tests=(`ls -I "*.okl" -I "*.sh" -I "*.log"`)
 backends=("/host" "/occa/cpu" "/occa/gpu/opencl")
 
-# Set debug to 0 to avoid output
+# Set debug to 0 to avoid debug output
 export EXA_DEBUG=0
 
 for t in "${tests[@]}"; do

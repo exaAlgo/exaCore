@@ -26,6 +26,13 @@ OCCA_DIR ?= $(HOME)/local/occa
 ### Fortran interface ###
 UNDERSCORE ?= 1
 
+### Meta info about the package ###
+SRCDIR       =src
+BUILDDIR     =build
+EXAMPLESDIR  =examples
+TESTSDIR     =tests
+INTERFACESDIR=interfaces
+
 ### Include template makefile ###
 -include exa-base.mk
 

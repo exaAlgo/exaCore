@@ -1,10 +1,3 @@
-### Meta info about the package ###
-SRCDIR       =src
-BUILDDIR     =build
-EXAMPLESDIR  =examples
-TESTSDIR     =tests
-INTERFACESDIR=interfaces
-
 LDFLAGS  += -L$(GSDIR)/lib -lgs -lm
 INCFLAGS += -I$(GSDIR)/include -I$(SRCDIR) -I$(INTERFACESDIR)
 
@@ -52,16 +45,16 @@ $(BUILDDIR)/src/%.c.o: $(SRCDIR)/%.c
 ### Compile interfaces/ ###
 interfaces.c   = $(wildcard $(INTERFACESDIR)/*.c)
 interfaces.obj = $(patsubst $(INTERFACESDIR)/%.c,\
-  $(BUILDDIR)/$(INTERFACESDIR)/%.c.o,$(interfaces.c))
+  $(BUILDDIR)/interfaces/%.c.o,$(interfaces.c))
 obj += $(interfaces.obj)
 
-$(BUILDDIR)/$(INTERFACESDIR)/%.c.o: $(INTERFACESDIR)/%.c
+$(BUILDDIR)/interfaces/%.c.o: $(INTERFACESDIR)/%.c
 	$(compile.c) -c $< -o $@
 
 ### Compile examples/ ###
 examples.src = $(wildcard $(EXAMPLESDIR)/*.c)
 examples.obj = $(patsubst $(EXAMPLESDIR)/%.c,\
-  $(BUILDDIR)/$(EXAMPLESDIR)/%,$(examples.src))
+  $(BUILDDIR)/examples/%,$(examples.src))
 examples.ldflags = -L$(BUILDDIR) -l$(libName) $(LDFLAGS)
 
 $(BUILDDIR)/examples/%: $(EXAMPLESDIR)/%.c
@@ -71,9 +64,9 @@ $(BUILDDIR)/examples/%: $(EXAMPLESDIR)/%.c
 tests.c   = $(wildcard $(TESTSDIR)/*.c)
 tests.f   = $(wildcard $(TESTSDIR)/*.f)
 tests.obj = $(patsubst $(TESTSDIR)/%.c,\
-  $(BUILDDIR)/$(TESTSDIR)/%-c,$(tests.c))
+  $(BUILDDIR)/tests/%-c,$(tests.c))
 tests.obj+= $(patsubst $(TESTSDIR)/%.f,\
-  $(BUILDDIR)/$(TESTSDIR)/%-f,$(tests.f))
+  $(BUILDDIR)/tests/%-f,$(tests.f))
 tests.incflags= -I$(TESTSDIR)
 tests.ldflags = -L$(BUILDDIR) -l$(libName) $(LDFLAGS)
 
