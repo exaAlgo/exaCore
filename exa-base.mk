@@ -1,5 +1,5 @@
-LDFLAGS  += -L$(GSDIR)/lib -lgs -lm
-INCFLAGS += -I$(GSDIR)/include -I$(SRCDIR) -I$(INTERFACESDIR)
+LDFLAGS  += -L$(GS_DIR)/lib -lgs -lm
+INCFLAGS += -I$(GS_DIR)/include -I$(SRCDIR) -I$(INTERFACESDIR)
 
 libExt    ?=so
 libPrefix ?=lib

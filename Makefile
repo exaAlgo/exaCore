@@ -18,7 +18,7 @@ DEBUG ?= 1
 PREFIX ?= $(HOME)/local/exa
 
 # Dependency locations
-GSDIR ?=
+GS_DIR ?=
 
 OCCA ?= 1
 OCCA_DIR ?= $(HOME)/local/occa
@@ -45,7 +45,7 @@ lib: lib-base
 
 .PHONY: install
 install: install-base lib
-	@cp -u $(GSDIR)/include/*.h $(PREFIX)/include/
+	@cp -u $(GS_DIR)/include/*.h $(PREFIX)/include/
 	@cp -u interfaces/*.h $(PREFIX)/include/
 	@cp -u tests/*.h $(PREFIX)/include/
 	@mkdir -p $(PREFIX)/share
