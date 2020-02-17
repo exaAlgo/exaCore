@@ -16,6 +16,7 @@ int exaOccaKernelCreate(exaProgram p,const char *kernelName,
 
   exaOccaKernel ok;
   exaMalloc(1,&ok);
+  exaDebug(h,"exaOccaKernelCreate: %s\n",kernelName);
   ok->kernel=occaDeviceBuildKernel(oh->device,op->fileName,
     kernelName,op->props);
 
