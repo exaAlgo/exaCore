@@ -45,7 +45,6 @@ lib: lib-base
 
 .PHONY: install
 install: install-base lib
-	@cp -u $(GS_DIR)/include/*.h $(PREFIX)/include/
 	@cp -u interfaces/*.h $(PREFIX)/include/
 	@cp -u tests/*.h $(PREFIX)/include/
 	@mkdir -p $(PREFIX)/share

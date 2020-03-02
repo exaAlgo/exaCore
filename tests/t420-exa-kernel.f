@@ -26,7 +26,7 @@
       call exainit(trim(arg),mpi_comm_world,handle,ierr)
       call exasettingscreate(handle,exa_str_null,settings,ierr)
 
-!     remote '-f' at the end of fortran tests
+!     remove '-f' at the end of fortran tests
       exename=exename(1:len_trim(exename)-2)
       call exaprogramcreate(handle,trim(exename),settings,prog,ierr)
 
