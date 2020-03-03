@@ -166,7 +166,8 @@ int exaSettingsCreate(exaHandle h,const char *fname,
   exaSettings *settings);
 int exaSettingsFree(exaSettings settings);
 int exaSettingsGetHandle(exaSettings s,exaHandle *h);
-exaValue exaSettingsGetValue(const char *settingName,exaSettings s);
+exaValue exaSettingsGetValue(const char *settingName,
+  exaSettings s);
 int exaSettingsGet(void *out,const char *settingName,
   exaSettings s);
 int exaSettingsSet(const char *settingName,exaValue value,
@@ -223,6 +224,7 @@ exaValue getExaULong (const exaULong  i);
 exaValue getExaScalar(const exaScalar i);
 exaValue getExaChar  (const exaChar   i);
 exaValue getExaStr   (const char *    i);
+void exaValueToStr(char **str,exaValue v);
 int exaValueFree(exaValue v);
 //
 // exaKernel: wraps a kernel

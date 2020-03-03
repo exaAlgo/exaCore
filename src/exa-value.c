@@ -100,6 +100,35 @@ int exaValueEq(exaValue val1,exaValue val2)
   return 0;
 }
 
+void exaValueToStr(char **str,exaValue v){
+  exaMalloc(BUFSIZ,str);
+  switch(v->type){
+    case exaInt_t:
+      snprintf(*str,BUFSIZ,exaIntFormat,v->value.i);
+      break;
+    case exaUInt_t:
+      snprintf(*str,BUFSIZ,exaUIntFormat,v->value.ui);
+      break;
+    case exaLong_t:
+      snprintf(*str,BUFSIZ,exaLongFormat,v->value.l);
+      break;
+    case exaULong_t:
+      snprintf(*str,BUFSIZ,exaULongFormat,v->value.ul);
+      break;
+    case exaScalar_t:
+      snprintf(*str,BUFSIZ,exaScalarFormat,v->value.s);
+      break;
+    case exaChar_t:
+      snprintf(*str,BUFSIZ,exaCharFormat,v->value.b);
+      break;
+    case exaStr_t:
+      snprintf(*str,BUFSIZ,exaStrFormat,v->value.str);
+      break;
+  }
+}
+
+//TODO: Keep track of these values and free them
+//when exaFinalize is called if they are not free'd
 exaValue getExaInt(const exaInt i){
   exaValue v;
   exaValueCreate(exaInt_t,(void*)&i,&v);

@@ -53,10 +53,12 @@ typedef double exaScalar;
 typedef char exaChar;
 #define exaCharString "char"
 #define exaCharMPIType MPI_BYTE
+#define exaCharFormat "%c"
 
 typedef char *exaStr;
 #define exaStrString "char *"
 #define exaCharMPIType MPI_BYTE
+#define exaStrFormat "%s"
 
 /* Following are not valid for Byte and Str types */
 #define exaTypeGetMax(T) T##MAX
