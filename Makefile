@@ -33,6 +33,9 @@ EXAMPLESDIR  =examples
 TESTSDIR     =tests
 INTERFACESDIR=interfaces
 
+LDFLAGS  = -L$(GS_DIR)/lib -lgs -lm
+INCFLAGS = -I$(GS_DIR)/include -I$(SRCDIR) -I$(INTERFACESDIR)
+
 ### Include template makefile ###
 -include exa-base.mk
 
