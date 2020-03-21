@@ -64,17 +64,16 @@ int exaCommScan(exaComm c,void *out,void *in,void *buf,exaInt size,
   comm_scan(out,&c->gsComm,exaDataTypeGetGSType(t),exaOpGetGSOp(op),in,size,buf);
 }
 
-int exaSplit(exaHandle h,int bin){
+int exaSplit(exaHandle h,int bin,int rank){
   exaComm c=exaGetComm(h);
-  exaCommSplit(&c,bin);
+  exaCommSplit(&c,bin,rank);
   exaSetComm(h,c);
 }
-int exaCommSplit(exaComm *c_,int bin){
+int exaCommSplit(exaComm *c_,int bin,int rank){
   exaComm c=*c_;
 
   MPI_Comm local;
-  exaInt id = exaCommRank(c);
-  MPI_Comm_split(c->gsComm.c,bin,id,&local);
+  MPI_Comm_split(c->gsComm.c,bin,rank,&local);
 
   exaCommCrystalFinalize(c);
   exaCommDestroy(c);

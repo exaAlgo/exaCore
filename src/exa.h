@@ -123,7 +123,8 @@ exaInt      exaRank      (exaHandle h);
 // scan, gop and bcast
 int exaScan(exaHandle h,void *out,void *in,void *buf,exaInt size,
   exaDataType type,exaOp op);
-int exaGop(exaHandle h,void *v,exaInt size,exaDataType type,exaOp op);
+int exaGop(exaHandle h,void *v,exaInt size,exaDataType type,
+  exaOp op);
 int exaReduce(exaHandle h,void *out,void *in,exaInt size,
   exaDataType type,exaOp op);
 int exaBcast(exaHandle h,void *in,exaInt count,exaDataType type);
@@ -131,7 +132,7 @@ int exaBcast(exaHandle h,void *in,exaInt count,exaDataType type);
 int exaCrystalInit    (exaHandle h);
 int exaCrystalFinalize(exaHandle h);
 void exaBarrier(exaHandle h);
-int exaSplit(exaHandle h,int bin);
+int exaSplit(exaHandle h,int bin,int rank);
 // debug
 int exaDebug   (exaHandle h,const char *format,...);
 int exaGetDebug(exaHandle h);
@@ -147,7 +148,7 @@ exaInt      exaCommSize      (exaComm c);
 exaInt      exaCommRank      (exaComm c);
 int         exaCommScan      (exaComm c,void *out,void *in,void *buf,
   exaInt size,exaDataType t,exaOp op);
-int         exaCommSplit     (exaComm *c,int bin);
+int         exaCommSplit     (exaComm *c,int bin,int rank);
 int         exaCommDup       (exaComm *newComm,exaComm oldComm);
 int         exaCommGop       (exaComm c,void *v,exaInt size,
   exaDataType type,exaOp op);
