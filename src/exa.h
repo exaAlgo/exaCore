@@ -123,10 +123,14 @@ exaInt      exaRank      (exaHandle h);
 // scan, gop and bcast
 int exaScan(exaHandle h,void *out,void *in,void *buf,exaInt size,
   exaDataType type,exaOp op);
+
 int exaGop(exaHandle h,void *v,exaInt size,exaDataType type,
   exaOp op);
 int exaReduce(exaHandle h,void *out,void *in,exaInt size,
+  exaDataType type,exaOp op,int root);
+int exaAllReduce(exaHandle h,void *out,void *in,exaInt size,
   exaDataType type,exaOp op);
+
 int exaBcast(exaHandle h,void *in,exaInt count,exaDataType type);
 // crystal transfer
 int exaCrystalInit    (exaHandle h);
