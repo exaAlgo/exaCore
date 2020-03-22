@@ -56,12 +56,15 @@ exaInt exaCommRank(exaComm c){
 }
 
 int exaScan(exaHandle h,void *out,void *in,void *buf,exaInt size,
-  exaDataType t,exaOp op){
+  exaDataType t,exaOp op)
+{
   return exaCommScan(exaGetComm(h),out,in,buf,size,t,op);
 }
-int exaCommScan(exaComm c,void *out,void *in,void *buf,exaInt size,
-  exaDataType t,exaOp op){
-  comm_scan(out,&c->gsComm,exaDataTypeGetGSType(t),exaOpGetGSOp(op),in,size,buf);
+int exaCommScan(exaComm c,void *out,void *in,void *buf,
+  exaInt size,exaDataType t,exaOp op)
+{
+  comm_scan(out,&c->gsComm,exaDataTypeGetGSType(t),
+    exaOpGetGSOp(op),in,size,buf);
 }
 
 int exaSplit(exaHandle h,int bin,int rank){

@@ -16,7 +16,9 @@ static exaBackend backends[EXA_MAX_BACKENDS];
 //
 // exaRegister
 //
-void exaRegister(int (*init)(exaHandle,const char*),const char *prefix,int priority){
+void exaRegister(int (*init)(exaHandle,const char*),
+  const char *prefix,int priority)
+{
   exaBackend bend;
 
   bend.init=init;
