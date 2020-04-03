@@ -43,13 +43,15 @@ int exaInit(exaHandle *h_,exaCommExternal ce,const char *backend) {
 
   // Default value for options
   char *debug=getenv("EXA_DEBUG");
-  if(debug==NULL)
+  if(debug==NULL){
 #if defined(EXA_DEBUG)
     h->debug=1;
 #else
     h->debug=0;
 #endif
-  else h->debug=atoi(debug);
+  } else{
+    h->debug=atoi(debug);
+  }
 
   char *root=getenv("EXA_ROOT");
   if(root==NULL) h->root = 0;
@@ -81,7 +83,8 @@ int exaInit(exaHandle *h_,exaCommExternal ce,const char *backend) {
 
 int exaDebug(exaHandle h,const char *format,...)
 {
-  if(!exaGetDebug(h)) return 0;
+  if(!exaGetDebug(h))
+    return 0;
   va_list args;
   va_start(args,format);
   fflush(stdout);
