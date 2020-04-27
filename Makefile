@@ -14,6 +14,9 @@ INCFLAGS ?=
 # Build options
 DEBUG ?= 1
 
+# Build with MPI
+MPI ?= 1
+
 # Install prefix
 PREFIX ?= $(HOME)/local/exa
 

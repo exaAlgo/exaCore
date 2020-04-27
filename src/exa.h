@@ -152,7 +152,7 @@ exaInt exaCommSize(exaComm c);
 exaInt exaCommRank(exaComm c);
 int exaCommScan(exaComm c,void *out,void *in,void *buf,
   exaInt size,exaDataType t,exaOp op);
-int exaCommSplit(exaComm *c,int bin,int rank);
+int exaCommSplit(exaComm oldComm,int color,int rank,exaComm *newComm);
 int exaCommDup(exaComm *newComm,exaComm oldComm);
 int exaCommGop(exaComm c,void *v,exaInt size,exaDataType type,
   exaOp op);

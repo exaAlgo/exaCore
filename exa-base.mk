@@ -84,6 +84,10 @@ ifneq ($(DEBUG),0)
   EXAFLAGS += -g -DEXA_DEBUG
 endif
 
+ifneq ($(MPI),0)
+	EXAFLAGS += -DEXA_MPI
+endif
+
 EXAFLAGS += -fPIC
 
 compile.c  =$(CC) $(CFLAGS) $(EXAFLAGS) $(CPPFLAGS) $(INCFLAGS)

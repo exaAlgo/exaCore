@@ -68,22 +68,24 @@ int exaCommScan(exaComm c,void *out,void *in,void *buf,
 }
 
 int exaSplit(exaHandle h,int bin,int rank){
-  exaComm c=exaGetComm(h);
-  exaCommSplit(&c,bin,rank);
-  exaSetComm(h,c);
+  exaComm comm=exaGetComm(h);
+  exaComm newComm;
+  exaCommSplit(comm,bin,rank,&newComm);
+  exaSetComm(h,newComm);
 }
-int exaCommSplit(exaComm *c_,int bin,int rank){
-  exaComm c=*c_;
+int exaCommSplit(exaComm oldComm,int bin,int rank,exaComm *newComm){
+  exaCommExternal local;
+#if defined(EXA_MPI)
+  MPI_Comm_split(oldComm->gsComm.c,bin,rank,&local);
+#else
+  local=1;
+#endif
 
-  MPI_Comm local;
-  MPI_Comm_split(c->gsComm.c,bin,rank,&local);
-
-  exaCommCrystalFinalize(c);
-  exaCommDestroy(c);
-
-  exaCommCreate(c_,local);
+  exaCommCreate(newComm,local);
+#if defined(EXA_MPI)
   MPI_Comm_free(&local);
-  exaCommCrystalInit(*c_);
+#endif
+  exaCommCrystalInit(*newComm);
 }
 
 int exaCommDup(exaComm *newComm,exaComm oldComm){
