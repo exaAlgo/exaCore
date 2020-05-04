@@ -55,7 +55,7 @@ int exaOccaProgramFree(exaProgram p){
   exaProgramGetData(p,(void**)&op);
 
   exaFree(op->fileName);
-  occaFree(op->props);
+  occaFree((occaType*)&op->props);
 
   exaFree(op);
 

@@ -64,7 +64,7 @@ int exaOccaVectorFree(exaVector x){
   exaOccaVector vec;
   exaVectorGetData(x,(void**)&vec);
 
-  occaFree(vec->vector);
+  occaFree((occaType*)&vec->vector);
 
   exaFree(vec);
 

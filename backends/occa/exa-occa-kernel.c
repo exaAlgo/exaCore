@@ -89,7 +89,7 @@ int exaOccaKernelFree(exaKernel k)
   exaOccaKernel ok;
   exaKernelGetData(k,(void**)&ok);
 
-  occaFree(ok->kernel);
+  occaFree((occaType*)&ok->kernel);
 
   exaFree(ok);
 

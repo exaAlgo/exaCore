@@ -94,7 +94,7 @@ int exaOccaFinalize(exaHandle h){
   exaOccaHandle oh;
   exaHandleGetData(h,(void **)&oh);
 
-  occaFree(oh->device);
+  occaFree((occaType*)&oh->device);
 
   exaFree(oh);
   oh=NULL;
