@@ -57,7 +57,8 @@ int exaInit(exaHandle *h_,exaCommExternal ce,const char *backend) {
   if(root==NULL) h->root = 0;
   else h->root=atoi(root);
 
-  exaDebug(h,"[exaInit] numBackends: %d\n",numBackends);
+  if(exaRank(h)==0)
+    exaDebug(h,"[exaInit] numBackends: %d\n",numBackends);
 
   //TODO: sort backends based on priority
   int i,hostI;
@@ -78,6 +79,9 @@ int exaInit(exaHandle *h_,exaCommExternal ce,const char *backend) {
 
   h->info.type=exaHandleType;
 
+  if(exaRank(h)==0)
+    exaDebug(h,"[/exaInit]\n");
+
   return 0;
 }
 
@@ -94,7 +98,10 @@ int exaDebug(exaHandle h,const char *format,...)
 }
 
 int exaFinalize(exaHandle h) {
-  exaDebug(h,"[exaFinalize]\n");
+  int rank=exaRank(h);
+  if(rank==0)
+    exaDebug(h,"[exaFinalize]\n");
+
   // Finalize the backend
   h->backendFinalize(h);
   // Finalize crystal router
@@ -103,6 +110,9 @@ int exaFinalize(exaHandle h) {
   exaCommDestroy(exaGetComm(h));
   // Finalize the buffer
   exaBufferFree(h->buf);
+
+  if(rank==0)
+    exaDebug(h,"[/exaFinalize]\n");
 
   exaFree(h);
 
@@ -117,7 +127,11 @@ int exaGetDebug(exaHandle h)
 
 int exaSetDebug(exaHandle h,int debug)
 {
+  if(exaRank(h)==0)
+    exaDebug(h,"[exaSetDebug]\n");
   h->debug=debug;
+  if(exaRank(h)==0)
+    exaDebug(h,"[/exaSetDebug]\n");
 }
 
 int exaDestroy(void *p){
