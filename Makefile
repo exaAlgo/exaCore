@@ -26,7 +26,7 @@ GS_DIR ?=
 OCCA ?= 1
 OCCA_DIR ?= $(HOME)/local/occa
 
-### Fortran interface ###
+# Fortran interface (TODO: Should be set after a check)
 UNDERSCORE ?= 1
 
 ### Meta info about the package ###
@@ -38,6 +38,33 @@ INTERFACESDIR=interfaces
 
 LDFLAGS  = -L$(GS_DIR)/lib -lgs -lm
 INCFLAGS = -I$(GS_DIR)/include -I$(SRCDIR) -I$(INTERFACESDIR)
+
+### Backends ###
+# OCCA backend (third party)
+occa.dir       = backends/occa
+occa.src       = $(wildcard $(occa.dir)/*.c)
+occa.obj       = $(patsubst $(occa.dir)/%.c,\
+  $(BUILDDIR)/$(occa.dir)/%.o,$(occa.src))
+occa.incflags += -I$(occa.dir) -I$(OCCA_DIR)/include
+
+ifneq ($(OCCA),0)
+  LDFLAGS += -L$(OCCA_DIR)/lib -locca
+  obj = $(occa.obj)
+endif
+
+$(BUILDDIR)/$(occa.dir)/%.o: $(occa.dir)/%.c
+	$(compile.c) $(occa.incflags) -c $< -o $@
+
+# native backend
+native.dir       = backends/native
+native.src       = $(wildcard $(native.dir)/*.c)
+native.incflags += -I$(native.dir)
+native.obj       = $(patsubst $(native.dir)/%.c,\
+  $(BUILDDIR)/$(native.dir)/%.c.o,$(native.src))
+obj             += $(native.obj)
+
+$(BUILDDIR)/$(native.dir)/%.c.o: $(native.dir)/%.c
+	$(compile.c) $(native.incflags) -c $< -o $@
 
 ### Include template makefile ###
 -include exa-base.mk
