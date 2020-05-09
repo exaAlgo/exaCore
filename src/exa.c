@@ -30,7 +30,7 @@ void exaRegister(int (*init)(exaHandle,const char*),
 //
 // exaHandle: wraps exaComm, buffer and other options
 //
-int exaInit(exaHandle *h_,exaCommExternal ce,const char *backend) {
+int exaInit(exaHandle *h_,exaExternalComm ce,const char *backend) {
   exaMalloc(1,h_);
   exaHandle h=*h_;
 

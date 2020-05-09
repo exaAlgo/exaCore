@@ -11,7 +11,7 @@ exaComm exaGetComm(exaHandle h){
   return h->comm;
 }
 
-int exaCommCreate(exaComm *c,exaCommExternal ce){
+int exaCommCreate(exaComm *c,exaExternalComm ce){
   exaMalloc(1,c);
   comm_init(&(*c)->gsComm,ce);
 
@@ -74,7 +74,7 @@ int exaSplit(exaHandle h,int bin,int rank){
   exaSetComm(h,newComm);
 }
 int exaCommSplit(exaComm oldComm,int bin,int rank,exaComm *newComm){
-  exaCommExternal local;
+  exaExternalComm local;
 #if defined(EXA_MPI)
   MPI_Comm_split(oldComm->gsComm.c,bin,rank,&local);
 #else

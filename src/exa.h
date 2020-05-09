@@ -87,9 +87,9 @@ typedef struct exaArray_private *exaArray;
 typedef struct exaBuffer_private *exaBuffer;
 typedef struct exaGS_private *exaGS;
 //
-// exaCommExternal
+// exaExternalComm
 //
-typedef MPI_Comm exaCommExternal;
+typedef MPI_Comm exaExternalComm;
 //
 // exaRegister
 //
@@ -106,7 +106,7 @@ int exaDestroy     (void *p);
 //
 // exaHandle: wraps an exaComm, buffer and other options
 //
-int exaInit(exaHandle *h,exaCommExternal ce,const char *backend);
+int exaInit(exaHandle *h,exaExternalComm ce,const char *backend);
 int exaFinalize(exaHandle h);
 int exaHandleGetData(exaHandle h,void **data);
 int exaHandleSetData(exaHandle h,void **data);
@@ -144,7 +144,7 @@ int exaSetDebug(exaHandle h,int debug);
 //
 // exaComm: wraps gslib comm, gs_op and crystal router
 //
-int exaCommCreate(exaComm *c,exaCommExternal ce);
+int exaCommCreate(exaComm *c,exaExternalComm ce);
 int exaCommDestroy(exaComm c);
 MPI_Comm exaCommGetMPIComm(exaComm c);
 struct comm exaCommGetGSComm (exaComm c);
