@@ -15,6 +15,9 @@ static const char *occaOpenMP="mode     : 'OpenMP',"
 
 int exaOccaInit(exaHandle h,const char *backend)
 {
+  if(exaRank(h)==0)
+    exaDebug(h,"[exaOccaInit]\n");
+
   exaOccaHandle oh;
   exaMalloc(1,&oh);
 
@@ -56,12 +59,12 @@ int exaOccaInit(exaHandle h,const char *backend)
     snprintf(deviceConfig,BUFSIZ,occaOpenMP,schedule,chunkSize);
   }
 
-  exaDebug(h,"[occaInit] deviceConfig=%s\n",deviceConfig);
+  if(exaRank(h)==0) exaDebug(h,"deviceConfig=\"%s\"\n",deviceConfig);
   oh->device=occaCreateDeviceFromString(deviceConfig);
 
   exaHandleSetData(h,(void **)&oh);
 
-  exaDebug(h,"[occaInit] Set backend handles ...\n");
+  if(exaRank(h)==0) exaDebug(h,"Set backend handles ...\n");
   // set call back functions for the backend
   h->backendFinalize=exaOccaFinalize;
   h->updateSettings=exaOccaUpdateSettings;
@@ -73,6 +76,9 @@ int exaOccaInit(exaHandle h,const char *backend)
   h->kernelCreate=exaOccaKernelCreate;
   h->kernelFree=exaOccaKernelFree;
   h->barrier=exaOccaBarrier;
+
+  if(exaRank(h)==0)
+    exaDebug(h,"[/exaOccaInit]\n");
 
   return 0;
 }
