@@ -124,6 +124,8 @@ void exaValueToStr(char **str,exaValue v){
     case exaStr_t:
       snprintf(*str,BUFSIZ,exaStrFormat,v->value.str);
       break;
+    default:
+      break;
   }
 }
 

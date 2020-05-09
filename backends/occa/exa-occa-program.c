@@ -17,10 +17,11 @@ int exaOccaProgramCreate(exaProgram p,const char *fname,
   op->props=occaCreateProperties();
 
   exaValue val;
-  const char *key,*value;
+  const char *key;
+  const char *defines="defines::";
+  char *value;
   char str[BUFSIZ];
 
-  const char *defines="defines::";
   key=exaSettingsIterateKeys(defines,s);
   while(key!=NULL){
     snprintf(str,BUFSIZ,"defines/%s",key+strlen(defines));
