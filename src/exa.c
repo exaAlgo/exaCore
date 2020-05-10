@@ -212,6 +212,7 @@ gs_op exaOpGetGSOp(exaOp t)
   return out;
 }
 
+#if defined(EXA_MPI)
 MPI_Op exaOpGetMPIOp(exaOp t)
 {
   MPI_Op out;
@@ -230,3 +231,4 @@ MPI_Op exaOpGetMPIOp(exaOp t)
   }
   return out;
 }
+#endif

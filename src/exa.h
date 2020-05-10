@@ -40,7 +40,10 @@ typedef enum {
 } exaOp;
 
 gs_op  exaOpGetGSOp (exaOp t);
+#if defined(EXA_MPI)
 MPI_Op exaOpGetMPIOp(exaOp t);
+#endif
+
 //
 // exaDataType
 //
@@ -89,7 +92,11 @@ typedef struct exaGS_private *exaGS;
 //
 // exaExternalComm
 //
+#if defined(EXA_MPI)
 typedef MPI_Comm exaExternalComm;
+#else
+typedef int exaExternalComm;
+#endif
 //
 // exaRegister
 //
@@ -114,12 +121,10 @@ int exaHandleSetData(exaHandle h,void **data);
 const char *exaGetBackendName(exaHandle h);
 const char *exaGetBackendExtension(exaHandle h);
 // communication
-exaComm     exaGetComm   (exaHandle h);
-MPI_Comm    exaGetMPIComm(exaHandle h);
-struct comm exaGetGSComm (exaHandle h);
-int         exaSetComm   (exaHandle h,exaComm c);
-exaInt      exaSize      (exaHandle h);
-exaInt      exaRank      (exaHandle h);
+exaComm exaGetComm(exaHandle h);
+int exaSetComm(exaHandle h,exaComm c);
+exaInt exaSize(exaHandle h);
+exaInt exaRank(exaHandle h);
 // scan, gop and bcast
 int exaScan(exaHandle h,void *out,void *in,void *buf,exaInt size,
   exaDataType type,exaOp op);
@@ -146,8 +151,6 @@ int exaSetDebug(exaHandle h,int debug);
 //
 int exaCommCreate(exaComm *c,exaExternalComm ce);
 int exaCommDestroy(exaComm c);
-MPI_Comm exaCommGetMPIComm(exaComm c);
-struct comm exaCommGetGSComm (exaComm c);
 exaInt exaCommSize(exaComm c);
 exaInt exaCommRank(exaComm c);
 int exaCommScan(exaComm c,void *out,void *in,void *buf,

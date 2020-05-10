@@ -18,7 +18,13 @@ void fExaInit(const char *backend,MPI_Fint *fcomm,
   if(handleCurrent==handleMax)
     handleMax+=handleMax/2+1,exaRealloc(handleMax,&handleDict);
 
-  MPI_Comm comm=MPI_Comm_f2c(*fcomm);
+  exaExternalComm comm;
+#if defined(EXA_MPI)
+  comm=MPI_Comm_f2c(*fcomm);
+#else
+  comm=1;
+#endif
+
   *err=exaInit(&handleDict[handleCurrent],comm,backend_c);
 
   if(*err==0)

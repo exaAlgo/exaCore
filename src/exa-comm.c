@@ -27,20 +27,6 @@ int exaCommDestroy(exaComm c){
   return 0;
 }
 
-MPI_Comm exaGetMPIComm(exaHandle h){
-  return exaCommGetMPIComm(exaGetComm(h));
-}
-MPI_Comm exaCommGetMPIComm(exaComm c){
-  return  c->gsComm.c;
-}
-
-struct comm exaGetGSComm(exaHandle h) {
-  return exaCommGetGSComm(exaGetComm(h));
-}
-struct comm exaCommGetGSComm(exaComm c){
-  return c->gsComm;
-}
-
 exaInt exaSize(exaHandle h){
   return exaCommSize(exaGetComm(h));
 }
@@ -89,11 +75,17 @@ int exaCommSplit(exaComm oldComm,int bin,int rank,exaComm *newComm){
 }
 
 int exaCommDup(exaComm *newComm,exaComm oldComm){
-  MPI_Comm local;
+  exaExternalComm local;
+#if defined(EXA_MPI)
   MPI_Comm_dup(oldComm->gsComm.c,&local);
+#else
+  local=1;
+#endif
 
   exaCommCreate(newComm,local);
+#if defined(EXA_MPI)
   MPI_Comm_free(&local);
+#endif
   exaCommCrystalInit(*newComm);
 }
 
@@ -105,8 +97,10 @@ int exaGop(exaHandle h,void *v,exaInt size,exaDataType type,
 int exaCommGop(exaComm c,void *v,exaInt size,exaDataType type,
   exaOp op)
 {
+#if defined(EXA_MPI)
   return MPI_Allreduce(MPI_IN_PLACE,v,size,
     exaDataTypeGetMPIType(type),exaOpGetMPIOp(op),c->gsComm.c);
+#endif
 }
 
 int exaReduce(exaHandle h,void *out,void *in,exaInt size,
@@ -117,6 +111,8 @@ int exaReduce(exaHandle h,void *out,void *in,exaInt size,
 int exaCommReduce(exaComm c,void *out,void *in,exaInt size,
   exaDataType type,exaOp op,int root)
 {
+//TODO: Broken for  EXA_MPI==0
+#if defined(EXA_MPI)
   if(out==in && exaCommRank(c)==root){
     // we should use MPI_IN_PLACE at root
     return MPI_Reduce(MPI_IN_PLACE,out,size,
@@ -126,6 +122,10 @@ int exaCommReduce(exaComm c,void *out,void *in,exaInt size,
     return MPI_Reduce(in,out,size,exaDataTypeGetMPIType(type),
 		  exaOpGetMPIOp(op),root,c->gsComm.c);
   }
+#else
+  if(out!=in)
+    memcpy(out,in,size*exaDataTypeGetSize(type));
+#endif
 }
 
 int exaAllReduce(exaHandle h,void *out,void *in,exaInt size,
@@ -136,6 +136,7 @@ int exaAllReduce(exaHandle h,void *out,void *in,exaInt size,
 int exaCommAllReduce(exaComm c,void *out,void *in,exaInt size,
   exaDataType type,exaOp op)
 {
+#if defined(EXA_MPI)
   if(out==in){
     // we should use MPI_IN_PLACE at root
     return MPI_Allreduce(MPI_IN_PLACE,out,size,
@@ -144,6 +145,7 @@ int exaCommAllReduce(exaComm c,void *out,void *in,exaInt size,
     return MPI_Allreduce(in,out,size,exaDataTypeGetMPIType(type),
 		  exaOpGetMPIOp(op),c->gsComm.c);
   }
+#endif
 }
 
 int exaBcast(exaHandle h,void *in,exaInt count,exaDataType type){
@@ -152,8 +154,10 @@ int exaBcast(exaHandle h,void *in,exaInt count,exaDataType type){
 int exaCommBcast(exaComm c,void *in,exaInt count,exaDataType type,
   int root)
 {
+#if defined(EXA_MPI)
   return MPI_Bcast(in,count,exaDataTypeGetMPIType(type),root,
     c->gsComm.c);
+#endif
 }
 
 void exaBarrier(exaHandle h) {
