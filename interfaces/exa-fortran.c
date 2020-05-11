@@ -154,11 +154,13 @@ void fExaVectorGetSize(int *size,exaFortranVector *vec,int *err)
 
 #define fExaVectorRead EXA_FORTRAN_NAME(exavectorread,EXAVECTORREAD)
 void fExaVectorRead(exaFortranVector *vec,exaScalar *array,
-  int64_t *offset,int *err)
+  ptrdiff_t *offset,int *err)
 {
+  exaHandle h; exaVectorGetHandle(vec,&h);
+  exaVector v=exaVectorF2C(*vec);
   exaScalar *b;
-  *err=exaVectorRead(exaVectorF2C(*vec),(void**)&b);
-  *offset=b-array;
+  *err=exaVectorRead(v,(void**)&b);
+  *offset=(ptrdiff_t)(b-array);
 }
 
 #define fExaVectorWrite\
