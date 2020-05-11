@@ -4,11 +4,20 @@
 // exaComm
 //
 int exaSetComm(exaHandle h,exaComm c){
-  // TODO: malloc and a copy
+  // TODO: Is this correct?
   h->comm=c;
 }
 exaComm exaGetComm(exaHandle h){
   return h->comm;
+}
+
+int exaCommSetHandle(exaComm c,exaHandle *h){
+  c->h=*h;
+  return 0;
+}
+int exaCommGetHandle(exaComm c,exaHandle *h){
+  *h=c->h;
+  return 0;
 }
 
 int exaCommCreate(exaComm *c,exaExternalComm ce){

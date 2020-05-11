@@ -49,6 +49,7 @@ struct exaSettings_private{
 //
 struct exaComm_private{
   struct exaTypeInfo_private info;
+  exaHandle h;
   struct comm gsComm;
   struct crystal cr;
 };
@@ -165,5 +166,9 @@ struct exaGS_private{
   struct exaTypeInfo_private info;
 
   struct gs_data *topology;
+
+  exaVector indices ; // size=#(global_ids)  , data_type=exaUInt
+  exaVector uniqueIds; // size=#(unique_ids)  , data_type=exaLong
+  exaVector offsets ; // size=#(unique_ids)+1, data_type=exaUInt
 };
 #endif

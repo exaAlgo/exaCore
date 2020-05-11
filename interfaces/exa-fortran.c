@@ -156,7 +156,6 @@ void fExaVectorGetSize(int *size,exaFortranVector *vec,int *err)
 void fExaVectorRead(exaFortranVector *vec,exaScalar *array,
   ptrdiff_t *offset,int *err)
 {
-  exaHandle h; exaVectorGetHandle(vec,&h);
   exaVector v=exaVectorF2C(*vec);
   exaScalar *b;
   *err=exaVectorRead(v,(void**)&b);

@@ -149,7 +149,10 @@ int exaSetDebug(exaHandle h,int debug);
 //
 // exaComm: wraps gslib comm, gs_op and crystal router
 //
+//TODO: Need to pass in exaHandle for exaCommCreate
 int exaCommCreate(exaComm *c,exaExternalComm ce);
+int exaCommSetHandle(exaComm c,exaHandle *h);
+int exaCommGetHandle(exaComm c,exaHandle *h);
 int exaCommDestroy(exaComm c);
 exaInt exaCommSize(exaComm c);
 exaInt exaCommRank(exaComm c);
