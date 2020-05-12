@@ -36,6 +36,10 @@ int exaInit(exaHandle *h_,exaExternalComm ce,const char *backend) {
 
   // Create comm
   exaCommCreate(&h->comm,ce);
+  // TODO: Temporary fix, pass handle as an argument
+  // to commCreate
+  exaCommSetHandle(h->comm,&h);
+
   // Init crystal router
   exaCrystalInit(h);
   // Create the buffer

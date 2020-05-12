@@ -9,8 +9,14 @@ int exaGSSetup(exaLong *ids,exaUInt n,exaComm c,int unique,
   int verbose,exaGS *t)
 {
   exaMalloc(1,t);
+
+  (*t)->indices=NULL;
+  (*t)->uniqueIds=NULL;
+  (*t)->offsets=NULL;
+
   (*t)->topology=gs_setup(ids,n,&c->gsComm,unique,gs_auto,verbose);
   (*t)->info.type=exaGSType;
+
   return 0;
 }
 
@@ -26,7 +32,7 @@ int exaGSDeviceSetup(exaLong *ids,exaUInt n,exaComm c,int unique,
   exaGS s; exaGSSetup(ids,n,c,unique,verbose,&s);
   exaBuffer buf; exaBufferCreate(&buf,BUFSIZ);
 
-  exaInt *in; exaCalloc(n,&ids);
+  exaInt *in; exaCalloc(n,&in);
   exaUInt i;
   for(i=0;i<n;i++) in[i]=1;
 
@@ -49,7 +55,12 @@ int exaGSDeviceSetup(exaLong *ids,exaUInt n,exaComm c,int unique,
 
   //TODO: Use exaArraySort
   globalId *ptr=exaArrayGetPointer(globalIdsArray);
-  exaUInt nGlobalIds=exaArrayGetSize(globalIdsArray);
+  exaInt nGlobalIds=exaArrayGetSize(globalIdsArray);
+  if(nGlobalIds==0){
+    exaArrayFree(globalIdsArray);
+    return 0;
+  }
+
   sarray_sort_2(globalId,ptr,nGlobalIds,id,1,index,0,&buf->buf);
 
   exaUInt *activeIdxs; exaCalloc(nGlobalIds,&activeIdxs);
@@ -108,9 +119,9 @@ int exaGSOp(void *v,exaDataType T,exaOp op,unsigned transpose,
 int exaGSFree(exaGS t){
   if(t==NULL) return 0;
 
-  exaVectorFree(t->indices  );
-  exaVectorFree(t->uniqueIds);
-  exaVectorFree(t->offsets  );
+  if(t->indices) exaVectorFree(t->indices);
+  if(t->uniqueIds) exaVectorFree(t->uniqueIds);
+  if(t->offsets) exaVectorFree(t->offsets);
 
   gs_free(t->topology);
   exaFree(t);
