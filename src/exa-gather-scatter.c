@@ -109,6 +109,15 @@ int exaGSDeviceSetup(exaLong *ids,exaUInt n,exaComm c,int unique,
   return 0;
 }
 
+int exaGSGetIndices(exaGS gs,exaVector *indices){
+  *indices=gs->indices;
+  return 0;
+}
+int exaGSGetOffsets(exaGS gs,exaVector *offsets){
+  *offsets=gs->offsets;
+  return 0;
+}
+
 int exaGSOp(void *v,exaDataType T,exaOp op,unsigned transpose,
   exaGS t,exaBuffer buf)
 {

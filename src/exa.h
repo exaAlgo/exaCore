@@ -201,6 +201,8 @@ int exaGSDeviceSetup(exaLong *ids,exaUInt n,exaComm c,int unique,
   int verbose,exaGS *t);
 int exaGSOp(void *v,exaDataType T,exaOp op,unsigned transpose,
   exaGS t,exaBuffer buf);
+int exaGSGetIndices(exaGS gs,exaVector *indices);
+int exaGSGetOffsets(exaGS gs,exaVector *offsets);
 int exaGSFree(exaGS t);
 //
 // exaVector: wraps a vector. Currently just a host vector.
