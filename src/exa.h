@@ -197,6 +197,8 @@ int exaBufferFree(exaBuffer buf);
 //
 int exaGSSetup(exaLong *ids,exaUInt n,exaComm c,int unique,
   int verbose,exaGS *t);
+int exaGSDeviceSetup(exaLong *ids,exaUInt n,exaComm c,int unique,
+  int verbose,exaGS *t);
 int exaGSOp(void *v,exaDataType T,exaOp op,unsigned transpose,
   exaGS t,exaBuffer buf);
 int exaGSFree(exaGS t);

@@ -20,9 +20,9 @@ int exaGSSetup(exaLong *ids,exaUInt n,exaComm c,int unique,
   return 0;
 }
 
-typedef struct globalId_private {
+typedef struct globalId_private{
   exaLong id;
-  exaUInt index;
+  exaInt index;
   exaUInt offset;
 } globalId;
 
@@ -30,7 +30,7 @@ int exaGSDeviceSetup(exaLong *ids,exaUInt n,exaComm c,int unique,
   int verbose,exaGS *t)
 {
   exaGS s; exaGSSetup(ids,n,c,unique,verbose,&s);
-  exaBuffer buf; exaBufferCreate(&buf,BUFSIZ);
+  exaBuffer buf; exaBufferCreate(&buf,1024);
 
   exaInt *in; exaCalloc(n,&in);
   exaUInt i;
@@ -47,7 +47,6 @@ int exaGSDeviceSetup(exaLong *ids,exaUInt n,exaComm c,int unique,
     }
 
   exaFree(in);
-  exaBufferFree(buf);
   exaGSFree(s);
 
   // Allocate exaGS struct
@@ -55,7 +54,7 @@ int exaGSDeviceSetup(exaLong *ids,exaUInt n,exaComm c,int unique,
 
   //TODO: Use exaArraySort
   globalId *ptr=exaArrayGetPointer(globalIdsArray);
-  exaInt nGlobalIds=exaArrayGetSize(globalIdsArray);
+  exaUInt nGlobalIds=exaArrayGetSize(globalIdsArray);
   if(nGlobalIds==0){
     exaArrayFree(globalIdsArray);
     return 0;
@@ -81,6 +80,7 @@ int exaGSDeviceSetup(exaLong *ids,exaUInt n,exaComm c,int unique,
     }
    
   exaArrayFree(globalIdsArray);
+  exaBufferFree(buf);
 
   exaUInt nUniqueIds=exaArrayGetSize(uniqueIdsArray);
   ptr=exaArrayGetPointer(uniqueIdsArray);
@@ -101,6 +101,7 @@ int exaGSDeviceSetup(exaLong *ids,exaUInt n,exaComm c,int unique,
 
   (*t)->topology=gs_setup(uniqueIds,nUniqueIds,&c->gsComm,unique,
     gs_auto,verbose);
+  (*t)->info.type=exaGSType;
 
   exaFree(uniqueIds);
   exaFree(offsets);
