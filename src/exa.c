@@ -123,6 +123,17 @@ int exaFinalize(exaHandle h) {
   return 0;
 }
 
+int exaSetComm(exaHandle h,exaComm c){
+  // TODO: Is this correct?
+  h->comm=c;
+}
+exaComm exaGetComm(exaHandle h){
+  return h->comm;
+}
+
+exaExternalComm exaGetExternalComm(exaHandle h){
+  return exaCommGetExternalComm(exaGetComm(h));
+}
 
 int exaGetDebug(exaHandle h)
 {

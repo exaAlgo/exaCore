@@ -3,14 +3,6 @@
 //
 // exaComm
 //
-int exaSetComm(exaHandle h,exaComm c){
-  // TODO: Is this correct?
-  h->comm=c;
-}
-exaComm exaGetComm(exaHandle h){
-  return h->comm;
-}
-
 int exaCommSetHandle(exaComm c,exaHandle *h){
   c->h=*h;
   return 0;
