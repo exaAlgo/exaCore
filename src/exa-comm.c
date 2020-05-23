@@ -28,6 +28,10 @@ int exaCommDestroy(exaComm c){
   return 0;
 }
 
+exaExternalComm exaCommGetExternalComm(exaComm c){
+  return c->gsComm.c;
+}
+
 exaInt exaSize(exaHandle h){
   return exaCommSize(exaGetComm(h));
 }

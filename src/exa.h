@@ -123,6 +123,7 @@ const char *exaGetBackendExtension(exaHandle h);
 // communication
 exaComm exaGetComm(exaHandle h);
 int exaSetComm(exaHandle h,exaComm c);
+exaExternalComm exaGetExternalComm(exaHandle h);
 exaInt exaSize(exaHandle h);
 exaInt exaRank(exaHandle h);
 // scan, gop and bcast
@@ -154,6 +155,7 @@ int exaCommCreate(exaComm *c,exaExternalComm ce);
 int exaCommSetHandle(exaComm c,exaHandle *h);
 int exaCommGetHandle(exaComm c,exaHandle *h);
 int exaCommDestroy(exaComm c);
+exaExternalComm exaCommGetExternalComm(exaComm c);
 exaInt exaCommSize(exaComm c);
 exaInt exaCommRank(exaComm c);
 int exaCommScan(exaComm c,void *out,void *in,void *buf,
