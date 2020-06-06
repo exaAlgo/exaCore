@@ -138,9 +138,6 @@ int exaAllReduce(exaHandle h,void *out,void *in,exaInt size,
   exaDataType type,exaOp op);
 
 int exaBcast(exaHandle h,void *in,exaInt count,exaDataType type);
-// crystal transfer
-int exaCrystalInit    (exaHandle h);
-int exaCrystalFinalize(exaHandle h);
 void exaBarrier(exaHandle h);
 int exaSplit(exaHandle h,int bin,int rank);
 // debug
@@ -171,9 +168,6 @@ int exaCommAllReduce(exaComm c,void *out,void *in,exaInt size,
 int exaCommBcast(exaComm c,void *in,exaInt count,
   exaDataType type,int root);
 void exaCommBarrier(exaComm c);
-// crystal router functionality
-int exaCommCrystalInit(exaComm c);
-int exaCommCrystalFinalize(exaComm c);
 //
 // exaSettings
 //

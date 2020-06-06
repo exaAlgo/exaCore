@@ -40,8 +40,6 @@ int exaInit(exaHandle *h_,exaExternalComm ce,const char *backend) {
   // to commCreate
   exaCommSetHandle(h->comm,&h);
 
-  // Init crystal router
-  exaCrystalInit(h);
   // Create the buffer
   exaBufferCreate(&h->buf,1024);
 
@@ -108,8 +106,6 @@ int exaFinalize(exaHandle h) {
 
   // Finalize the backend
   h->backendFinalize(h);
-  // Finalize crystal router
-  exaCrystalFinalize(h);
   // Finalize communication
   exaCommDestroy(exaGetComm(h));
   // Finalize the buffer
