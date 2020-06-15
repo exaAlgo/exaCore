@@ -3,14 +3,6 @@
 //
 // exaComm
 //
-int exaSetComm(exaHandle h,exaComm c){
-  // TODO: Is this correct?
-  h->comm=c;
-}
-exaComm exaGetComm(exaHandle h){
-  return h->comm;
-}
-
 int exaCommSetHandle(exaComm c,exaHandle *h){
   c->h=*h;
   return 0;
@@ -22,7 +14,9 @@ int exaCommGetHandle(exaComm c,exaHandle *h){
 
 int exaCommCreate(exaComm *c,exaExternalComm ce){
   exaMalloc(1,c);
+
   comm_init(&(*c)->gsComm,ce);
+  crystal_init(&(*c)->cr,&(*c)->gsComm);
 
   (*c)->info.type=exaCommType;
   return 0;
@@ -31,9 +25,15 @@ int exaCommCreate(exaComm *c,exaExternalComm ce){
 int exaCommDestroy(exaComm c){
   if(c==NULL) return 0;
 
+  crystal_free(&(c->cr));
   comm_free(&c->gsComm);
+
   exaFree(c);
   return 0;
+}
+
+exaExternalComm exaCommGetExternalComm(exaComm c){
+  return c->gsComm.c;
 }
 
 exaInt exaSize(exaHandle h){
@@ -80,7 +80,6 @@ int exaCommSplit(exaComm oldComm,int bin,int rank,exaComm *newComm){
 #if defined(EXA_MPI)
   MPI_Comm_free(&local);
 #endif
-  exaCommCrystalInit(*newComm);
 }
 
 int exaCommDup(exaComm *newComm,exaComm oldComm){
@@ -95,7 +94,6 @@ int exaCommDup(exaComm *newComm,exaComm oldComm){
 #if defined(EXA_MPI)
   MPI_Comm_free(&local);
 #endif
-  exaCommCrystalInit(*newComm);
 }
 
 int exaGop(exaHandle h,void *v,exaInt size,exaDataType type,
@@ -175,22 +173,4 @@ void exaBarrier(exaHandle h) {
 }
 void exaCommBarrier(exaComm c) {
   comm_barrier(&(c->gsComm));
-}
-//
-// exaCrystal: Crystal router functionality
-//
-int exaCrystalInit(exaHandle h){
-  exaCommCrystalInit(exaGetComm(h));
-}
-int exaCommCrystalInit(exaComm c) {
-  crystal_init(&(c->cr),&(c->gsComm));
-  return 0;
-}
-
-int exaCrystalFinalize(exaHandle h){
-  exaCommCrystalFinalize(exaGetComm(h));
-}
-int exaCommCrystalFinalize(exaComm c){
-  crystal_free(&(c->cr));
-  return 0;
 }
