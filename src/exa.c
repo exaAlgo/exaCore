@@ -68,7 +68,7 @@ int exaInit(exaHandle *h_,exaExternalComm ce,const char *backend) {
   int i,hostI;
   for(i=0;i<numBackends;i++){
     if(strcmp(backends[i].prefix,"/host")==0) hostI=i;
-    if(strcmp(backends[i].prefix,backend)==0){
+    if(strcmp(backend,backends[i].prefix)!=NULL){
       backends[i].init(h,backend);
       strcpy(h->backendName,backend);
       break;
