@@ -59,7 +59,7 @@ int exaOccaInit(exaHandle h,const char *backend)
     snprintf(deviceConfig,BUFSIZ,occaOpenMP,schedule,chunkSize);
   }
 
-  if(exaRank(h)==0) exaDebug(h,"deviceConfig=\"%s\"\n",deviceConfig);
+  exaDebug(h,"deviceConfig=\"%s\"\n",deviceConfig);
   oh->device=occaCreateDeviceFromString(deviceConfig);
 
   exaHandleSetData(h,(void **)&oh);

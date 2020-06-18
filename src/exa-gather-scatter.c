@@ -41,18 +41,11 @@ int exaGSDeviceSetup(exaLong *ids,exaUInt n,exaComm c,int unique,
   exaArray globalIdsArray; exaArrayInit(&globalIdsArray,globalId,10);
   globalId gId;
   for(i=0;i<n;i++)
-    if(in[i]>1){
-      gId.id=ids[i],gId.index=i;
-      exaArrayAppend(globalIdsArray,(void*)&gId);
-    }
-
+    if(in[i]>1)
+      gId.id=ids[i],gId.index=i,exaArrayAppend(globalIdsArray,(void*)&gId);
   exaFree(in);
   exaGSFree(s);
 
-  // Allocate exaGS struct
-  exaMalloc(1,t);
-
-  //TODO: Use exaArraySort
   globalId *ptr=exaArrayGetPointer(globalIdsArray);
   exaUInt nGlobalIds=exaArrayGetSize(globalIdsArray);
   if(nGlobalIds==0){
@@ -60,15 +53,19 @@ int exaGSDeviceSetup(exaLong *ids,exaUInt n,exaComm c,int unique,
     return 0;
   }
 
+  //TODO: Use exaArraySort
   sarray_sort_2(globalId,ptr,nGlobalIds,id,1,index,0,&buf->buf);
 
   exaUInt *activeIdxs; exaCalloc(nGlobalIds,&activeIdxs);
   for(i=0;i<nGlobalIds;i++) activeIdxs[i]=ptr[i].index;
 
   exaHandle h; exaCommGetHandle(c,&h);
+  exaMalloc(1,t);
   exaVectorCreate(h,nGlobalIds,exaUInt_t,&(*t)->indices);
   exaVectorWrite((*t)->indices,activeIdxs);
   exaFree(activeIdxs);
+
+  exaDebug(h,"rank=%d nGlobalIds=%d\n",exaRank(h),nGlobalIds);
 
   exaArray uniqueIdsArray; exaArrayInit(&uniqueIdsArray,globalId,10);
   ptr[0].offset=0; exaArrayAppend(uniqueIdsArray,&ptr[0]);
@@ -85,6 +82,9 @@ int exaGSDeviceSetup(exaLong *ids,exaUInt n,exaComm c,int unique,
   exaUInt nUniqueIds=exaArrayGetSize(uniqueIdsArray);
   ptr=exaArrayGetPointer(uniqueIdsArray);
 
+  exaDebug(h,"rank=%d nUniqueIds=%u\n",exaRank(h),nUniqueIds);
+
+  // Allocate exaGS struct
   exaVectorCreate(h,nUniqueIds  ,exaLong_t,&(*t)->uniqueIds);
   exaVectorCreate(h,nUniqueIds+1,exaUInt_t,&(*t)->offsets );
 
@@ -99,6 +99,7 @@ int exaGSDeviceSetup(exaLong *ids,exaUInt n,exaComm c,int unique,
   exaVectorWrite((*t)->uniqueIds,uniqueIds);
   exaVectorWrite((*t)->offsets,offsets);
 
+  //FIXME: nUniqueIds != outgoing ids
   (*t)->topology=gs_setup(uniqueIds,nUniqueIds,&c->gsComm,unique,
     gs_auto,verbose);
   (*t)->info.type=exaGSType;

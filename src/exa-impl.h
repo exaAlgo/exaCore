@@ -167,8 +167,8 @@ struct exaGS_private{
 
   struct gs_data *topology;
 
-  exaVector indices ; // size=#(global_ids)  , data_type=exaUInt
-  exaVector uniqueIds; // size=#(unique_ids)  , data_type=exaLong
-  exaVector offsets ; // size=#(unique_ids)+1, data_type=exaUInt
+  exaVector indices ; // size=#(global_ids), data_type=exaUInt
+  exaVector uniqueIds; // size=#(unique_ids), data_type=exaLong
+  exaVector offsets; // size=#(unique_ids)+1, data_type=exaUInt
 };
 #endif
