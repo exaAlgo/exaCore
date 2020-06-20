@@ -76,16 +76,14 @@ all-base: lib-base install-base examples-base tests-base
 
 .PHONY: lib-base
 lib-base: $(obj)
-	$(link.c) $(BUILDDIR)/$(libPrefix)$(libName).$(libExt) $(obj)\
-    $(LDFLAGS)
+	$(link.c) $(BUILDDIR)/$(libPrefix)$(libName).$(libExt) $(obj) $(LDFLAGS)
 
 .PHONY: install-base
 install-base: lib-base
 	@mkdir -p $(PREFIX)/include
 	@cp -u $(SRCDIR)/*.h $(PREFIX)/include/
 	@mkdir -p $(PREFIX)/lib
-	@cp -u $(BUILDDIR)/$(libPrefix)$(libName).$(libExt)\
-    $(PREFIX)/lib/
+	@cp -u $(BUILDDIR)/$(libPrefix)$(libName).$(libExt) $(PREFIX)/lib/
 
 .PHONY: examples-base
 examples-base: install-base $(examples.obj)
